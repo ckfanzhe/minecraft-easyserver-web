@@ -642,7 +642,8 @@ export default {
     
     .log-container {
       width: 100%;
-      flex: 1;
+      height: 650px;
+      max-height: 650px;
       overflow-y: auto;
       overflow-x: hidden;
       background: #1e1e1e;

@@ -34,6 +34,10 @@
             <el-icon><Baseball /></el-icon>
             <span>{{ $t('nav.menu.world') }}</span>
           </el-menu-item>
+          <el-menu-item index="/resource-packs">
+            <el-icon><Box /></el-icon>
+            <span>{{ $t('nav.menu.resourcepack') }}</span>
+          </el-menu-item>
           <el-menu-item index="/commands">
             <el-icon><ChatLineSquare /></el-icon>
             <span>{{ $t('nav.menu.interaction') }}</span>
@@ -109,13 +113,41 @@ import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { ElMessage, ElMessageBox } from 'element-plus';
+import { 
+  Odometer, 
+  Setting, 
+  User, 
+  Key, 
+  Baseball, 
+  Box,
+  ChatLineSquare, 
+  Document, 
+  TrendCharts,
+  VideoPlay,
+  VideoPause,
+  Refresh,
+  RefreshRight
+} from '@element-plus/icons-vue';
 import api from './api';
 import LanguageSwitcher from './components/LanguageSwitcher.vue';
 
 export default {
   name: 'App',
   components: {
-    LanguageSwitcher
+    LanguageSwitcher,
+    Odometer,
+    Setting,
+    User,
+    Key,
+    Baseball,
+    Box,
+    ChatLineSquare,
+    Document,
+    TrendCharts,
+    VideoPlay,
+    VideoPause,
+    Refresh,
+    RefreshRight
   },
   setup() {
     const route = useRoute();

@@ -312,6 +312,7 @@ const messages = {
       refresh: '刷新',
       clear: '清空',
       autoScroll: '自动滚动',
+      autoRefresh: '自动刷新',
       status: '状态',
       connecting: '连接中...',
       connected: '已连接',
@@ -322,7 +323,8 @@ const messages = {
       cleared: '日志已清空',
       clearSuccess: '日志清空成功',
       clearFailed: '日志清空失败',
-      loadFailed: '日志加载失败'
+      loadFailed: '日志加载失败',
+      confirmClear: '确定要清空所有日志吗？此操作不可撤销！'
     },
     
     // Interaction
@@ -425,6 +427,7 @@ const messages = {
       active: '活跃',
       inactive: '未激活',
       activate: '激活',
+      version: '版本',
       selectFile: '请选择文件',
       loadFailed: '加载失败',
       operationFailed: '操作失败'
@@ -741,6 +744,7 @@ const messages = {
       refresh: 'Refresh',
       clear: 'Clear',
       autoScroll: 'Auto Scroll',
+      autoRefresh: 'Auto Refresh',
       status: 'Status',
       connecting: 'Connecting...',
       connected: 'Connected',
@@ -751,7 +755,8 @@ const messages = {
       cleared: 'Logs cleared',
       clearSuccess: 'Logs cleared successfully',
       clearFailed: 'Failed to clear logs',
-      loadFailed: 'Failed to load logs'
+      loadFailed: 'Failed to load logs',
+      confirmClear: 'Are you sure you want to clear all logs? This action cannot be undone!'
     },
     
     // Interaction
@@ -854,6 +859,7 @@ const messages = {
       active: 'Active',
       inactive: 'Inactive',
       activate: 'Activate',
+      version: 'Version',
       selectFile: 'Please select a file',
       loadFailed: 'Load failed',
       operationFailed: 'Operation failed'
