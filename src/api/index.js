@@ -44,8 +44,13 @@ export default {
 
   // 白名单管理
   getAllowlist: () => api.get('/allowlist'),
-  addToAllowlist: (player) => api.post('/allowlist', player),
+  addToAllowlist: (entry) => api.post('/allowlist', entry),
   removeFromAllowlist: (name) => api.delete(`/allowlist/${name}`),
+
+  // 权限管理
+  getPermissions: () => api.get('/permissions'),
+  updatePermission: (permission) => api.put('/permissions', permission),
+  removePermission: (xuid) => api.delete(`/permissions/${xuid}`),
 
   // 权限管理
   getPermissions: () => api.get('/permissions'),

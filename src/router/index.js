@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import Home from '../views/Home.vue';
 import ServerConfig from '../views/ServerConfig.vue';
 import PlayerManagement from '../views/PlayerManagement.vue';
+import PermissionManagement from '../views/PermissionManagement.vue';
 import WorldManagement from '../views/WorldManagement.vue';
 import CommandConsole from '../views/CommandConsole.vue';
 import LogViewer from '../views/LogViewer.vue';
@@ -22,6 +23,11 @@ const routes = [
     path: '/players',
     name: 'PlayerManagement',
     component: PlayerManagement
+  },
+  {
+    path: '/permissions',
+    name: 'PermissionManagement',
+    component: PermissionManagement
   },
   {
     path: '/worlds',

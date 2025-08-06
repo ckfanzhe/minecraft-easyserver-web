@@ -26,6 +26,10 @@
             <el-icon><User /></el-icon>
             <span>{{ $t('nav.menu.allowlist') }}</span>
           </el-menu-item>
+          <el-menu-item index="/permissions">
+            <el-icon><Key /></el-icon>
+            <span>{{ $t('nav.menu.permission') }}</span>
+          </el-menu-item>
           <el-menu-item index="/worlds">
             <el-icon><Globe /></el-icon>
             <span>{{ $t('nav.menu.world') }}</span>
@@ -123,6 +127,7 @@ export default {
         '/': t('nav.menu.dashboard'),
         '/config': t('nav.menu.serverConfig'),
         '/players': t('nav.menu.allowlist'),
+        '/permissions': t('nav.menu.permission'),
         '/worlds': t('nav.menu.world'),
         '/commands': t('nav.menu.interaction'),
         '/logs': t('nav.menu.logs'),

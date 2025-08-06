@@ -186,34 +186,94 @@ const messages = {
     // Allowlist Management
     allowlist: {
       title: '白名单管理',
-      placeholder: '输入玩家xuid',
+      placeholder: '输入玩家名称',
       add: '添加',
       remove: '移除',
       empty: '暂无白名单用户',
-      errorEmptyName: '请输入玩家xuid'
+      errorEmptyName: '请输入玩家名称',
+      // 新增字段
+      addPlayer: '添加玩家',
+      playerName: '玩家名称',
+      ignoresPlayerLimit: '忽略玩家限制',
+      actions: '操作',
+      delete: '删除',
+      emptyState: '暂无白名单玩家',
+      addPlayerDialog: {
+        title: '添加白名单玩家',
+        playerNameLabel: '玩家名称',
+        playerNamePlaceholder: '请输入玩家名称',
+        ignoresPlayerLimitLabel: '忽略玩家限制',
+        ignoresPlayerLimitTip: '开启后，该玩家可以在服务器满员时仍然加入',
+        cancel: '取消',
+        confirm: '添加'
+      },
+      validation: {
+        nameRequired: '请输入玩家名称',
+        nameLength: '玩家名称长度应在3-16个字符之间',
+        namePattern: '玩家名称只能包含字母、数字和下划线'
+      },
+      messages: {
+        loadFailed: '获取白名单失败',
+        playerExists: '该玩家已在白名单中',
+        addSuccess: '玩家添加成功',
+        addFailed: '添加玩家失败',
+        removeConfirm: '确定要将玩家 "{playerName}" 从白名单中移除吗？',
+        removeConfirmTitle: '确认删除',
+        removeSuccess: '玩家移除成功',
+        removeFailed: '移除玩家失败'
+      },
+      status: {
+        yes: '是',
+        no: '否'
+      }
     },
     
     // Permission Management
     permission: {
       title: '权限管理',
-      placeholder: '输入玩家xuid',
       add: '添加权限',
+      playerXuid: '玩家XUID',
+      permissionLevel: '权限等级',
+      actions: '操作',
       remove: '移除',
-      empty: '暂无权限设置',
-      errorEmptyName: '请输入玩家xuid',
-      modal: {
-        title: '选择权限级别',
-        description: '为玩家',
-        description2: '选择权限级别：',
-        cancel: '取消'
-      },
+      empty: '暂无权限配置',
       levels: {
         visitor: '访客',
-        visitorDesc: '只能查看，无法修改',
         member: '成员',
-        memberDesc: '可以进行基本操作',
         operator: '管理员',
+        visitorDesc: '只能查看，无法修改',
+        memberDesc: '可以进行基本操作',
         operatorDesc: '拥有完全管理权限'
+      },
+      addDialog: {
+        title: '添加权限',
+        xuidsLabel: '玩家XUID',
+        xuidsPlaceholder: '请输入16位数字XUID',
+        levelLabel: '权限等级',
+        levelPlaceholder: '请选择权限等级',
+        cancel: '取消',
+        confirm: '添加'
+      },
+      editDialog: {
+        title: '编辑权限'
+      },
+      validation: {
+        xuidsRequired: '请输入玩家XUID',
+        xuidsLength: 'XUID必须为16位数字',
+        xuidsPattern: 'XUID只能包含数字',
+        levelRequired: '请选择权限等级'
+      },
+      messages: {
+        loadFailed: '获取权限列表失败',
+        playerExists: '该玩家权限已存在',
+        addSuccess: '添加权限成功',
+        addFailed: '添加权限失败',
+        updateSuccess: '更新权限成功',
+        updateFailed: '更新权限失败',
+        removeConfirm: '确定要移除玩家 {xuid} 的权限吗？',
+        removeConfirmTitle: '确认移除',
+        removeSuccess: '移除权限成功',
+        removeFailed: '移除权限失败'
       }
     },
     
@@ -523,34 +583,94 @@ const messages = {
     // Allowlist Management
     allowlist: {
       title: 'Allowlist Management',
-      placeholder: 'Enter player xuid',
+      placeholder: 'Enter player name',
       add: 'Add',
       remove: 'Remove',
       empty: 'No allowlist users',
-      errorEmptyName: 'Please enter player xuid'
+      errorEmptyName: 'Please enter player name',
+      // New fields
+      addPlayer: 'Add Player',
+      playerName: 'Player Name',
+      ignoresPlayerLimit: 'Ignores Player Limit',
+      actions: 'Actions',
+      delete: 'Delete',
+      emptyState: 'No allowlist players',
+      addPlayerDialog: {
+        title: 'Add Allowlist Player',
+        playerNameLabel: 'Player Name',
+        playerNamePlaceholder: 'Please enter player name',
+        ignoresPlayerLimitLabel: 'Ignores Player Limit',
+        ignoresPlayerLimitTip: 'When enabled, this player can join even when the server is full',
+        cancel: 'Cancel',
+        confirm: 'Add'
+      },
+      validation: {
+        nameRequired: 'Please enter player name',
+        nameLength: 'Player name length should be between 3-16 characters',
+        namePattern: 'Player name can only contain letters, numbers and underscores'
+      },
+      messages: {
+        loadFailed: 'Failed to load allowlist',
+        playerExists: 'This player is already in the allowlist',
+        addSuccess: 'Player added successfully',
+        addFailed: 'Failed to add player',
+        removeConfirm: 'Are you sure you want to remove player "{playerName}" from the allowlist?',
+        removeConfirmTitle: 'Confirm Delete',
+        removeSuccess: 'Player removed successfully',
+        removeFailed: 'Failed to remove player'
+      },
+      status: {
+        yes: 'Yes',
+        no: 'No'
+      }
     },
     
     // Permission Management
     permission: {
       title: 'Permission Management',
-      placeholder: 'Enter player xuid',
       add: 'Add Permission',
+      playerXuid: 'Player XUID',
+      permissionLevel: 'Permission Level',
+      actions: 'Actions',
       remove: 'Remove',
-      empty: 'No permission settings',
-      errorEmptyName: 'Please enter player xuid',
-      modal: {
-        title: 'Select Permission Level',
-        description: 'For player',
-        description2: 'select permission level:',
-        cancel: 'Cancel'
-      },
+      empty: 'No permission configurations',
       levels: {
         visitor: 'Visitor',
-        visitorDesc: 'View only, cannot modify',
         member: 'Member',
-        memberDesc: 'Can perform basic operations',
         operator: 'Operator',
-        operatorDesc: 'Full administrative permissions'
+        visitorDesc: 'Basic access permissions',
+        memberDesc: 'Regular member permissions',
+        operatorDesc: 'Administrator permissions'
+      },
+      addDialog: {
+        title: 'Add Permission',
+        xuidsLabel: 'Player XUID',
+        xuidsPlaceholder: 'Please enter 16-digit XUID',
+        levelLabel: 'Permission Level',
+        levelPlaceholder: 'Please select permission level',
+        cancel: 'Cancel',
+        confirm: 'Add'
+      },
+      editDialog: {
+        title: 'Edit Permission'
+      },
+      validation: {
+        xuidsRequired: 'Please enter player XUID',
+        xuidsLength: 'XUID must be 16 digits',
+        xuidsPattern: 'XUID can only contain numbers',
+        levelRequired: 'Please select permission level'
+      },
+      messages: {
+        loadFailed: 'Failed to load permission list',
+        playerExists: 'Player permission already exists',
+        addSuccess: 'Permission added successfully',
+        addFailed: 'Failed to add permission',
+        updateSuccess: 'Permission updated successfully',
+        updateFailed: 'Failed to update permission',
+        removeConfirm: 'Are you sure you want to remove permission for player {xuid}?',
+        removeConfirmTitle: 'Confirm Remove',
+        removeSuccess: 'Permission removed successfully',
+        removeFailed: 'Failed to remove permission'
       }
     },
     
