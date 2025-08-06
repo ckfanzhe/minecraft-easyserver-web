@@ -234,7 +234,7 @@ export default {
       }
 
       connectionStatus.value = 'connecting';
-      const wsUrl = `ws://${window.location.hostname}:8081/api/logs/ws`;
+      const wsUrl = `ws://${window.location.hostname}:8080/api/logs/ws`;
       logWebSocket = new WebSocket(wsUrl);
 
       logWebSocket.onopen = () => {
