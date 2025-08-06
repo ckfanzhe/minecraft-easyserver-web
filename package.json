@@ -1,0 +1,46 @@
+{
+  "name": "minecraft-easy-server-frontend",
+  "version": "1.0.0",
+  "description": "Minecraft Easy Server Frontend",
+  "main": "index.js",
+  "scripts": {
+    "dev": "webpack serve --mode development",
+    "build": "webpack --mode production",
+    "serve": "webpack serve --mode development --open"
+  },
+  "dependencies": {
+    "@element-plus/icons-vue": "^2.1.0",
+    "axios": "^1.4.0",
+    "echarts": "^5.6.0",
+    "element-plus": "^2.3.8",
+    "vue": "^3.3.4",
+    "vue-echarts": "^7.0.3",
+    "vue-i18n": "^9.14.5",
+    "vue-router": "^4.2.4"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.28.0",
+    "@babel/preset-env": "^7.28.0",
+    "@vue/compiler-sfc": "^3.3.4",
+    "babel-loader": "^10.0.0",
+    "css-loader": "^6.8.1",
+    "file-loader": "^6.2.0",
+    "html-webpack-plugin": "^5.5.3",
+    "sass": "^1.64.1",
+    "sass-loader": "^13.3.2",
+    "style-loader": "^3.3.3",
+    "url-loader": "^4.1.1",
+    "vue-loader": "^17.2.2",
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1"
+  },
+  "keywords": [
+    "minecraft",
+    "server",
+    "vue",
+    "frontend"
+  ],
+  "author": "",
+  "license": "MIT"
+}
