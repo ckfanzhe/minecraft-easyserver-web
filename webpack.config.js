@@ -74,11 +74,12 @@ module.exports = {
     hot: true,
     open: true,
     historyApiFallback: true,
-    proxy: {
-      '/api': {
+    proxy: [
+      {
+        context: ['/api'],
         target: 'http://localhost:8080',
         changeOrigin: true
       }
-    }
+    ]
   }
 };
