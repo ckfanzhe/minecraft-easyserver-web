@@ -1,59 +1,30 @@
 # Minecraft Easy Server Frontend
 
-**[中文版本 (Chinese Version)](README_CN.md)**
+**[中文版本](README_CN.md)**
 
-A modern, responsive web frontend for Minecraft Easy Server management panel, built with Vue 3, Element Plus, and modern web technologies.
+A modern web management panel for Minecraft Easy Server built with Vue 3 and Element Plus.
 
 ## 🚀 Features
 
-### 🎮 Server Management
-- **Real-time Server Control** - Start, stop, and restart Minecraft servers with one click
-- **Server Status Monitoring** - Live server status updates and resource monitoring
-- **Multi-version Support** - Download and switch between different Minecraft server versions
-
-### ⚙️ Configuration Management
-- **Visual Configuration Editor** - Easy-to-use interface for server settings
-- **Real-time Validation** - Instant feedback on configuration changes
-- **Backup & Restore** - Save and restore server configurations
-
-### 👥 Player Management
-- **Whitelist Management** - Add/remove players from server whitelist
-- **Permission System** - Manage player permissions (Visitor/Member/Operator)
-- **Player Activity** - Monitor player connections and activity
-
-### 🌍 World Management
-- **World Upload** - Support for .zip and .mcworld file uploads
-- **World Switching** - One-click world activation
-- **World Backup** - Automated world backup and restore
-
-### 🎨 Resource Pack Management
-- **Resource Pack Upload** - Support for .zip and .mcpack formats
-- **Pack Activation** - Easy resource pack management
-- **Preview Support** - Visual preview of resource packs
-
-### 💻 Command Console
-- **Real-time Command Execution** - Execute server commands directly
-- **Command History** - Access to previous commands
-- **Quick Commands** - Predefined command shortcuts
-
-### 📊 Monitoring & Logs
-- **Real-time Logs** - Live server log streaming
-- **Performance Metrics** - Server performance monitoring
-- **Log Filtering** - Advanced log search and filtering
-
-### 🌐 Internationalization
-- **Multi-language Support** - English and Chinese interfaces
-- **Dynamic Language Switching** - Change language without page reload
+- **Server Control** - Start, stop, restart Minecraft server
+- **Performance Monitoring** - Real-time CPU and memory usage
+- **Server Configuration** - Visual configuration editor
+- **Player Management** - Allowlist and permission management
+- **World Management** - Upload and switch worlds (.zip/.mcworld)
+- **Resource Packs** - Upload and manage resource packs (.zip/.mcpack)
+- **Command Console** - Execute commands with history
+- **Log Viewer** - Real-time server logs
+- **Multi-language** - Chinese and English support
 
 ## 🛠️ Technology Stack
 
-- **Vue 3** - Progressive JavaScript framework with Composition API
-- **Element Plus** - Vue 3 component library for modern UI
+- **Vue 3** - Progressive JavaScript framework
+- **Element Plus** - Vue 3 UI component library
 - **Vue Router 4** - Official router for Vue.js
-- **Axios** - Promise-based HTTP client
-- **Vue I18n** - Internationalization plugin
-- **ECharts** - Data visualization library
-- **Webpack 5** - Module bundler and build tool
+- **Vue I18n** - Internationalization support
+- **ECharts** - Charts and data visualization
+- **Axios** - HTTP client for API requests
+- **Webpack 5** - Module bundler
 - **Sass** - CSS preprocessor
 
 
@@ -62,238 +33,106 @@ A modern, responsive web frontend for Minecraft Easy Server management panel, bu
 ### Prerequisites
 
 - Node.js 16+ and npm
-- Modern web browser (Chrome, Firefox, Safari, Edge)
+- Modern web browser
 
 ### Installation
 
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/ckfanzhe/bedrock-easy-server.git
-   cd minecraft-easy-server/minecraft-easyserver-web
-   ```
+```bash
+# Clone repository
+git clone https://github.com/ckfanzhe/bedrock-easy-server.git
+cd minecraft-easy-server/minecraft-easyserver-web
 
-2. **Install dependencies**:
-   ```bash
-   npm install
-   ```
+# Install dependencies
+npm install
+```
 
 ### Development
 
-1. **Start development server**:
-   ```bash
-   npm run dev
-   ```
-
-2. **Access the application**:
-   - Open browser and visit: `http://localhost:3001`
-   - The dev server includes hot reload for instant updates
+```bash
+# Start development server
+npm run dev
+# Access at http://localhost:3001
+```
 
 ### Production Build
 
-1. **Build for production**:
-   ```bash
-   npm run build
-   ```
-
-2. **Output**:
-   - Built files will be generated in the `dist/` directory
-   - Files are optimized and minified for production use
+```bash
+# Build for production
+npm run build
+# Output in dist/ directory
+```
 
 ## 🔧 Configuration
 
 ### API Proxy
 
-The development server is configured to proxy API requests to the backend:
+Development server proxies API requests to backend:
 
 ```javascript
-// webpack.config.js
+// webpack.config.js - API proxy to localhost:8080
 devServer: {
-  proxy: [
-    {
-      context: ['/api'],
-      target: 'http://localhost:8080',
-      changeOrigin: true
-    }
-  ]
+  proxy: [{
+    context: ['/api'],
+    target: 'http://localhost:8080',
+    changeOrigin: true
+  }]
 }
 ```
 
-### Environment Variables
+## 🧪 Development
 
-Create a `.env` file for environment-specific configuration:
-
-```env
-# API Base URL (for production)
-VUE_APP_API_BASE_URL=http://your-server:8080
-
-# Default Language
-VUE_APP_DEFAULT_LANG=en
-
-# Debug Mode
-VUE_APP_DEBUG=false
-```
-
-## 🎨 Styling Guidelines
-
-### SCSS Structure
-- Use SCSS for all styling
-- Follow BEM naming convention
-- Utilize Element Plus theme variables
-- Implement responsive design patterns
-
-### Component Styling
-```vue
-<style lang="scss" scoped>
-.component-name {
-  &__element {
-    // Element styles
-  }
-  
-  &--modifier {
-    // Modifier styles
-  }
-}
-</style>
-```
-
-## 🧪 Development Guidelines
-
-### Vue 3 Best Practices
-- Use Composition API for complex logic
-- Implement proper component lifecycle
-- Follow Vue 3 reactivity patterns
-- Use TypeScript for better type safety (optional)
+### Vue 3 Features
+- Composition API for component logic
+- Vue Router 4 for navigation
+- Vue I18n for internationalization
+- Element Plus components
 
 ### Code Style
-- Use ESLint for code linting
-- Follow Vue.js style guide
-- Implement proper error handling
-- Add comprehensive comments
-
-### Component Development
-```vue
-<template>
-  <!-- Template content -->
-</template>
-
-<script>
-import { ref, reactive, onMounted } from 'vue'
-import { useI18n } from 'vue-i18n'
-
-export default {
-  name: 'ComponentName',
-  setup() {
-    const { t } = useI18n()
-    
-    // Component logic
-    
-    return {
-      // Exposed properties
-    }
-  }
-}
-</script>
-
-<style lang="scss" scoped>
-// Component styles
-</style>
-```
+- SCSS for styling
+- ESLint for code quality
+- Scoped component styles
+- Responsive design
 
 ## 🌐 Internationalization
 
-The frontend supports multiple languages:
+Supports Chinese and English with dynamic language switching:
 
-### Adding New Languages
-
-1. Create language file in `src/i18n/`:
-   ```javascript
-   // src/i18n/es.js
-   export default {
-     common: {
-       save: 'Guardar',
-       cancel: 'Cancelar'
-     }
-   }
-   ```
-
-2. Register in i18n configuration:
-   ```javascript
-   // src/i18n/index.js
-   import es from './es'
-   
-   const messages = {
-     en,
-     zh,
-     es
-   }
-   ```
-
-### Using Translations
-```vue
-<template>
-  <div>{{ $t('common.save') }}</div>
-</template>
-
-<script>
-import { useI18n } from 'vue-i18n'
-
-export default {
-  setup() {
-    const { t } = useI18n()
-    
-    return {
-      getMessage: () => t('common.message')
-    }
-  }
+```javascript
+// All translations in src/i18n/index.js
+const messages = {
+  zh: { /* Chinese translations */ },
+  en: { /* English translations */ }
 }
-</script>
+
+// Usage in components
+const { t } = useI18n()
+// Template: {{ $t('nav.title') }}
+// Script: t('common.save')
 ```
 
-## 📦 Build and Deployment
-
-### Production Build
-The build process creates optimized files for production:
-
-```bash
-npm run build
-```
+## 📦 Build & Deployment
 
 ### Build Output
 - `dist/index.html` - Main HTML file
 - `dist/bundle.js` - Bundled JavaScript
-- `dist/images/` - Optimized images
+- Static assets optimized for production
 
-### Deployment Options
-
-1. **Static File Server**: Deploy `dist/` contents to any web server
-2. **CDN**: Upload to CDN for global distribution
-3. **Embedded**: Files are embedded in Go binary for single-file deployment
+### Deployment
+1. **Static hosting** - Deploy `dist/` to any web server
+2. **Embedded** - Files embedded in Go binary for single executable
 
 ## 🤝 Contributing
 
-### Development Workflow
-
 1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/new-feature`
-3. Make changes and test thoroughly
-4. Commit changes: `git commit -am 'Add new feature'`
-5. Push branch: `git push origin feature/new-feature`
-6. Create Pull Request
+2. Create feature branch: `git checkout -b feature/new-feature`
+3. Make changes and test
+4. Submit Pull Request
 
-### Code Standards
-
+### Standards
 - Follow Vue.js style guide
 - Use ESLint for code quality
-- Implement responsive design
-- Add proper documentation
-- Test on multiple browsers
-
-### Testing
-
-- Test all features thoroughly
-- Verify responsive design
-- Check browser compatibility
-- Validate accessibility
+- Test in multiple browsers
+- Maintain responsive design
 
 ## 📄 License
 
