@@ -1,11 +1,11 @@
 <template>
-  <div class="world-management">
+  <div class="resource-pack-management">
     <!-- 上传区域 -->
     <el-card class="upload-card" shadow="hover">
       <template #header>
         <div class="upload-header">
           <el-icon class="upload-icon"><FolderOpened /></el-icon>
-          <span>{{ $t('world.upload') }}</span>
+          <span>{{ $t('resourcepack.upload') }}</span>
         </div>
       </template>
       
@@ -15,7 +15,7 @@
           :auto-upload="false"
           :show-file-list="true"
           :limit="1"
-          accept=".zip,.mcworld"
+          accept=".zip,.mcpack"
           :on-change="handleFileChange"
           :on-remove="handleFileRemove"
           drag
@@ -24,7 +24,7 @@
           <div class="upload-content">
             <el-icon class="upload-main-icon"><upload-filled /></el-icon>
             <div class="upload-text">
-              <p class="upload-title">{{ $t('world.uploadDesc') }}</p>
+              <p class="upload-title">{{ $t('resourcepack.uploadDesc') }}</p>
               <p class="upload-hint">拖拽文件到此处或点击选择</p>
             </div>
           </div>
@@ -34,7 +34,7 @@
         <div class="upload-actions" v-if="uploadForm.file">
           <el-button 
             type="primary" 
-            @click="uploadWorld"
+            @click="uploadResourcePack"
             :loading="uploading"
             size="large"
           >
@@ -46,54 +46,74 @@
             清除
           </el-button>
         </div>
+        
+        <div class="upload-note">
+          <el-icon><InfoFilled /></el-icon>
+          <span>{{ $t('resourcepack.uploadNote') }}</span>
+        </div>
       </div>
     </el-card>
 
-    <!-- 世界列表 -->
-    <el-card class="world-list-card">
+    <!-- 资源包列表 -->
+    <el-card class="resource-pack-list-card">
       <template #header>
         <div class="card-header">
-          <span>{{ $t('world.title') }}</span>
-          <el-button type="text" @click="fetchWorlds" :loading="loading">
+          <span>{{ $t('resourcepack.title') }}</span>
+          <el-button type="text" @click="fetchResourcePacks" :loading="loading">
             <el-icon><Refresh /></el-icon>
             {{ $t('common.refresh') }}
           </el-button>
         </div>
       </template>
       
-      <div class="world-content">
+      <div class="resource-pack-content">
         <el-table 
-          :data="worlds" 
+          :data="resourcePacks" 
           v-loading="loading"
           style="width: 100%"
-          empty-text="暂无世界文件"
+          :empty-text="$t('resourcepack.empty')"
           stripe
         >
-          <el-table-column prop="name" :label="$t('common.name')" min-width="250" show-overflow-tooltip />
+          <el-table-column prop="name" :label="$t('common.name')" min-width="200" show-overflow-tooltip />
+          <el-table-column prop="description" :label="$t('common.description')" min-width="250" show-overflow-tooltip />
+          <el-table-column :label="$t('common.version')" width="120" align="center">
+            <template #default="scope">
+              <span v-if="scope.row.version">{{ scope.row.version.join('.') }}</span>
+              <span v-else>-</span>
+            </template>
+          </el-table-column>
           <el-table-column :label="$t('common.status')" width="140" align="center">
             <template #default="scope">
               <el-tag :type="scope.row.active ? 'success' : 'info'">
-                {{ scope.row.active ? $t('world.current') : $t('common.inactive') }}
+                {{ scope.row.active ? $t('common.active') : $t('common.inactive') }}
               </el-tag>
             </template>
           </el-table-column>
-          <el-table-column :label="$t('common.actions')" width="180" align="center">
+          <el-table-column :label="$t('common.actions')" width="200" align="center">
             <template #default="scope">
               <el-button 
                 v-if="!scope.row.active"
                 type="primary" 
                 size="small" 
-                @click="activateWorld(scope.row.name)"
-                :loading="activating === scope.row.name"
+                @click="activateResourcePack(scope.row.uuid)"
+                :loading="activating === scope.row.uuid"
               >
                 {{ $t('common.activate') }}
               </el-button>
               <el-button 
+                v-else
+                type="warning" 
+                size="small" 
+                @click="deactivateResourcePack(scope.row.uuid)"
+                :loading="deactivating === scope.row.uuid"
+              >
+                {{ $t('common.deactivate') }}
+              </el-button>
+              <el-button 
                 type="danger" 
                 size="small" 
-                @click="confirmDeleteWorld(scope.row.name)"
-                :loading="deleting === scope.row.name"
-                :disabled="scope.row.active"
+                @click="confirmDeleteResourcePack(scope.row)"
+                :loading="deleting === scope.row.uuid"
               >
                 {{ $t('common.delete') }}
               </el-button>
@@ -108,26 +128,28 @@
 <script>
 import { ref, reactive, onMounted } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
-import { Upload, UploadFilled, FolderOpened, Close, Refresh } from '@element-plus/icons-vue';
+import { Upload, UploadFilled, FolderOpened, Close, Refresh, InfoFilled } from '@element-plus/icons-vue';
 import { useI18n } from 'vue-i18n';
 import api from '@/api';
 
 export default {
-  name: 'WorldManagement',
+  name: 'ResourcePackManagement',
   components: {
     Upload,
     UploadFilled,
     FolderOpened,
     Close,
-    Refresh
+    Refresh,
+    InfoFilled
   },
   setup() {
     const { t } = useI18n();
     
-    const worlds = ref([]);
+    const resourcePacks = ref([]);
     const loading = ref(false);
     const uploading = ref(false);
     const activating = ref('');
+    const deactivating = ref('');
     const deleting = ref('');
     const uploadRef = ref(null);
     
@@ -135,15 +157,21 @@ export default {
       file: null
     });
 
-    // 获取世界列表
-    const fetchWorlds = async () => {
+    // 获取资源包列表
+    const fetchResourcePacks = async () => {
       try {
         loading.value = true;
-        const response = await api.getWorlds();
-        worlds.value = response.data.worlds || [];
+        const response = await api.getResourcePacks();
+        resourcePacks.value = response.data.resource_packs || [];
       } catch (error) {
-        console.error('获取世界列表失败:', error);
-        ElMessage.error(t('common.loadFailed'));
+        console.error('获取资源包列表失败:', error);
+        if (error.response && error.response.data && error.response.data.error) {
+          ElMessage.error(`加载失败: ${error.response.data.error}`);
+        } else if (error.request) {
+          ElMessage.error('网络请求失败，请检查网络连接');
+        } else {
+          ElMessage.error(t('common.loadFailed'));
+        }
       } finally {
         loading.value = false;
       }
@@ -159,8 +187,8 @@ export default {
       uploadForm.file = null;
     };
 
-    // 上传世界文件
-    const uploadWorld = async () => {
+    // 上传资源包文件
+    const uploadResourcePack = async () => {
       if (!uploadForm.file) {
         ElMessage.warning(t('common.selectFile'));
         return;
@@ -169,16 +197,22 @@ export default {
       try {
         uploading.value = true;
         const formData = new FormData();
-        formData.append('world', uploadForm.file);
+        formData.append('resource_pack', uploadForm.file);
         
-        await api.uploadWorld(formData);
-        ElMessage.success(t('message.worldUploaded'));
+        await api.uploadResourcePack(formData);
+        ElMessage.success('资源包上传成功');
         
         clearUpload();
-        await fetchWorlds();
+        await fetchResourcePacks();
       } catch (error) {
-        console.error('上传世界文件失败:', error);
-        ElMessage.error(t('common.operationFailed'));
+        console.error('上传资源包文件失败:', error);
+        if (error.response && error.response.data && error.response.data.error) {
+          ElMessage.error(`上传失败: ${error.response.data.error}`);
+        } else if (error.request) {
+          ElMessage.error('网络请求失败，请检查网络连接');
+        } else {
+          ElMessage.error(t('common.operationFailed'));
+        }
       } finally {
         uploading.value = false;
       }
@@ -190,26 +224,53 @@ export default {
       uploadRef.value?.clearFiles();
     };
 
-    // 激活世界
-    const activateWorld = async (worldName) => {
+    // 激活资源包
+    const activateResourcePack = async (uuid) => {
       try {
-        activating.value = worldName;
-        await api.activateWorld(worldName);
-        ElMessage.success(t('message.worldActivated'));
-        await fetchWorlds();
+        activating.value = uuid;
+        await api.activateResourcePack(uuid);
+        ElMessage.success('资源包激活成功');
+        await fetchResourcePacks();
       } catch (error) {
-        console.error('激活世界失败:', error);
-        ElMessage.error(t('common.operationFailed'));
+        console.error('激活资源包失败:', error);
+        if (error.response && error.response.data && error.response.data.error) {
+          ElMessage.error(`激活失败: ${error.response.data.error}`);
+        } else if (error.request) {
+          ElMessage.error('网络请求失败，请检查网络连接');
+        } else {
+          ElMessage.error(t('common.operationFailed'));
+        }
       } finally {
         activating.value = '';
       }
     };
 
-    // 确认删除世界
-    const confirmDeleteWorld = async (worldName) => {
+    // 停用资源包
+    const deactivateResourcePack = async (uuid) => {
+      try {
+        deactivating.value = uuid;
+        await api.deactivateResourcePack(uuid);
+        ElMessage.success('资源包停用成功');
+        await fetchResourcePacks();
+      } catch (error) {
+        console.error('停用资源包失败:', error);
+        if (error.response && error.response.data && error.response.data.error) {
+          ElMessage.error(`停用失败: ${error.response.data.error}`);
+        } else if (error.request) {
+          ElMessage.error('网络请求失败，请检查网络连接');
+        } else {
+          ElMessage.error(t('common.operationFailed'));
+        }
+      } finally {
+        deactivating.value = '';
+      }
+    };
+
+    // 确认删除资源包
+    const confirmDeleteResourcePack = async (resourcePack) => {
       try {
         await ElMessageBox.confirm(
-          t('world.deleteConfirm', { worldName }),
+          t('resourcepack.deleteConfirm'),
           t('common.warning'),
           {
             confirmButtonText: t('common.confirm'),
@@ -217,53 +278,61 @@ export default {
             type: 'warning'
           }
         );
-        await deleteWorld(worldName);
+        await deleteResourcePack(resourcePack.uuid);
       } catch (error) {
         // 用户取消删除
       }
     };
 
-    // 删除世界
-    const deleteWorld = async (worldName) => {
+    // 删除资源包
+    const deleteResourcePack = async (uuid) => {
       try {
-        deleting.value = worldName;
-        await api.deleteWorld(worldName);
-        ElMessage.success(t('message.worldDeleted'));
-        await fetchWorlds();
+        deleting.value = uuid;
+        await api.deleteResourcePack(uuid);
+        ElMessage.success('资源包删除成功');
+        await fetchResourcePacks();
       } catch (error) {
-        console.error('删除世界失败:', error);
-        ElMessage.error(t('common.operationFailed'));
+        console.error('删除资源包失败:', error);
+        if (error.response && error.response.data && error.response.data.error) {
+          ElMessage.error(`删除失败: ${error.response.data.error}`);
+        } else if (error.request) {
+          ElMessage.error('网络请求失败，请检查网络连接');
+        } else {
+          ElMessage.error(t('common.operationFailed'));
+        }
       } finally {
         deleting.value = '';
       }
     };
 
     onMounted(() => {
-      fetchWorlds();
+      fetchResourcePacks();
     });
 
     return {
-      worlds,
+      resourcePacks,
       loading,
       uploading,
       activating,
+      deactivating,
       deleting,
       uploadRef,
       uploadForm,
-      fetchWorlds,
+      fetchResourcePacks,
       handleFileChange,
       handleFileRemove,
-      uploadWorld,
+      uploadResourcePack,
       clearUpload,
-      activateWorld,
-      confirmDeleteWorld
+      activateResourcePack,
+      deactivateResourcePack,
+      confirmDeleteResourcePack
     };
   }
 };
 </script>
 
 <style lang="scss" scoped>
-.world-management {
+.resource-pack-management {
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -288,16 +357,34 @@ export default {
     .upload-area {
       padding: 20px 0;
     }
+    
+    .upload-note {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 16px;
+      padding: 12px 16px;
+      background-color: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-radius: 8px;
+      color: #0369a1;
+      font-size: 14px;
+      
+      .el-icon {
+        font-size: 16px;
+        color: #0284c7;
+      }
+    }
   }
   
-  .world-list-card {
+  .resource-pack-list-card {
     .card-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
     
-    .world-content {
+    .resource-pack-content {
       padding: 20px 0;
     }
   }
@@ -355,22 +442,6 @@ export default {
         font-size: 14px;
         color: #909399;
       }
-    }
-  }
-  
-  .upload-tip {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    margin-top: 12px;
-    padding: 8px 12px;
-    background-color: #f5f7fa;
-    border-radius: 6px;
-    
-    span {
-      font-size: 12px;
-      color: #606266;
     }
   }
   

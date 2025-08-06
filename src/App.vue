@@ -15,7 +15,7 @@
           active-text-color="#409EFF"
         >
           <el-menu-item index="/">
-            <el-icon><House /></el-icon>
+            <el-icon><Odometer /></el-icon>
             <span>{{ $t('nav.menu.dashboard') }}</span>
           </el-menu-item>
           <el-menu-item index="/config">
@@ -26,9 +26,17 @@
             <el-icon><User /></el-icon>
             <span>{{ $t('nav.menu.allowlist') }}</span>
           </el-menu-item>
+          <el-menu-item index="/permissions">
+            <el-icon><Key /></el-icon>
+            <span>{{ $t('nav.menu.permission') }}</span>
+          </el-menu-item>
           <el-menu-item index="/worlds">
-            <el-icon><Globe /></el-icon>
+            <el-icon><Baseball /></el-icon>
             <span>{{ $t('nav.menu.world') }}</span>
+          </el-menu-item>
+          <el-menu-item index="/resource-packs">
+            <el-icon><Box /></el-icon>
+            <span>{{ $t('nav.menu.resourcepack') }}</span>
           </el-menu-item>
           <el-menu-item index="/commands">
             <el-icon><ChatLineSquare /></el-icon>
@@ -105,13 +113,41 @@ import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { ElMessage, ElMessageBox } from 'element-plus';
+import { 
+  Odometer, 
+  Setting, 
+  User, 
+  Key, 
+  Baseball, 
+  Box,
+  ChatLineSquare, 
+  Document, 
+  TrendCharts,
+  VideoPlay,
+  VideoPause,
+  Refresh,
+  RefreshRight
+} from '@element-plus/icons-vue';
 import api from './api';
 import LanguageSwitcher from './components/LanguageSwitcher.vue';
 
 export default {
   name: 'App',
   components: {
-    LanguageSwitcher
+    LanguageSwitcher,
+    Odometer,
+    Setting,
+    User,
+    Key,
+    Baseball,
+    Box,
+    ChatLineSquare,
+    Document,
+    TrendCharts,
+    VideoPlay,
+    VideoPause,
+    Refresh,
+    RefreshRight
   },
   setup() {
     const route = useRoute();
@@ -123,6 +159,7 @@ export default {
         '/': t('nav.menu.dashboard'),
         '/config': t('nav.menu.serverConfig'),
         '/players': t('nav.menu.allowlist'),
+        '/permissions': t('nav.menu.permission'),
         '/worlds': t('nav.menu.world'),
         '/commands': t('nav.menu.interaction'),
         '/logs': t('nav.menu.logs'),

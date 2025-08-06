@@ -2,7 +2,9 @@ import { createRouter, createWebHistory } from 'vue-router';
 import Home from '../views/Home.vue';
 import ServerConfig from '../views/ServerConfig.vue';
 import PlayerManagement from '../views/PlayerManagement.vue';
+import PermissionManagement from '../views/PermissionManagement.vue';
 import WorldManagement from '../views/WorldManagement.vue';
+import ResourcePackManagement from '../views/ResourcePackManagement.vue';
 import CommandConsole from '../views/CommandConsole.vue';
 import LogViewer from '../views/LogViewer.vue';
 import PerformanceMonitor from '../views/PerformanceMonitor.vue';
@@ -24,9 +26,19 @@ const routes = [
     component: PlayerManagement
   },
   {
+    path: '/permissions',
+    name: 'PermissionManagement',
+    component: PermissionManagement
+  },
+  {
     path: '/worlds',
     name: 'WorldManagement',
     component: WorldManagement
+  },
+  {
+    path: '/resource-packs',
+    name: 'ResourcePackManagement',
+    component: ResourcePackManagement
   },
   {
     path: '/commands',

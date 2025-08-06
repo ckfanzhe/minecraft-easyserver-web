@@ -1,132 +1,361 @@
 # Minecraft Easy Server Frontend
 
-这是 Minecraft Easy Server 的现代化前端项目，使用 Vue 3 + Webpack + Element Plus 构建。
+**[中文版本 (Chinese Version)](README_CN.md)**
 
-## 技术栈
+A modern, responsive web frontend for Minecraft Easy Server management panel, built with Vue 3, Element Plus, and modern web technologies.
 
-- **Vue 3** - 渐进式 JavaScript 框架
-- **Vue Router 4** - 官方路由管理器
-- **Element Plus** - 基于 Vue 3 的组件库
-- **Axios** - HTTP 客户端
-- **Webpack 5** - 模块打包器
-- **Sass** - CSS 预处理器
+## 🚀 Features
 
-## 项目结构
+### 🎮 Server Management
+- **Real-time Server Control** - Start, stop, and restart Minecraft servers with one click
+- **Server Status Monitoring** - Live server status updates and resource monitoring
+- **Multi-version Support** - Download and switch between different Minecraft server versions
+
+### ⚙️ Configuration Management
+- **Visual Configuration Editor** - Easy-to-use interface for server settings
+- **Real-time Validation** - Instant feedback on configuration changes
+- **Backup & Restore** - Save and restore server configurations
+
+### 👥 Player Management
+- **Whitelist Management** - Add/remove players from server whitelist
+- **Permission System** - Manage player permissions (Visitor/Member/Operator)
+- **Player Activity** - Monitor player connections and activity
+
+### 🌍 World Management
+- **World Upload** - Support for .zip and .mcworld file uploads
+- **World Switching** - One-click world activation
+- **World Backup** - Automated world backup and restore
+
+### 🎨 Resource Pack Management
+- **Resource Pack Upload** - Support for .zip and .mcpack formats
+- **Pack Activation** - Easy resource pack management
+- **Preview Support** - Visual preview of resource packs
+
+### 💻 Command Console
+- **Real-time Command Execution** - Execute server commands directly
+- **Command History** - Access to previous commands
+- **Quick Commands** - Predefined command shortcuts
+
+### 📊 Monitoring & Logs
+- **Real-time Logs** - Live server log streaming
+- **Performance Metrics** - Server performance monitoring
+- **Log Filtering** - Advanced log search and filtering
+
+### 🌐 Internationalization
+- **Multi-language Support** - English and Chinese interfaces
+- **Dynamic Language Switching** - Change language without page reload
+
+## 🛠️ Technology Stack
+
+- **Vue 3** - Progressive JavaScript framework with Composition API
+- **Element Plus** - Vue 3 component library for modern UI
+- **Vue Router 4** - Official router for Vue.js
+- **Axios** - Promise-based HTTP client
+- **Vue I18n** - Internationalization plugin
+- **ECharts** - Data visualization library
+- **Webpack 5** - Module bundler and build tool
+- **Sass** - CSS preprocessor
+
+## 📁 Project Structure
 
 ```
-frontend/
+minecraft-easyserver-web/
 ├── public/
-│   └── index.html          # HTML 模板
+│   └── index.html              # HTML template
 ├── src/
-│   ├── api/
-│   │   └── index.js        # API 接口封装
+│   ├── api/                    # API service layer
+│   │   ├── index.js           # API client configuration
+│   │   ├── server.js          # Server management APIs
+│   │   ├── config.js          # Configuration APIs
+│   │   ├── player.js          # Player management APIs
+│   │   ├── world.js           # World management APIs
+│   │   └── logs.js            # Logging APIs
+│   ├── components/             # Reusable components
+│   │   ├── common/            # Common UI components
+│   │   ├── charts/            # Chart components
+│   │   └── forms/             # Form components
+│   ├── views/                  # Page components
+│   │   ├── Dashboard.vue      # Main dashboard
+│   │   ├── ServerManagement.vue # Server control panel
+│   │   ├── Configuration.vue   # Server configuration
+│   │   ├── PlayerManagement.vue # Player management
+│   │   ├── WorldManagement.vue # World management
+│   │   ├── ResourcePacks.vue   # Resource pack management
+│   │   ├── CommandConsole.vue  # Command execution
+│   │   ├── LogViewer.vue      # Log monitoring
+│   │   └── Performance.vue    # Performance monitoring
 │   ├── router/
-│   │   └── index.js        # 路由配置
-│   ├── styles/
-│   │   └── global.scss     # 全局样式
-│   ├── views/              # 页面组件
-│   │   ├── Home.vue
-│   │   ├── ServerManagement.vue
-│   │   ├── ServerConfig.vue
-│   │   ├── PlayerManagement.vue
-│   │   ├── WorldManagement.vue
-│   │   ├── CommandConsole.vue
-│   │   ├── LogViewer.vue
-│   │   └── PerformanceMonitor.vue
-│   ├── App.vue             # 根组件
-│   └── main.js             # 入口文件
-├── package.json            # 项目配置
-├── webpack.config.js       # Webpack 配置
-└── README.md              # 项目说明
+│   │   └── index.js           # Route configuration
+│   ├── stores/                # State management
+│   │   ├── server.js          # Server state
+│   │   ├── config.js          # Configuration state
+│   │   └── user.js            # User preferences
+│   ├── i18n/                  # Internationalization
+│   │   ├── index.js           # i18n configuration
+│   │   ├── en.js              # English translations
+│   │   └── zh.js              # Chinese translations
+│   ├── styles/                # Global styles
+│   │   ├── global.scss        # Global styles
+│   │   ├── variables.scss     # SCSS variables
+│   │   └── mixins.scss        # SCSS mixins
+│   ├── utils/                 # Utility functions
+│   │   ├── request.js         # HTTP request utilities
+│   │   ├── validation.js      # Form validation
+│   │   └── helpers.js         # Helper functions
+│   ├── App.vue                # Root component
+│   └── main.js                # Application entry point
+├── package.json               # Project dependencies
+├── webpack.config.js          # Webpack configuration
+├── .babelrc                   # Babel configuration
+└── README.md                  # Project documentation
 ```
 
-## 功能模块
+## 🚀 Getting Started
 
-### 已实现的基础功能
+### Prerequisites
 
-1. **首页 (Home)**
-   - 服务器状态概览
-   - 快速操作按钮
-   - 最近日志显示
-   - 系统信息展示
+- Node.js 16+ and npm
+- Modern web browser (Chrome, Firefox, Safari, Edge)
 
-2. **导航系统**
-   - 侧边栏导航
-   - 路由管理
-   - 页面标题动态更新
+### Installation
 
-3. **API 集成**
-   - 完整的后端 API 封装
-   - 请求/响应拦截器
-   - 错误处理
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/ckfanzhe/bedrock-easy-server.git
+   cd minecraft-easy-server/minecraft-easyserver-web
+   ```
 
-### 待开发的功能模块
+2. **Install dependencies**:
+   ```bash
+   npm install
+   ```
 
-- 服务器管理 (启动/停止/重启)
-- 服务器配置编辑
-- 玩家管理 (白名单/权限)
-- 世界管理 (上传/切换/备份)
-- 命令控制台 (实时命令执行)
-- 日志查看 (实时日志/过滤)
-- 性能监控 (图表展示)
+### Development
 
-## 安装和运行
+1. **Start development server**:
+   ```bash
+   npm run dev
+   ```
 
-### 安装依赖
+2. **Access the application**:
+   - Open browser and visit: `http://localhost:3001`
+   - The dev server includes hot reload for instant updates
 
-```bash
-cd frontend
-npm install
+### Production Build
+
+1. **Build for production**:
+   ```bash
+   npm run build
+   ```
+
+2. **Output**:
+   - Built files will be generated in the `dist/` directory
+   - Files are optimized and minified for production use
+
+## 🔧 Configuration
+
+### API Proxy
+
+The development server is configured to proxy API requests to the backend:
+
+```javascript
+// webpack.config.js
+devServer: {
+  proxy: [
+    {
+      context: ['/api'],
+      target: 'http://localhost:8080',
+      changeOrigin: true
+    }
+  ]
+}
 ```
 
-### 开发模式
+### Environment Variables
 
-```bash
-npm run dev
+Create a `.env` file for environment-specific configuration:
+
+```env
+# API Base URL (for production)
+VUE_APP_API_BASE_URL=http://your-server:8080
+
+# Default Language
+VUE_APP_DEFAULT_LANG=en
+
+# Debug Mode
+VUE_APP_DEBUG=false
 ```
 
-访问 http://localhost:3000
+## 🎨 Styling Guidelines
 
-### 生产构建
+### SCSS Structure
+- Use SCSS for all styling
+- Follow BEM naming convention
+- Utilize Element Plus theme variables
+- Implement responsive design patterns
+
+### Component Styling
+```vue
+<style lang="scss" scoped>
+.component-name {
+  &__element {
+    // Element styles
+  }
+  
+  &--modifier {
+    // Modifier styles
+  }
+}
+</style>
+```
+
+## 🧪 Development Guidelines
+
+### Vue 3 Best Practices
+- Use Composition API for complex logic
+- Implement proper component lifecycle
+- Follow Vue 3 reactivity patterns
+- Use TypeScript for better type safety (optional)
+
+### Code Style
+- Use ESLint for code linting
+- Follow Vue.js style guide
+- Implement proper error handling
+- Add comprehensive comments
+
+### Component Development
+```vue
+<template>
+  <!-- Template content -->
+</template>
+
+<script>
+import { ref, reactive, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+export default {
+  name: 'ComponentName',
+  setup() {
+    const { t } = useI18n()
+    
+    // Component logic
+    
+    return {
+      // Exposed properties
+    }
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+// Component styles
+</style>
+```
+
+## 🌐 Internationalization
+
+The frontend supports multiple languages:
+
+### Adding New Languages
+
+1. Create language file in `src/i18n/`:
+   ```javascript
+   // src/i18n/es.js
+   export default {
+     common: {
+       save: 'Guardar',
+       cancel: 'Cancelar'
+     }
+   }
+   ```
+
+2. Register in i18n configuration:
+   ```javascript
+   // src/i18n/index.js
+   import es from './es'
+   
+   const messages = {
+     en,
+     zh,
+     es
+   }
+   ```
+
+### Using Translations
+```vue
+<template>
+  <div>{{ $t('common.save') }}</div>
+</template>
+
+<script>
+import { useI18n } from 'vue-i18n'
+
+export default {
+  setup() {
+    const { t } = useI18n()
+    
+    return {
+      getMessage: () => t('common.message')
+    }
+  }
+}
+</script>
+```
+
+## 📦 Build and Deployment
+
+### Production Build
+The build process creates optimized files for production:
 
 ```bash
 npm run build
 ```
 
-构建文件将生成在 `dist/` 目录中。
+### Build Output
+- `dist/index.html` - Main HTML file
+- `dist/bundle.js` - Bundled JavaScript
+- `dist/images/` - Optimized images
 
-## 开发说明
+### Deployment Options
 
-### API 代理配置
+1. **Static File Server**: Deploy `dist/` contents to any web server
+2. **CDN**: Upload to CDN for global distribution
+3. **Embedded**: Files are embedded in Go binary for single-file deployment
 
-开发服务器已配置代理，所有 `/api` 请求将转发到后端服务器 `http://localhost:8080`。
+## 🤝 Contributing
 
-### 样式规范
+### Development Workflow
 
-- 使用 Sass 预处理器
-- 遵循 BEM 命名规范
-- 响应式设计支持
-- Element Plus 主题定制
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/new-feature`
+3. Make changes and test thoroughly
+4. Commit changes: `git commit -am 'Add new feature'`
+5. Push branch: `git push origin feature/new-feature`
+6. Create Pull Request
 
-### 组件开发
+### Code Standards
 
-- 使用 Vue 3 Composition API
-- 组件按功能模块划分
-- 统一的错误处理和加载状态
+- Follow Vue.js style guide
+- Use ESLint for code quality
+- Implement responsive design
+- Add proper documentation
+- Test on multiple browsers
 
-## 部署说明
+### Testing
 
-1. 执行生产构建
-2. 将 `dist/` 目录内容部署到 Web 服务器
-3. 配置反向代理将 `/api` 请求转发到后端服务
+- Test all features thoroughly
+- Verify responsive design
+- Check browser compatibility
+- Validate accessibility
 
-## 贡献指南
+## 📄 License
 
-1. 遵循现有的代码风格
-2. 添加适当的注释
-3. 确保响应式设计
-4. 测试新功能的兼容性
+This project is licensed under the MIT License - see the [LICENSE](../LICENSE) file for details.
 
-## 许可证
+## 🙏 Acknowledgments
 
-MIT License
+- [Vue.js](https://vuejs.org/) - Progressive JavaScript framework
+- [Element Plus](https://element-plus.org/) - Vue 3 component library
+- [ECharts](https://echarts.apache.org/) - Data visualization
+- [Vue I18n](https://vue-i18n.intlify.dev/) - Internationalization
+- [Webpack](https://webpack.js.org/) - Module bundler

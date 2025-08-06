@@ -186,34 +186,94 @@ const messages = {
     // Allowlist Management
     allowlist: {
       title: '白名单管理',
-      placeholder: '输入玩家xuid',
+      placeholder: '输入玩家名称',
       add: '添加',
       remove: '移除',
       empty: '暂无白名单用户',
-      errorEmptyName: '请输入玩家xuid'
+      errorEmptyName: '请输入玩家名称',
+      // 新增字段
+      addPlayer: '添加玩家',
+      playerName: '玩家名称',
+      ignoresPlayerLimit: '忽略玩家限制',
+      actions: '操作',
+      delete: '删除',
+      emptyState: '暂无白名单玩家',
+      addPlayerDialog: {
+        title: '添加白名单玩家',
+        playerNameLabel: '玩家名称',
+        playerNamePlaceholder: '请输入玩家名称',
+        ignoresPlayerLimitLabel: '忽略玩家限制',
+        ignoresPlayerLimitTip: '开启后，该玩家可以在服务器满员时仍然加入',
+        cancel: '取消',
+        confirm: '添加'
+      },
+      validation: {
+        nameRequired: '请输入玩家名称',
+        nameLength: '玩家名称长度应在3-16个字符之间',
+        namePattern: '玩家名称只能包含字母、数字和下划线'
+      },
+      messages: {
+        loadFailed: '获取白名单失败',
+        playerExists: '该玩家已在白名单中',
+        addSuccess: '玩家添加成功',
+        addFailed: '添加玩家失败',
+        removeConfirm: '确定要将玩家 "{playerName}" 从白名单中移除吗？',
+        removeConfirmTitle: '确认删除',
+        removeSuccess: '玩家移除成功',
+        removeFailed: '移除玩家失败'
+      },
+      status: {
+        yes: '是',
+        no: '否'
+      }
     },
     
     // Permission Management
     permission: {
       title: '权限管理',
-      placeholder: '输入玩家xuid',
       add: '添加权限',
+      playerXuid: '玩家XUID',
+      permissionLevel: '权限等级',
+      actions: '操作',
       remove: '移除',
-      empty: '暂无权限设置',
-      errorEmptyName: '请输入玩家xuid',
-      modal: {
-        title: '选择权限级别',
-        description: '为玩家',
-        description2: '选择权限级别：',
-        cancel: '取消'
-      },
+      empty: '暂无权限配置',
       levels: {
         visitor: '访客',
-        visitorDesc: '只能查看，无法修改',
         member: '成员',
-        memberDesc: '可以进行基本操作',
         operator: '管理员',
+        visitorDesc: '只能查看，无法修改',
+        memberDesc: '可以进行基本操作',
         operatorDesc: '拥有完全管理权限'
+      },
+      addDialog: {
+        title: '添加权限',
+        xuidsLabel: '玩家XUID',
+        xuidsPlaceholder: '请输入16位数字XUID',
+        levelLabel: '权限等级',
+        levelPlaceholder: '请选择权限等级',
+        cancel: '取消',
+        confirm: '添加'
+      },
+      editDialog: {
+        title: '编辑权限'
+      },
+      validation: {
+        xuidsRequired: '请输入玩家XUID',
+        xuidsLength: 'XUID必须为16位数字',
+        xuidsPattern: 'XUID只能包含数字',
+        levelRequired: '请选择权限等级'
+      },
+      messages: {
+        loadFailed: '获取权限列表失败',
+        playerExists: '该玩家权限已存在',
+        addSuccess: '添加权限成功',
+        addFailed: '添加权限失败',
+        updateSuccess: '更新权限成功',
+        updateFailed: '更新权限失败',
+        removeConfirm: '确定要移除玩家 {xuid} 的权限吗？',
+        removeConfirmTitle: '确认移除',
+        removeSuccess: '移除权限成功',
+        removeFailed: '移除权限失败'
       }
     },
     
@@ -252,6 +312,7 @@ const messages = {
       refresh: '刷新',
       clear: '清空',
       autoScroll: '自动滚动',
+      autoRefresh: '自动刷新',
       status: '状态',
       connecting: '连接中...',
       connected: '已连接',
@@ -262,25 +323,44 @@ const messages = {
       cleared: '日志已清空',
       clearSuccess: '日志清空成功',
       clearFailed: '日志清空失败',
-      loadFailed: '日志加载失败'
+      loadFailed: '日志加载失败',
+      confirmClear: '确定要清空所有日志吗？此操作不可撤销！'
     },
     
     // Interaction
     interaction: {
       title: '命令交互与日志',
+      logs: '服务器日志',
+      commandInput: '命令输入',
+      quickCommands: '快捷命令',
+      commandHistory: '命令历史',
+      commandPlaceholder: '输入命令（支持上下箭头浏览历史）',
+      noLogs: '暂无日志',
+      clearLogs: '清空日志',
+      clearHistory: '清空历史',
+      confirmClearLogs: '确定要清空所有日志吗？',
+      confirmClearHistory: '确定要清空命令历史吗？',
+      logsCleared: '日志已清空',
+      historyCleared: '历史已清空',
+      loadLogsFailed: '加载日志失败',
+      clearLogsFailed: '清空日志失败',
+      clearHistoryFailed: '清空历史失败',
+      commandExecuted: '命令执行成功',
+      commandFailed: '命令执行失败',
+      commandExecuteFailed: '命令执行失败，请检查网络连接',
+      serverNotRunning: '服务器未运行，无法执行命令',
+      checkServerStatusFailed: '检查服务器状态失败',
+      executed: '已执行',
       sendCommand: '发送命令',
       command: '命令',
       send: '发送',
       history: '命令历史',
-      clearHistory: '清空',
       enabled: '命令交互已启用',
       disabled: '命令交互在当前平台不可用',
       commandSent: '命令发送成功',
       sendFailed: '发送命令失败',
       noHistory: '暂无命令历史',
-      historyCleared: '命令历史已清空',
-      clearHistorySuccess: '命令历史清空成功',
-      clearHistoryFailed: '清空命令历史失败'
+      clearHistorySuccess: '命令历史清空成功'
     },
     
     // Commands
@@ -320,6 +400,9 @@ const messages = {
     
     // Common
     common: {
+      name: '名称',
+      status: '状态',
+      actions: '操作',
       confirm: '确认',
       cancel: '取消',
       save: '保存',
@@ -335,7 +418,19 @@ const messages = {
       success: '成功',
       error: '错误',
       warning: '警告',
-      info: '信息'
+      info: '信息',
+      noData: '暂无数据',
+      operation: '操作',
+      description: '描述',
+      enabled: '启用',
+      disabled: '禁用',
+      active: '活跃',
+      inactive: '未激活',
+      activate: '激活',
+      version: '版本',
+      selectFile: '请选择文件',
+      loadFailed: '加载失败',
+      operationFailed: '操作失败'
     }
   },
   
@@ -523,34 +618,94 @@ const messages = {
     // Allowlist Management
     allowlist: {
       title: 'Allowlist Management',
-      placeholder: 'Enter player xuid',
+      placeholder: 'Enter player name',
       add: 'Add',
       remove: 'Remove',
       empty: 'No allowlist users',
-      errorEmptyName: 'Please enter player xuid'
+      errorEmptyName: 'Please enter player name',
+      // New fields
+      addPlayer: 'Add Player',
+      playerName: 'Player Name',
+      ignoresPlayerLimit: 'Ignores Player Limit',
+      actions: 'Actions',
+      delete: 'Delete',
+      emptyState: 'No allowlist players',
+      addPlayerDialog: {
+        title: 'Add Allowlist Player',
+        playerNameLabel: 'Player Name',
+        playerNamePlaceholder: 'Please enter player name',
+        ignoresPlayerLimitLabel: 'Ignores Player Limit',
+        ignoresPlayerLimitTip: 'When enabled, this player can join even when the server is full',
+        cancel: 'Cancel',
+        confirm: 'Add'
+      },
+      validation: {
+        nameRequired: 'Please enter player name',
+        nameLength: 'Player name length should be between 3-16 characters',
+        namePattern: 'Player name can only contain letters, numbers and underscores'
+      },
+      messages: {
+        loadFailed: 'Failed to load allowlist',
+        playerExists: 'This player is already in the allowlist',
+        addSuccess: 'Player added successfully',
+        addFailed: 'Failed to add player',
+        removeConfirm: 'Are you sure you want to remove player "{playerName}" from the allowlist?',
+        removeConfirmTitle: 'Confirm Delete',
+        removeSuccess: 'Player removed successfully',
+        removeFailed: 'Failed to remove player'
+      },
+      status: {
+        yes: 'Yes',
+        no: 'No'
+      }
     },
     
     // Permission Management
     permission: {
       title: 'Permission Management',
-      placeholder: 'Enter player xuid',
       add: 'Add Permission',
+      playerXuid: 'Player XUID',
+      permissionLevel: 'Permission Level',
+      actions: 'Actions',
       remove: 'Remove',
-      empty: 'No permission settings',
-      errorEmptyName: 'Please enter player xuid',
-      modal: {
-        title: 'Select Permission Level',
-        description: 'For player',
-        description2: 'select permission level:',
-        cancel: 'Cancel'
-      },
+      empty: 'No permission configurations',
       levels: {
         visitor: 'Visitor',
-        visitorDesc: 'View only, cannot modify',
         member: 'Member',
-        memberDesc: 'Can perform basic operations',
         operator: 'Operator',
-        operatorDesc: 'Full administrative permissions'
+        visitorDesc: 'Basic access permissions',
+        memberDesc: 'Regular member permissions',
+        operatorDesc: 'Administrator permissions'
+      },
+      addDialog: {
+        title: 'Add Permission',
+        xuidsLabel: 'Player XUID',
+        xuidsPlaceholder: 'Please enter 16-digit XUID',
+        levelLabel: 'Permission Level',
+        levelPlaceholder: 'Please select permission level',
+        cancel: 'Cancel',
+        confirm: 'Add'
+      },
+      editDialog: {
+        title: 'Edit Permission'
+      },
+      validation: {
+        xuidsRequired: 'Please enter player XUID',
+        xuidsLength: 'XUID must be 16 digits',
+        xuidsPattern: 'XUID can only contain numbers',
+        levelRequired: 'Please select permission level'
+      },
+      messages: {
+        loadFailed: 'Failed to load permission list',
+        playerExists: 'Player permission already exists',
+        addSuccess: 'Permission added successfully',
+        addFailed: 'Failed to add permission',
+        updateSuccess: 'Permission updated successfully',
+        updateFailed: 'Failed to update permission',
+        removeConfirm: 'Are you sure you want to remove permission for player {xuid}?',
+        removeConfirmTitle: 'Confirm Remove',
+        removeSuccess: 'Permission removed successfully',
+        removeFailed: 'Failed to remove permission'
       }
     },
     
@@ -589,6 +744,7 @@ const messages = {
       refresh: 'Refresh',
       clear: 'Clear',
       autoScroll: 'Auto Scroll',
+      autoRefresh: 'Auto Refresh',
       status: 'Status',
       connecting: 'Connecting...',
       connected: 'Connected',
@@ -599,25 +755,44 @@ const messages = {
       cleared: 'Logs cleared',
       clearSuccess: 'Logs cleared successfully',
       clearFailed: 'Failed to clear logs',
-      loadFailed: 'Failed to load logs'
+      loadFailed: 'Failed to load logs',
+      confirmClear: 'Are you sure you want to clear all logs? This action cannot be undone!'
     },
     
     // Interaction
     interaction: {
       title: 'Command Interaction & Logs',
+      logs: 'Server Logs',
+      commandInput: 'Command Input',
+      quickCommands: 'Quick Commands',
+      commandHistory: 'Command History',
+      commandPlaceholder: 'Enter command (use up/down arrows to browse history)',
+      noLogs: 'No logs available',
+      clearLogs: 'Clear Logs',
+      clearHistory: 'Clear History',
+      confirmClearLogs: 'Are you sure you want to clear all logs?',
+      confirmClearHistory: 'Are you sure you want to clear command history?',
+      logsCleared: 'Logs cleared',
+      historyCleared: 'History cleared',
+      loadLogsFailed: 'Failed to load logs',
+      clearLogsFailed: 'Failed to clear logs',
+      clearHistoryFailed: 'Failed to clear history',
+      commandExecuted: 'Command executed successfully',
+      commandFailed: 'Command execution failed',
+      commandExecuteFailed: 'Command execution failed, please check network connection',
+      serverNotRunning: 'Server is not running, cannot execute command',
+      checkServerStatusFailed: 'Failed to check server status',
+      executed: 'Executed',
       sendCommand: 'Send Command',
       command: 'Command',
       send: 'Send',
       history: 'Command History',
-      clearHistory: 'Clear',
       enabled: 'Command interaction enabled',
       disabled: 'Command interaction not available on current platform',
       commandSent: 'Command sent successfully',
       sendFailed: 'Failed to send command',
       noHistory: 'No command history',
-      historyCleared: 'Command history cleared',
-      clearHistorySuccess: 'Command history cleared successfully',
-      clearHistoryFailed: 'Failed to clear command history'
+      clearHistorySuccess: 'Command history cleared successfully'
     },
     
     // Commands
@@ -657,6 +832,9 @@ const messages = {
     
     // Common
     common: {
+      name: 'Name',
+      status: 'Status',
+      actions: 'Actions',
       confirm: 'Confirm',
       cancel: 'Cancel',
       save: 'Save',
@@ -672,7 +850,19 @@ const messages = {
       success: 'Success',
       error: 'Error',
       warning: 'Warning',
-      info: 'Info'
+      info: 'Info',
+      noData: 'No Data',
+      operation: 'Operation',
+      description: 'Description',
+      enabled: 'Enabled',
+      disabled: 'Disabled',
+      active: 'Active',
+      inactive: 'Inactive',
+      activate: 'Activate',
+      version: 'Version',
+      selectFile: 'Please select a file',
+      loadFailed: 'Load failed',
+      operationFailed: 'Operation failed'
     }
   }
 }

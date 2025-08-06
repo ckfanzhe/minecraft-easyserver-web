@@ -1,5 +1,5 @@
 {
-  "name": "minecraft-easy-server-frontend",
+  "name": "minecraft-easyserver-web",
   "version": "1.0.0",
   "description": "Minecraft Easy Server Frontend",
   "main": "index.js",
@@ -33,7 +33,7 @@
     "vue-loader": "^17.2.2",
     "webpack": "^5.88.2",
     "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^4.15.1"
+    "webpack-dev-server": "^5.2.2"
   },
   "keywords": [
     "minecraft",
