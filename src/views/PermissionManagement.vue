@@ -14,15 +14,15 @@
       
       <div class="permission-content">
         <el-table :data="permissions" v-loading="loading" stripe>
-          <el-table-column prop="xuid" :label="$t('permission.playerXuid')" width="200" />
-          <el-table-column prop="permission" :label="$t('permission.permissionLevel')" width="150">
+          <el-table-column prop="xuid" :label="$t('permission.playerXuid')" min-width="200" />
+          <el-table-column prop="permission" :label="$t('permission.permissionLevel')" min-width="150">
             <template #default="scope">
               <el-tag :type="getPermissionTagType(scope.row.permission)">
                 {{ $t(`permission.levels.${scope.row.permission}`) }}
               </el-tag>
             </template>
           </el-table-column>
-          <el-table-column :label="$t('permission.actions')" width="120">
+          <el-table-column :label="$t('permission.actions')" min-width="120">
             <template #default="scope">
               <el-button
                 type="primary"

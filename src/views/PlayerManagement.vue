@@ -14,15 +14,15 @@
       
       <div class="allowlist-content">
         <el-table :data="allowlist" v-loading="loading" stripe>
-          <el-table-column prop="name" :label="$t('allowlist.playerName')" width="200" />
-          <el-table-column prop="ignoresPlayerLimit" :label="$t('allowlist.ignoresPlayerLimit')" width="150">
+          <el-table-column prop="name" :label="$t('allowlist.playerName')" min-width="200" />
+          <el-table-column prop="ignoresPlayerLimit" :label="$t('allowlist.ignoresPlayerLimit')" min-width="150">
             <template #default="scope">
               <el-tag :type="scope.row.ignoresPlayerLimit ? 'success' : 'info'">
                 {{ scope.row.ignoresPlayerLimit ? $t('allowlist.status.yes') : $t('allowlist.status.no') }}
               </el-tag>
             </template>
           </el-table-column>
-          <el-table-column :label="$t('allowlist.actions')" width="120">
+          <el-table-column :label="$t('allowlist.actions')" min-width="120">
             <template #default="scope">
               <el-button
                 type="danger"
