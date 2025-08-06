@@ -15,7 +15,7 @@
           active-text-color="#409EFF"
         >
           <el-menu-item index="/">
-            <el-icon><House /></el-icon>
+            <el-icon><Odometer /></el-icon>
             <span>{{ $t('nav.menu.dashboard') }}</span>
           </el-menu-item>
           <el-menu-item index="/config">
@@ -31,7 +31,7 @@
             <span>{{ $t('nav.menu.permission') }}</span>
           </el-menu-item>
           <el-menu-item index="/worlds">
-            <el-icon><Globe /></el-icon>
+            <el-icon><Baseball /></el-icon>
             <span>{{ $t('nav.menu.world') }}</span>
           </el-menu-item>
           <el-menu-item index="/commands">

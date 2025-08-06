@@ -328,19 +328,37 @@ const messages = {
     // Interaction
     interaction: {
       title: '命令交互与日志',
+      logs: '服务器日志',
+      commandInput: '命令输入',
+      quickCommands: '快捷命令',
+      commandHistory: '命令历史',
+      commandPlaceholder: '输入命令（支持上下箭头浏览历史）',
+      noLogs: '暂无日志',
+      clearLogs: '清空日志',
+      clearHistory: '清空历史',
+      confirmClearLogs: '确定要清空所有日志吗？',
+      confirmClearHistory: '确定要清空命令历史吗？',
+      logsCleared: '日志已清空',
+      historyCleared: '历史已清空',
+      loadLogsFailed: '加载日志失败',
+      clearLogsFailed: '清空日志失败',
+      clearHistoryFailed: '清空历史失败',
+      commandExecuted: '命令执行成功',
+      commandFailed: '命令执行失败',
+      commandExecuteFailed: '命令执行失败，请检查网络连接',
+      serverNotRunning: '服务器未运行，无法执行命令',
+      checkServerStatusFailed: '检查服务器状态失败',
+      executed: '已执行',
       sendCommand: '发送命令',
       command: '命令',
       send: '发送',
       history: '命令历史',
-      clearHistory: '清空',
       enabled: '命令交互已启用',
       disabled: '命令交互在当前平台不可用',
       commandSent: '命令发送成功',
       sendFailed: '发送命令失败',
       noHistory: '暂无命令历史',
-      historyCleared: '命令历史已清空',
-      clearHistorySuccess: '命令历史清空成功',
-      clearHistoryFailed: '清空命令历史失败'
+      clearHistorySuccess: '命令历史清空成功'
     },
     
     // Commands
@@ -380,6 +398,9 @@ const messages = {
     
     // Common
     common: {
+      name: '名称',
+      status: '状态',
+      actions: '操作',
       confirm: '确认',
       cancel: '取消',
       save: '保存',
@@ -395,7 +416,18 @@ const messages = {
       success: '成功',
       error: '错误',
       warning: '警告',
-      info: '信息'
+      info: '信息',
+      noData: '暂无数据',
+      operation: '操作',
+      description: '描述',
+      enabled: '启用',
+      disabled: '禁用',
+      active: '活跃',
+      inactive: '未激活',
+      activate: '激活',
+      selectFile: '请选择文件',
+      loadFailed: '加载失败',
+      operationFailed: '操作失败'
     }
   },
   
@@ -725,19 +757,37 @@ const messages = {
     // Interaction
     interaction: {
       title: 'Command Interaction & Logs',
+      logs: 'Server Logs',
+      commandInput: 'Command Input',
+      quickCommands: 'Quick Commands',
+      commandHistory: 'Command History',
+      commandPlaceholder: 'Enter command (use up/down arrows to browse history)',
+      noLogs: 'No logs available',
+      clearLogs: 'Clear Logs',
+      clearHistory: 'Clear History',
+      confirmClearLogs: 'Are you sure you want to clear all logs?',
+      confirmClearHistory: 'Are you sure you want to clear command history?',
+      logsCleared: 'Logs cleared',
+      historyCleared: 'History cleared',
+      loadLogsFailed: 'Failed to load logs',
+      clearLogsFailed: 'Failed to clear logs',
+      clearHistoryFailed: 'Failed to clear history',
+      commandExecuted: 'Command executed successfully',
+      commandFailed: 'Command execution failed',
+      commandExecuteFailed: 'Command execution failed, please check network connection',
+      serverNotRunning: 'Server is not running, cannot execute command',
+      checkServerStatusFailed: 'Failed to check server status',
+      executed: 'Executed',
       sendCommand: 'Send Command',
       command: 'Command',
       send: 'Send',
       history: 'Command History',
-      clearHistory: 'Clear',
       enabled: 'Command interaction enabled',
       disabled: 'Command interaction not available on current platform',
       commandSent: 'Command sent successfully',
       sendFailed: 'Failed to send command',
       noHistory: 'No command history',
-      historyCleared: 'Command history cleared',
-      clearHistorySuccess: 'Command history cleared successfully',
-      clearHistoryFailed: 'Failed to clear command history'
+      clearHistorySuccess: 'Command history cleared successfully'
     },
     
     // Commands
@@ -777,6 +827,9 @@ const messages = {
     
     // Common
     common: {
+      name: 'Name',
+      status: 'Status',
+      actions: 'Actions',
       confirm: 'Confirm',
       cancel: 'Cancel',
       save: 'Save',
@@ -792,7 +845,18 @@ const messages = {
       success: 'Success',
       error: 'Error',
       warning: 'Warning',
-      info: 'Info'
+      info: 'Info',
+      noData: 'No Data',
+      operation: 'Operation',
+      description: 'Description',
+      enabled: 'Enabled',
+      disabled: 'Disabled',
+      active: 'Active',
+      inactive: 'Inactive',
+      activate: 'Activate',
+      selectFile: 'Please select a file',
+      loadFailed: 'Load failed',
+      operationFailed: 'Operation failed'
     }
   }
 }
