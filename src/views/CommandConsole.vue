@@ -1,11 +1,15 @@
 <template>
   <div class="command-console">
-    <!-- 日志显示区域 -->
-    <el-card class="log-card">
+    <!-- 控制台区域 -->
+    <el-card class="console-card">
       <template #header>
         <div class="card-header">
           <span>{{ $t('interaction.logs') }}</span>
           <div class="header-actions">
+            <el-button type="primary" size="small" @click="showQuickCommands = !showQuickCommands">
+              <el-icon><Menu /></el-icon>
+              {{ $t('interaction.quickCommands') }}
+            </el-button>
             <el-button type="primary" size="small" @click="refreshLogs">
               <el-icon><Refresh /></el-icon>
               {{ $t('common.refresh') }}
@@ -13,39 +17,6 @@
             <el-button type="danger" size="small" @click="clearLogs">
               <el-icon><Delete /></el-icon>
               {{ $t('interaction.clearLogs') }}
-            </el-button>
-          </div>
-        </div>
-      </template>
-      
-      <div class="log-container" ref="logContainer">
-        <div v-if="logs.length === 0" class="empty-logs">
-          <el-empty :description="$t('interaction.noLogs')" />
-        </div>
-        <div v-else class="log-content">
-          <div 
-            v-for="(log, index) in logs" 
-            :key="index" 
-            class="log-line"
-            :class="getLogClass(log.level)"
-          >
-            <span class="log-timestamp">{{ formatTimestamp(log.timestamp) }}</span>
-            <span class="log-level">{{ log.level }}</span>
-            <span class="log-message">{{ log.message }}</span>
-          </div>
-        </div>
-      </div>
-    </el-card>
-
-    <!-- 命令输入区域 -->
-    <el-card class="command-card">
-      <template #header>
-        <div class="card-header">
-          <span>{{ $t('interaction.commandInput') }}</span>
-          <div class="header-actions">
-            <el-button type="primary" size="small" @click="showQuickCommands = !showQuickCommands">
-              <el-icon><Menu /></el-icon>
-              {{ $t('interaction.quickCommands') }}
             </el-button>
             <el-button type="warning" size="small" @click="clearHistory">
               <el-icon><Delete /></el-icon>
@@ -71,50 +42,86 @@
         </div>
       </div>
       
-      <!-- 命令输入框 -->
-      <div class="command-input-area">
-        <div class="input-wrapper">
-          <span class="command-prompt">></span>
-          <el-input
-            v-model="currentCommand"
-            :placeholder="$t('interaction.commandPlaceholder')"
-            @keyup.enter="executeCommand"
-            @keyup.up="navigateHistory(-1)"
-            @keyup.down="navigateHistory(1)"
-            class="command-input"
-            :disabled="executing"
-          />
-          <el-button 
-            type="primary" 
-            @click="executeCommand"
-            :loading="executing"
-            class="execute-btn"
-          >
-            <el-icon><Right /></el-icon>
-          </el-button>
+      <div class="console-container">
+        <!-- 日志显示区域 -->
+        <div class="log-container" ref="logContainer">
+          <div v-if="mergedTimeline.length === 0" class="empty-logs">
+            <el-empty :description="$t('interaction.noLogs')" />
+          </div>
+          <div v-else class="log-content">
+            <!-- 统一时间线 -->
+            <template v-for="(item, index) in mergedTimeline" :key="index">
+              <!-- 服务器日志 -->
+              <div 
+                v-if="item.type === 'log'"
+                class="log-line"
+                :class="getLogClass(item.data.level)"
+              >
+                <span class="log-timestamp">{{ formatTimestamp(item.data.timestamp) }}</span>
+                <span class="log-level">{{ item.data.level }}</span>
+                <span class="log-message">{{ item.data.message }}</span>
+              </div>
+              
+              <!-- 命令历史 -->
+              <div 
+                v-else-if="item.type === 'command'"
+                class="command-block"
+              >
+                <!-- 命令行 -->
+                <div 
+                  class="command-line"
+                  :class="{ 
+                    'success': item.data.success === true, 
+                    'error': item.data.success === false,
+                    'executing': item.data.executing
+                  }"
+                >
+                  <span class="log-timestamp">{{ formatTimestamp(item.data.timestamp) }}</span>
+                  <span class="command-prompt">></span>
+                  <span class="command-text">{{ item.data.command }}</span>
+                  <span class="command-status">
+                    <el-icon v-if="item.data.executing" class="rotating"><Loading /></el-icon>
+                    <el-icon v-else-if="item.data.success === true"><Check /></el-icon>
+                    <el-icon v-else-if="item.data.success === false"><Close /></el-icon>
+                  </span>
+                </div>
+                <!-- 命令响应 -->
+                <div 
+                  class="command-response"
+                  :class="{ 
+                    'success': item.data.success === true, 
+                    'error': item.data.success === false,
+                    'executing': item.data.executing
+                  }"
+                >
+                  {{ item.data.response }}
+                </div>
+              </div>
+            </template>
+          </div>
         </div>
-      </div>
-      
-      <!-- 命令历史 -->
-      <div v-if="commandHistory.length > 0" class="command-history">
-        <div class="history-header">
-          <span>{{ $t('interaction.commandHistory') }}</span>
-          <span class="history-count">({{ commandHistory.length }})</span>
-        </div>
-        <div class="history-list">
-          <div 
-            v-for="(cmd, index) in commandHistory.slice(-10)" 
-            :key="index"
-            class="history-item"
-            :class="{ 'success': cmd.success, 'error': !cmd.success }"
-            @click="currentCommand = cmd.command"
-          >
-            <span class="history-timestamp">{{ formatTimestamp(cmd.timestamp) }}</span>
-            <span class="history-command">{{ cmd.command }}</span>
-            <span class="history-status">
-              <el-icon v-if="cmd.success"><Check /></el-icon>
-              <el-icon v-else><Close /></el-icon>
-            </span>
+        
+        <!-- 命令输入框 -->
+        <div class="command-input-area">
+          <div class="input-wrapper">
+            <span class="command-prompt">></span>
+            <el-input
+              v-model="currentCommand"
+              :placeholder="$t('interaction.commandPlaceholder')"
+              @keyup.enter="executeCommand"
+              @keyup.up="navigateHistory(-1)"
+              @keyup.down="navigateHistory(1)"
+              class="command-input"
+              :disabled="executing"
+            />
+            <el-button 
+              type="primary" 
+              @click="executeCommand"
+              :loading="executing"
+              class="execute-btn"
+            >
+              <el-icon><Right /></el-icon>
+            </el-button>
           </div>
         </div>
       </div>
@@ -123,13 +130,20 @@
 </template>
 
 <script>
-import { ref, reactive, onMounted, onUnmounted, nextTick } from 'vue';
+import { ref, reactive, onMounted, onUnmounted, nextTick, computed } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { useI18n } from 'vue-i18n';
+import { Check, Close, Right, Loading } from '@element-plus/icons-vue';
 import api from '../api';
 
 export default {
   name: 'CommandConsole',
+  components: {
+    Check,
+    Close,
+    Right,
+    Loading
+  },
   setup() {
     const { t } = useI18n();
     const logs = ref([]);
@@ -152,6 +166,32 @@ export default {
     const getLogClass = (level) => {
       return `log-${level?.toLowerCase() || 'info'}`;
     };
+
+    // 合并日志和命令历史，按时间排序
+    const mergedTimeline = computed(() => {
+      const timeline = [];
+      
+      // 添加服务器日志
+      logs.value.forEach(log => {
+        timeline.push({
+          type: 'log',
+          timestamp: log.timestamp,
+          data: log
+        });
+      });
+      
+      // 添加命令历史
+      commandHistory.value.forEach(cmd => {
+        timeline.push({
+          type: 'command',
+          timestamp: cmd.timestamp,
+          data: cmd
+        });
+      });
+      
+      // 按时间戳排序
+      return timeline.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+    });
 
     // 滚动到日志底部
     const scrollToBottom = () => {
@@ -246,38 +286,56 @@ export default {
       executing.value = true;
       const command = currentCommand.value.trim();
       
+      // 先立即显示命令（状态为执行中）
+      const commandEntry = {
+        command,
+        response: '执行中...',
+        timestamp: new Date().toLocaleString('sv-SE').replace('T', ' '),
+        success: null, // null表示执行中
+        executing: true
+      };
+      commandHistory.value.push(commandEntry);
+      
+      // 清空输入框
+      currentCommand.value = '';
+      historyIndex.value = -1;
+      
+      // 滚动到底部显示新命令
+      scrollToBottom();
+      
       try {
         const response = await api.sendCommand(command);
         
-        // 添加到历史记录
-        commandHistory.value.push({
-          command,
-          response: response.data.message || '命令已发送',
-          timestamp: new Date().toISOString(),
-          success: true
-        });
-        
-        // 清空输入框
-        currentCommand.value = '';
-        historyIndex.value = -1;
+        // 更新命令历史记录的响应
+        const lastIndex = commandHistory.value.length - 1;
+        commandHistory.value[lastIndex] = {
+          ...commandHistory.value[lastIndex],
+          response: response.data.message || '命令执行成功',
+          success: true,
+          executing: false
+        };
         
         // 显示执行结果
         ElMessage.success(t('interaction.commandExecuted'));
         
-        // 刷新日志
-        setTimeout(loadLogs, 1000);
+        // 滚动到底部显示更新的结果
+        scrollToBottom();
         
       } catch (error) {
         console.error('执行命令失败:', error);
         ElMessage.error(t('interaction.commandExecuteFailed'));
         
-        // 仍然添加到历史记录
-        commandHistory.value.push({
-          command,
+        // 更新命令历史记录的错误响应
+        const lastIndex = commandHistory.value.length - 1;
+        commandHistory.value[lastIndex] = {
+          ...commandHistory.value[lastIndex],
           response: error.message || t('interaction.commandExecuteFailed'),
-          timestamp: new Date().toISOString(),
-          success: false
-        });
+          success: false,
+          executing: false
+        };
+        
+        // 滚动到底部显示更新的结果
+        scrollToBottom();
       } finally {
         executing.value = false;
       }
@@ -298,27 +356,54 @@ export default {
         return;
       }
 
+      executing.value = true;
+      
+      // 先立即显示命令（状态为执行中）
+      const commandEntry = {
+        command: cmd.command,
+        response: '执行中...',
+        timestamp: new Date().toLocaleString('sv-SE').replace('T', ' '),
+        success: null, // null表示执行中
+        executing: true
+      };
+      commandHistory.value.push(commandEntry);
+      
+      // 滚动到底部显示新命令
+      scrollToBottom();
+      
       try {
-        executing.value = true;
         const response = await api.executeQuickCommand(cmd.id);
         
-        // 添加到历史记录
-        commandHistory.value.push({
-          command: cmd.command,
-          response: response.data.message || '快捷命令已执行',
-          timestamp: new Date().toISOString(),
-          success: true
-        });
+        // 更新命令历史记录的响应
+        const lastIndex = commandHistory.value.length - 1;
+        commandHistory.value[lastIndex] = {
+          ...commandHistory.value[lastIndex],
+          response: response.data.message || '快捷命令执行成功',
+          success: true,
+          executing: false
+        };
         
         // 显示执行结果
-        ElMessage.success(`${command.name} ${t('interaction.executed')}`);
+        ElMessage.success(`${cmd.name} ${t('interaction.executed')}`);
         
-        // 刷新日志
-        setTimeout(loadLogs, 1000);
+        // 滚动到底部显示更新的结果
+        scrollToBottom();
         
       } catch (error) {
         console.error('执行快捷命令失败:', error);
         ElMessage.error(t('interaction.commandExecuteFailed'));
+        
+        // 更新命令历史记录的错误响应
+        const lastIndex = commandHistory.value.length - 1;
+        commandHistory.value[lastIndex] = {
+          ...commandHistory.value[lastIndex],
+          response: error.message || t('interaction.commandExecuteFailed'),
+          success: false,
+          executing: false
+        };
+        
+        // 滚动到底部显示更新的结果
+        scrollToBottom();
       } finally {
         executing.value = false;
       }
@@ -376,6 +461,8 @@ export default {
         
         logWebSocket.onopen = () => {
           console.log('WebSocket连接已建立');
+          // 连接建立后加载历史日志
+          loadLogs();
         };
         
         logWebSocket.onmessage = (event) => {
@@ -409,14 +496,12 @@ export default {
     };
 
     onMounted(() => {
-      loadLogs();
       loadCommandHistory();
       loadQuickCommands();
       initWebSocket();
       
-      // 定期刷新数据
+      // 定期刷新命令历史（日志通过WebSocket实时更新）
       refreshInterval = setInterval(() => {
-        loadLogs();
         loadCommandHistory();
       }, 30000);
     });
@@ -438,6 +523,7 @@ export default {
       executing,
       showQuickCommands,
       logContainer,
+      mergedTimeline,
       formatTimestamp,
       getLogClass,
       refreshLogs,
@@ -474,7 +560,7 @@ export default {
     }
   }
 
-  .log-card {
+  .console-card {
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -486,10 +572,15 @@ export default {
       padding: 0;
     }
     
+    .console-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    
     .log-container {
       width: 100%;
       flex: 1;
-      max-height: 550px;
       overflow-y: auto;
       overflow-x: hidden;
       background: #1e1e1e;
@@ -591,42 +682,114 @@ export default {
             }
           }
         }
-      }
-    }
-  }
-
-  .command-card {
-    flex-shrink: 0;
-    
-    .quick-commands-panel {
-      margin-bottom: 16px;
-      padding: 12px;
-      background: #f5f7fa;
-      border-radius: 6px;
-      
-      .quick-commands-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-        gap: 8px;
         
-        .quick-cmd-btn {
+        .command-line {
+          display: flex;
+          margin-bottom: 2px;
+          padding: 2px 0;
+          
+          .log-timestamp {
+            color: #569cd6;
+            margin-right: 8px;
+            min-width: 140px;
+            flex-shrink: 0;
+          }
+          
+          .command-prompt {
+            color: #4ec9b0;
+            font-weight: bold;
+            margin-right: 8px;
+            min-width: 20px;
+            flex-shrink: 0;
+          }
+          
+          .command-text {
+            flex: 1;
+            color: #d4d4d4;
+            word-break: break-all;
+          }
+          
+          .command-status {
+            margin-left: 8px;
+            flex-shrink: 0;
+            
+            .el-icon {
+              font-size: 14px;
+            }
+          }
+          
+          &.success {
+            .command-status .el-icon {
+              color: #67c23a;
+            }
+          }
+          
+          &.error {
+            .command-status .el-icon {
+              color: #f56c6c;
+            }
+          }
+          
+          &.executing {
+            .command-status .el-icon {
+              color: #409eff;
+            }
+          }
+        }
+        
+        .command-response {
+          margin-left: 148px;
+          padding: 4px 8px;
+          font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
           font-size: 12px;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
+          white-space: pre-wrap;
+          border-left: 3px solid #409eff;
+          background: rgba(64, 158, 255, 0.1);
+          
+          &.success {
+            border-left-color: #67c23a;
+            background: rgba(103, 194, 58, 0.1);
+            color: #67c23a;
+          }
+          
+          &.error {
+            border-left-color: #f56c6c;
+            background: rgba(245, 108, 108, 0.1);
+            color: #f56c6c;
+          }
+          
+          &.executing {
+            border-left-color: #409eff;
+            background: rgba(64, 158, 255, 0.1);
+            color: #409eff;
+          }
         }
       }
     }
     
+    // 旋转动画
+    .rotating {
+      animation: rotate 1s linear infinite;
+    }
+    
+    @keyframes rotate {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+    
     .command-input-area {
-      margin-bottom: 16px;
+      flex-shrink: 0;
+      padding: 12px;
+      background: #1e1e1e;
+      border-top: 1px solid #333;
       
       .input-wrapper {
         display: flex;
         align-items: center;
-        background: #1e1e1e;
-        border-radius: 6px;
-        padding: 8px 12px;
         
         .command-prompt {
           color: #4ec9b0;
@@ -663,85 +826,26 @@ export default {
         }
       }
     }
-    
-    .command-history {
-      .history-header {
-        display: flex;
-        align-items: center;
-        margin-bottom: 8px;
-        font-weight: 600;
-        color: #606266;
-        
-        .history-count {
-          margin-left: 4px;
-          font-size: 12px;
-          color: #909399;
-        }
-      }
+  }
+
+    .quick-commands-panel {
+      margin-bottom: 16px;
+      padding: 12px;
+      background: #f5f7fa;
+      border-radius: 6px;
       
-      .history-list {
-        max-height: 200px;
-        overflow-y: auto;
+      .quick-commands-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 8px;
         
-        .history-item {
-          display: flex;
-          align-items: center;
-          padding: 6px 8px;
-          margin-bottom: 2px;
-          background: #f8f9fa;
-          border-radius: 4px;
-          cursor: pointer;
-          transition: background-color 0.2s;
-          
-          &:hover {
-            background: #e9ecef;
-          }
-          
-          &.success {
-            border-left: 3px solid #67c23a;
-          }
-          
-          &.error {
-            border-left: 3px solid #f56c6c;
-          }
-          
-          .history-timestamp {
-            font-size: 11px;
-            color: #909399;
-            margin-right: 8px;
-            min-width: 120px;
-            flex-shrink: 0;
-          }
-          
-          .history-command {
-            flex: 1;
-            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-            font-size: 12px;
-            color: #606266;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-          }
-          
-          .history-status {
-            margin-left: 8px;
-            flex-shrink: 0;
-            
-            .el-icon {
-              font-size: 14px;
-              
-              &.success {
-                color: #67c23a;
-              }
-              
-              &.error {
-                color: #f56c6c;
-              }
-            }
-          }
+        .quick-cmd-btn {
+          font-size: 12px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
       }
     }
-  }
 }
 </style>
