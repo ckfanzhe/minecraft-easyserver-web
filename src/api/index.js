@@ -52,11 +52,6 @@ export default {
   updatePermission: (permission) => api.put('/permissions', permission),
   removePermission: (xuid) => api.delete(`/permissions/${xuid}`),
 
-  // 权限管理
-  getPermissions: () => api.get('/permissions'),
-  updatePermission: (permission) => api.put('/permissions', permission),
-  removePermission: (xuid) => api.delete(`/permissions/${xuid}`),
-
   // 世界管理
   getWorlds: () => api.get('/worlds'),
   uploadWorld: (formData) => api.post('/worlds/upload', formData, {

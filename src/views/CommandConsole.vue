@@ -156,10 +156,13 @@ export default {
     const logContainer = ref(null);
     let logWebSocket = null;
     let refreshInterval = null;
+    let reconnectAttempts = 0;
+    const maxReconnectAttempts = 10;
+    let reconnectTimeout = null;
 
     // 格式化时间戳
     const formatTimestamp = (timestamp) => {
-      return new Date(timestamp).toLocaleString();
+      return new Date(timestamp).toLocaleString('sv-SE').replace('T', ' ');
     };
 
     // 获取日志样式类
@@ -323,13 +326,27 @@ export default {
         
       } catch (error) {
         console.error('执行命令失败:', error);
-        ElMessage.error(t('interaction.commandExecuteFailed'));
+        
+        // 提供更具体的错误信息
+        let errorMessage = t('interaction.commandExecuteFailed');
+        if (error.response) {
+          // 服务器返回的错误
+          errorMessage = error.response.data?.error || error.response.data?.message || errorMessage;
+        } else if (error.request) {
+          // 网络错误
+          errorMessage = '网络连接失败，请检查服务器状态';
+        } else {
+          // 其他错误
+          errorMessage = error.message || errorMessage;
+        }
+        
+        ElMessage.error(errorMessage);
         
         // 更新命令历史记录的错误响应
         const lastIndex = commandHistory.value.length - 1;
         commandHistory.value[lastIndex] = {
           ...commandHistory.value[lastIndex],
-          response: error.message || t('interaction.commandExecuteFailed'),
+          response: errorMessage,
           success: false,
           executing: false
         };
@@ -391,13 +408,27 @@ export default {
         
       } catch (error) {
         console.error('执行快捷命令失败:', error);
-        ElMessage.error(t('interaction.commandExecuteFailed'));
+        
+        // 提供更具体的错误信息
+        let errorMessage = t('interaction.commandExecuteFailed');
+        if (error.response) {
+          // 服务器返回的错误
+          errorMessage = error.response.data?.error || error.response.data?.message || errorMessage;
+        } else if (error.request) {
+          // 网络错误
+          errorMessage = '网络连接失败，请检查服务器状态';
+        } else {
+          // 其他错误
+          errorMessage = error.message || errorMessage;
+        }
+        
+        ElMessage.error(errorMessage);
         
         // 更新命令历史记录的错误响应
         const lastIndex = commandHistory.value.length - 1;
         commandHistory.value[lastIndex] = {
           ...commandHistory.value[lastIndex],
-          response: error.message || t('interaction.commandExecuteFailed'),
+          response: errorMessage,
           success: false,
           executing: false
         };
@@ -416,12 +447,18 @@ export default {
       if (direction === -1) { // 上箭头
         if (historyIndex.value < commandHistory.value.length - 1) {
           historyIndex.value++;
-          currentCommand.value = commandHistory.value[commandHistory.value.length - 1 - historyIndex.value].command;
+          const targetIndex = commandHistory.value.length - 1 - historyIndex.value;
+          if (targetIndex >= 0 && targetIndex < commandHistory.value.length) {
+            currentCommand.value = commandHistory.value[targetIndex].command;
+          }
         }
       } else if (direction === 1) { // 下箭头
         if (historyIndex.value > 0) {
           historyIndex.value--;
-          currentCommand.value = commandHistory.value[commandHistory.value.length - 1 - historyIndex.value].command;
+          const targetIndex = commandHistory.value.length - 1 - historyIndex.value;
+          if (targetIndex >= 0 && targetIndex < commandHistory.value.length) {
+            currentCommand.value = commandHistory.value[targetIndex].command;
+          }
         } else if (historyIndex.value === 0) {
           historyIndex.value = -1;
           currentCommand.value = '';
@@ -461,6 +498,7 @@ export default {
         
         logWebSocket.onopen = () => {
           console.log('WebSocket连接已建立');
+          reconnectAttempts = 0; // 重置重连计数
           // 连接建立后加载历史日志
           loadLogs();
         };
@@ -487,11 +525,32 @@ export default {
         
         logWebSocket.onclose = () => {
           console.log('WebSocket连接已关闭');
-          // 5秒后尝试重连
-          setTimeout(initWebSocket, 5000);
+          
+          // 实现指数退避重连策略
+          if (reconnectAttempts < maxReconnectAttempts) {
+            const delay = Math.min(1000 * Math.pow(2, reconnectAttempts), 30000); // 最大延迟30秒
+            console.log(`${delay}ms后尝试第${reconnectAttempts + 1}次重连`);
+            
+            reconnectTimeout = setTimeout(() => {
+              reconnectAttempts++;
+              initWebSocket();
+            }, delay);
+          } else {
+            console.error('WebSocket重连次数已达上限，停止重连');
+            ElMessage.error('日志连接已断开，请刷新页面重试');
+          }
         };
       } catch (error) {
         console.error('初始化WebSocket失败:', error);
+        
+        // 初始化失败也要尝试重连
+        if (reconnectAttempts < maxReconnectAttempts) {
+          const delay = Math.min(1000 * Math.pow(2, reconnectAttempts), 30000);
+          reconnectTimeout = setTimeout(() => {
+            reconnectAttempts++;
+            initWebSocket();
+          }, delay);
+        }
       }
     };
 
@@ -512,6 +571,9 @@ export default {
       }
       if (refreshInterval) {
         clearInterval(refreshInterval);
+      }
+      if (reconnectTimeout) {
+        clearTimeout(reconnectTimeout);
       }
     });
 
