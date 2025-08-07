@@ -1,6 +1,6 @@
 import { createI18n } from 'vue-i18n'
 
-// 翻译资源
+// Translation resources
 const messages = {
   zh: {
     // Navigation
@@ -237,7 +237,7 @@ const messages = {
       remove: '移除',
       empty: '暂无白名单用户',
       errorEmptyName: '请输入玩家名称',
-      // 新增字段
+      // New fields
       addPlayer: '添加玩家',
       playerName: '玩家名称',
       ignoresPlayerLimit: '忽略玩家限制',
@@ -959,11 +959,11 @@ const messages = {
   }
 }
 
-// 创建 i18n 实例
+// Create i18n instance
 const i18n = createI18n({
-  legacy: false, // 使用 Composition API 模式
-  locale: localStorage.getItem('language') || 'zh', // 默认语言
-  fallbackLocale: 'zh', // 回退语言
+  legacy: false, // Use Composition API mode
+  locale: localStorage.getItem('language') || 'zh', // Default language
+  fallbackLocale: 'zh', // Fallback language
   messages
 })
 

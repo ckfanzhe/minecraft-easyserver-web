@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <el-container class="app-container">
-      <!-- 侧边栏 -->
+      <!-- Sidebar -->
       <el-aside :width="isCollapsed ? '64px' : '250px'" class="sidebar">
         <div class="logo">
           <h2 v-if="!isCollapsed">🎮 {{ $t('nav.title') }}</h2>
@@ -22,7 +22,7 @@
             <span>{{ $t('nav.menu.dashboard') }}</span>
           </el-menu-item>
           
-          <!-- 服务器管理子菜单 -->
+          <!-- Server Management Submenu -->
           <el-sub-menu index="server">
             <template #title>
               <el-icon><Setting /></el-icon>
@@ -42,7 +42,7 @@
             </el-menu-item>
           </el-sub-menu>
           
-          <!-- 玩家管理子菜单 -->
+          <!-- Player Management Submenu -->
           <el-sub-menu index="players">
             <template #title>
               <el-icon><User /></el-icon>
@@ -58,7 +58,7 @@
             </el-menu-item>
           </el-sub-menu>
           
-          <!-- 世界管理子菜单 -->
+          <!-- World Management Submenu -->
           <el-sub-menu index="world">
             <template #title>
               <el-icon><Baseball /></el-icon>
@@ -74,7 +74,7 @@
             </el-menu-item>
           </el-sub-menu>
           
-          <!-- 交互与日志子菜单 -->
+          <!-- Interaction and Logs Submenu -->
           <el-sub-menu index="interaction">
             <template #title>
               <el-icon><ChatLineSquare /></el-icon>
@@ -92,9 +92,9 @@
         </el-menu>
       </el-aside>
 
-      <!-- 主内容区 -->
+      <!-- Main Content Area -->
       <el-container>
-        <!-- 顶部导航栏 -->
+        <!-- Top Navigation Bar -->
         <el-header height="60px" class="header">
           <div class="header-content">
             <div class="header-left">
@@ -108,7 +108,7 @@
                 {{ getStatusText() }}
               </div>
               
-              <!-- 服务器控制按钮组 -->
+              <!-- Server Control Button Group -->
               <el-button-group class="control-btn-group">
                 <el-button 
                   :type="serverStatus === 'running' ? 'warning' : 'success'"
@@ -138,7 +138,7 @@
           </div>
         </el-header>
 
-        <!-- 主要内容 -->
+        <!-- Main Content -->
         <el-main class="main-content">
           <router-view />
         </el-main>
@@ -237,9 +237,9 @@ export default {
         case 'stopped':
           return t('nav.statusStopped');
         case 'starting':
-          return t('nav.statusOnline'); // 使用在线状态作为启动中
+          return t('nav.statusOnline'); // Use online status for starting
         case 'stopping':
-          return t('nav.statusOffline'); // 使用离线状态作为停止中
+          return t('nav.statusOffline'); // Use offline status for stopping
         default:
           return t('nav.statusUnknown');
       }
@@ -250,12 +250,12 @@ export default {
         const response = await api.getServerStatus();
         serverStatus.value = response.data.status;
       } catch (error) {
-        console.error('获取服务器状态失败:', error);
+        console.error('Failed to get server status:', error);
         serverStatus.value = '错误';
       }
     };
 
-    // 服务器控制方法
+    // Server control methods
     const startServer = async () => {
       try {
         await ElMessageBox.confirm(
@@ -274,7 +274,7 @@ export default {
         setTimeout(refreshStatus, 2000);
       } catch (error) {
         if (error !== 'cancel') {
-          console.error('启动服务器失败:', error);
+          console.error('Failed to start server:', error);
           ElMessage.error(t('serverManagement.startError'));
           refreshStatus();
         }
@@ -299,14 +299,14 @@ export default {
         setTimeout(refreshStatus, 2000);
       } catch (error) {
         if (error !== 'cancel') {
-          console.error('停止服务器失败:', error);
+          console.error('Failed to stop server:', error);
           ElMessage.error(t('serverManagement.stopError'));
           refreshStatus();
         }
       }
     };
 
-    // 切换服务器状态（启动/停止）
+    // Toggle server status (start/stop)
     const toggleServer = async () => {
       if (serverStatus.value === 'running') {
         await stopServer();
@@ -333,7 +333,7 @@ export default {
         setTimeout(refreshStatus, 3000);
       } catch (error) {
         if (error !== 'cancel') {
-          console.error('重启服务器失败:', error);
+          console.error('Failed to restart server:', error);
           ElMessage.error(t('serverManagement.restartError'));
           refreshStatus();
         }
@@ -342,7 +342,7 @@ export default {
 
     onMounted(() => {
       refreshStatus();
-      // 每30秒自动刷新状态
+      // Auto refresh status every 30 seconds
       setInterval(refreshStatus, 30000);
     });
 
@@ -372,7 +372,7 @@ export default {
   overflow-y: auto;
   transition: width 0.3s ease;
   
-  // 自定义滚动条样式
+  // Custom scrollbar styles
   &::-webkit-scrollbar {
     width: 6px;
   }

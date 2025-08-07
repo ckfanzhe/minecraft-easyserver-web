@@ -1,6 +1,6 @@
 <template>
   <div class="performance-monitor">
-    <!-- 性能概览卡片 -->
+    <!-- Performance Overview Cards -->
     <el-row :gutter="20" class="overview-cards">
       <el-col :span="6">
         <el-card class="metric-card">
@@ -56,7 +56,7 @@
       </el-col>
     </el-row>
 
-    <!-- 图表区域 -->
+    <!-- Chart Area -->
     <el-row :gutter="20" class="chart-section">
       <el-col :span="12">
         <el-card>
@@ -86,7 +86,7 @@
       </el-col>
     </el-row>
 
-    <!-- 详细信息 -->
+    <!-- Detailed Information -->
     <el-row :gutter="20" class="detail-section">
       <el-col :span="12">
         <el-card>
@@ -138,7 +138,7 @@ import {
 import { CanvasRenderer } from 'echarts/renderers'
 import api from '../api'
 
-// 注册 ECharts 组件
+// Register ECharts components
 use([
   LineChart,
   TitleComponent,
@@ -156,7 +156,7 @@ export default {
     Monitor
   },
   setup() {
-    // 响应式数据
+    // Reactive data
     const systemData = reactive({
       cpu_usage: 0,
       memory_usage: 0,
@@ -171,7 +171,7 @@ export default {
       timestamp: ''
     })
 
-    // 图表数据
+    // Chart data
     const chartData = reactive({
       times: [],
       systemCpu: [],
@@ -180,10 +180,10 @@ export default {
       bedrockMemory: []
     })
 
-    const maxDataPoints = 50 // 最大数据点数
+    const maxDataPoints = 50 // Maximum data points
     let updateInterval = null
 
-    // CPU 图表配置
+    // CPU chart configuration
     const cpuChartOption = ref({
       title: {
         text: 'CPU 使用率 (%)',
@@ -257,7 +257,7 @@ export default {
       ]
     })
 
-    // 内存图表配置
+    // Memory chart configuration
     const memoryChartOption = ref({
       title: {
         text: '内存使用率 (%)',
@@ -350,17 +350,17 @@ export default {
       ]
     })
 
-    // 加载性能数据
+    // Load performance data
     const loadPerformanceData = async () => {
       try {
         const response = await api.getPerformanceData()
         const data = response.data
 
-        // 更新当前数据
+        // Update current data
         Object.assign(systemData, data.system)
         Object.assign(bedrockData, data.bedrock)
 
-        // 添加到图表数据
+        // Add to chart data
         const currentTime = new Date().toISOString()
         chartData.times.push(currentTime)
         chartData.systemCpu.push(data.system.cpu_usage)
@@ -368,7 +368,7 @@ export default {
         chartData.bedrockCpu.push(data.bedrock.cpu_usage)
         chartData.bedrockMemory.push(data.bedrock.memory_mb)
 
-        // 限制数据点数量
+        // Limit data points count
         if (chartData.times.length > maxDataPoints) {
           chartData.times.shift()
           chartData.systemCpu.shift()
@@ -377,31 +377,31 @@ export default {
           chartData.bedrockMemory.shift()
         }
       } catch (error) {
-        console.error('获取性能数据失败:', error)
-        ElMessage.error('获取性能数据失败')
+        console.error('Failed to get performance data:', error)
+        ElMessage.error('Failed to get performance data')
       }
     }
 
-    // 清空图表数据
+    // Clear chart data
     const clearChartData = () => {
       chartData.times.length = 0
       chartData.systemCpu.length = 0
       chartData.systemMemory.length = 0
       chartData.bedrockCpu.length = 0
       chartData.bedrockMemory.length = 0
-      ElMessage.success('图表数据已清空')
+      ElMessage.success('Chart data cleared')
     }
 
-    // 格式化时间
+    // Format time
     const formatTime = (timestamp) => {
       if (!timestamp) return 'N/A'
       return new Date(timestamp).toLocaleString()
     }
 
-    // 生命周期
+    // Lifecycle
     onMounted(() => {
       loadPerformanceData()
-      // 每5秒更新一次数据
+      // Update data every 5 seconds
       updateInterval = setInterval(loadPerformanceData, 5000)
     })
 

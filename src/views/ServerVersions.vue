@@ -49,7 +49,7 @@
             </div>
             
             <div class="version-actions">
-              <!-- 下载按钮 -->
+              <!-- Download Button -->
               <el-button 
                 v-if="!version.downloaded"
                 type="primary"
@@ -61,7 +61,7 @@
                 {{ $t('server.versions.download') }}
               </el-button>
               
-              <!-- 下载进度 -->
+              <!-- Download Progress -->
               <div v-if="downloadingVersions.includes(version.version)" class="download-progress">
                 <el-progress 
                   :percentage="getDownloadProgress(version.version)" 
@@ -71,7 +71,7 @@
                 <p class="progress-text">{{ getProgressText(version.version) }}</p>
               </div>
               
-              <!-- 激活按钮 -->
+              <!-- Activate Button -->
               <el-button 
                 v-if="version.downloaded && !version.active"
                 type="success"
@@ -83,7 +83,7 @@
                 {{ $t('server.versions.activate') }}
               </el-button>
               
-              <!-- 当前激活标识 -->
+              <!-- Current Active Indicator -->
               <div v-if="version.active" class="active-indicator">
                 <el-icon class="active-icon"><CircleCheckFilled /></el-icon>
                 <span>{{ $t('server.versions.active') }}</span>
@@ -128,19 +128,19 @@ export default {
     
     let progressInterval = null
     
-    // 格式化日期
+    // Format date
     const formatDate = (dateString) => {
       if (!dateString) return ''
       return new Date(dateString).toLocaleDateString()
     }
     
-    // 获取下载进度
+    // Get download progress
     const getDownloadProgress = (version) => {
       const progress = downloadProgress[version]?.progress || 0
-      return Math.round(progress * 100) / 100 // 保留两位小数
+      return Math.round(progress * 100) / 100 // Keep two decimal places
     }
     
-    // 获取进度状态
+    // Get progress status
     const getProgressStatus = (version) => {
       const progress = downloadProgress[version]
       if (!progress) return ''
@@ -149,7 +149,7 @@ export default {
       return ''
     }
     
-    // 获取进度文本
+    // Get progress text
     const getProgressText = (version) => {
       const progress = downloadProgress[version]
       if (!progress) return ''
@@ -165,7 +165,7 @@ export default {
       return progress.message || ''
     }
     
-    // 加载版本列表
+    // Load version list
     const loadVersions = async () => {
       loading.value = true
       try {
@@ -183,13 +183,13 @@ export default {
       }
     }
     
-    // 更新版本列表
+    // Update version list
     const updateVersionList = async () => {
       updating.value = true
       try {
-        // 调用更新版本配置的API接口
+        // Call API to update version configuration
         await api.updateVersionConfig({})
-        // 更新配置后重新加载版本列表
+        // Reload version list after updating configuration
         await loadVersions()
         ElMessage.success('版本列表已更新')
       } catch (error) {
@@ -200,7 +200,7 @@ export default {
       }
     }
     
-    // 下载版本
+    // Download version
     const downloadVersion = async (version) => {
       try {
         downloadingVersions.value.push(version)
@@ -209,7 +209,7 @@ export default {
         await api.downloadServerVersion(version)
         ElMessage.success(`开始下载版本 ${version}`)
         
-        // 开始监控下载进度
+        // Start monitoring download progress
         startProgressMonitoring(version)
         
       } catch (error) {
@@ -220,7 +220,7 @@ export default {
       }
     }
     
-    // 监控下载进度
+    // Monitor download progress
     const startProgressMonitoring = (version) => {
       const checkProgress = async () => {
         try {
@@ -233,13 +233,13 @@ export default {
             throw new Error(response.data.message || 'Failed to get progress')
           }
           
-          // 如果下载完成或失败，停止监控
+          // Stop monitoring if download is complete or failed
           if (progress.progress >= 100 || progress.status === 'error' || progress.status === 'completed') {
             downloadingVersions.value = downloadingVersions.value.filter(v => v !== version)
             
             if (progress.status === 'completed' || progress.progress >= 100) {
               ElMessage.success(`版本 ${version} 下载完成`)
-              // 重新加载版本列表以更新状态
+              // Reload version list to update status
               await loadVersions()
             } else if (progress.status === 'error') {
               ElMessage.error(`版本 ${version} 下载失败`)
@@ -249,7 +249,7 @@ export default {
             return
           }
           
-          // 继续监控
+          // Continue monitoring
           setTimeout(checkProgress, 1000)
           
         } catch (error) {
@@ -262,7 +262,7 @@ export default {
       checkProgress()
     }
     
-    // 激活版本
+    // Activate version
     const activateVersion = async (version) => {
       try {
         await ElMessageBox.confirm(
@@ -279,7 +279,7 @@ export default {
         await api.activateServerVersion(version)
         
         ElMessage.success(t('server.versions.activated'))
-        // 重新加载版本列表以更新状态
+        // Reload version list to update status
         await loadVersions()
         
       } catch (error) {

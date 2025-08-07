@@ -1,6 +1,6 @@
 <template>
   <div class="command-console">
-    <!-- 控制台区域 -->
+    <!-- Console Area -->
     <el-card class="console-card">
       <template #header>
         <div class="card-header">
@@ -26,7 +26,7 @@
         </div>
       </template>
       
-      <!-- 快捷命令面板 -->
+      <!-- Quick Commands Panel -->
       <div v-if="showQuickCommands" class="quick-commands-panel">
         <div class="quick-commands-grid">
           <el-button 
@@ -43,15 +43,15 @@
       </div>
       
       <div class="console-container">
-        <!-- 日志显示区域 -->
+        <!-- Log Display Area -->
         <div class="log-container" ref="logContainer">
           <div v-if="mergedTimeline.length === 0" class="empty-logs">
             <el-empty :description="$t('interaction.noLogs')" />
           </div>
           <div v-else class="log-content">
-            <!-- 统一时间线 -->
+            <!-- Unified Timeline -->
             <template v-for="(item, index) in mergedTimeline" :key="index">
-              <!-- 服务器日志 -->
+              <!-- Server Logs -->
               <div 
                 v-if="item.type === 'log'"
                 class="log-line"
@@ -62,12 +62,12 @@
                 <span class="log-message">{{ item.data.message }}</span>
               </div>
               
-              <!-- 命令历史 -->
+              <!-- Command History -->
               <div 
                 v-else-if="item.type === 'command'"
                 class="command-block"
               >
-                <!-- 命令行 -->
+                <!-- Command Line -->
                 <div 
                   class="command-line"
                   :class="{ 
@@ -85,7 +85,7 @@
                     <el-icon v-else-if="item.data.success === false"><Close /></el-icon>
                   </span>
                 </div>
-                <!-- 命令响应 -->
+                <!-- Command Response -->
                 <div 
                   class="command-response"
                   :class="{ 
@@ -101,7 +101,7 @@
           </div>
         </div>
         
-        <!-- 命令输入框 -->
+        <!-- Command Input Box -->
         <div class="command-input-area">
           <div class="input-wrapper">
             <span class="command-prompt">></span>
@@ -160,21 +160,21 @@ export default {
     const maxReconnectAttempts = 10;
     let reconnectTimeout = null;
 
-    // 格式化时间戳
+    // Format timestamp
     const formatTimestamp = (timestamp) => {
       return new Date(timestamp).toLocaleString('sv-SE').replace('T', ' ');
     };
 
-    // 获取日志样式类
+    // Get log style class
     const getLogClass = (level) => {
       return `log-${level?.toLowerCase() || 'info'}`;
     };
 
-    // 合并日志和命令历史，按时间排序
+    // Merge logs and command history, sort by time
     const mergedTimeline = computed(() => {
       const timeline = [];
       
-      // 添加服务器日志
+      // Add server logs
       logs.value.forEach(log => {
         timeline.push({
           type: 'log',
@@ -183,7 +183,7 @@ export default {
         });
       });
       
-      // 添加命令历史
+      // Add command history
       commandHistory.value.forEach(cmd => {
         timeline.push({
           type: 'command',
@@ -192,11 +192,11 @@ export default {
         });
       });
       
-      // 按时间戳排序
+      // Sort by timestamp
       return timeline.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
     });
 
-    // 滚动到日志底部
+    // Scroll to bottom of logs
     const scrollToBottom = () => {
       nextTick(() => {
         if (logContainer.value) {
@@ -206,24 +206,24 @@ export default {
       });
     };
 
-    // 加载日志
+    // Load logs
     const loadLogs = async () => {
       try {
         const response = await api.getLogs(200);
         logs.value = response.data.logs || [];
         scrollToBottom();
       } catch (error) {
-        console.error('加载日志失败:', error);
+        console.error('Failed to load logs:', error);
         ElMessage.error(t('interaction.loadLogsFailed'));
       }
     };
 
-    // 刷新日志
+    // Refresh logs
     const refreshLogs = () => {
       loadLogs();
     };
 
-    // 清空日志
+    // Clear logs
     const clearLogs = async () => {
       try {
         await ElMessageBox.confirm(
@@ -241,39 +241,39 @@ export default {
         ElMessage.success(t('interaction.logsCleared'));
       } catch (error) {
         if (error !== 'cancel') {
-          console.error('清空日志失败:', error);
+          console.error('Failed to clear logs:', error);
           ElMessage.error(t('interaction.clearLogsFailed'));
         }
       }
     };
 
-    // 加载命令历史
+    // Load command history
     const loadCommandHistory = async () => {
       try {
         const response = await api.getCommandHistory();
         commandHistory.value = response.data.history || [];
       } catch (error) {
-        console.error('加载命令历史失败:', error);
+        console.error('Failed to load command history:', error);
       }
     };
 
-    // 加载快捷命令
+    // Load quick commands
     const loadQuickCommands = async () => {
       try {
         const response = await api.getQuickCommands();
         quickCommands.value = response.data.commands || [];
       } catch (error) {
-        console.error('加载快捷命令失败:', error);
+        console.error('Failed to load quick commands:', error);
       }
     };
 
-    // 执行命令
+    // Execute command
     const executeCommand = async () => {
       if (!currentCommand.value.trim()) {
         return;
       }
 
-      // 检查服务器状态
+      // Check server status
       try {
         const statusResponse = await api.getServerStatus();
         if (statusResponse.data.status !== 'running') {
@@ -281,7 +281,7 @@ export default {
           return;
         }
       } catch (error) {
-        console.error('检查服务器状态失败:', error);
+        console.error('Failed to check server status:', error);
         ElMessage.error(t('interaction.checkServerStatusFailed'));
         return;
       }
@@ -289,7 +289,7 @@ export default {
       executing.value = true;
       const command = currentCommand.value.trim();
       
-      // 先立即显示命令（状态为执行中）
+      // Immediately show command (status: executing)
       const commandEntry = {
         command,
         response: '执行中...',
@@ -299,17 +299,17 @@ export default {
       };
       commandHistory.value.push(commandEntry);
       
-      // 清空输入框
+      // Clear input field
       currentCommand.value = '';
       historyIndex.value = -1;
       
-      // 滚动到底部显示新命令
+      // Scroll to bottom to show new command
       scrollToBottom();
       
       try {
         const response = await api.sendCommand(command);
         
-        // 更新命令历史记录的响应
+        // Update command history response
         const lastIndex = commandHistory.value.length - 1;
         commandHistory.value[lastIndex] = {
           ...commandHistory.value[lastIndex],
@@ -318,31 +318,31 @@ export default {
           executing: false
         };
         
-        // 显示执行结果
+        // Show execution result
         ElMessage.success(t('interaction.commandExecuted'));
         
-        // 滚动到底部显示更新的结果
+        // Scroll to bottom to show updated result
         scrollToBottom();
         
       } catch (error) {
-        console.error('执行命令失败:', error);
+        console.error('Failed to execute command:', error);
         
-        // 提供更具体的错误信息
+        // Provide more specific error information
         let errorMessage = t('interaction.commandExecuteFailed');
         if (error.response) {
-          // 服务器返回的错误
+          // Server returned error
           errorMessage = error.response.data?.error || error.response.data?.message || errorMessage;
         } else if (error.request) {
-          // 网络错误
-          errorMessage = '网络连接失败，请检查服务器状态';
+          // Network error
+          errorMessage = 'Network connection failed, please check server status';
         } else {
-          // 其他错误
+          // Other errors
           errorMessage = error.message || errorMessage;
         }
         
         ElMessage.error(errorMessage);
         
-        // 更新命令历史记录的错误响应
+        // Update error response in command history
         const lastIndex = commandHistory.value.length - 1;
         commandHistory.value[lastIndex] = {
           ...commandHistory.value[lastIndex],
@@ -351,16 +351,16 @@ export default {
           executing: false
         };
         
-        // 滚动到底部显示更新的结果
+        // Scroll to bottom to show updated result
         scrollToBottom();
       } finally {
         executing.value = false;
       }
     };
 
-    // 执行快捷命令
+    // Execute quick command
     const executeQuickCommand = async (cmd) => {
-      // 检查服务器状态
+      // Check server status
       try {
         const statusResponse = await api.getServerStatus();
         if (statusResponse.data.status !== 'running') {
@@ -368,14 +368,14 @@ export default {
           return;
         }
       } catch (error) {
-        console.error('检查服务器状态失败:', error);
+        console.error('Failed to check server status:', error);
         ElMessage.error(t('interaction.checkServerStatusFailed'));
         return;
       }
 
       executing.value = true;
       
-      // 先立即显示命令（状态为执行中）
+      // Immediately show command (status: executing)
       const commandEntry = {
         command: cmd.command,
         response: '执行中...',
@@ -385,13 +385,13 @@ export default {
       };
       commandHistory.value.push(commandEntry);
       
-      // 滚动到底部显示新命令
+      // Scroll to bottom to show new command
       scrollToBottom();
       
       try {
         const response = await api.executeQuickCommand(cmd.id);
         
-        // 更新命令历史记录的响应
+        // Update command history response
         const lastIndex = commandHistory.value.length - 1;
         commandHistory.value[lastIndex] = {
           ...commandHistory.value[lastIndex],
@@ -400,31 +400,31 @@ export default {
           executing: false
         };
         
-        // 显示执行结果
+        // Show execution result
         ElMessage.success(`${cmd.name} ${t('interaction.executed')}`);
         
-        // 滚动到底部显示更新的结果
+        // Scroll to bottom to show updated result
         scrollToBottom();
         
       } catch (error) {
-        console.error('执行快捷命令失败:', error);
+        console.error('Failed to execute quick command:', error);
         
-        // 提供更具体的错误信息
+        // Provide more specific error information
         let errorMessage = t('interaction.commandExecuteFailed');
         if (error.response) {
-          // 服务器返回的错误
+          // Server returned error
           errorMessage = error.response.data?.error || error.response.data?.message || errorMessage;
         } else if (error.request) {
-          // 网络错误
+          // Network error
           errorMessage = '网络连接失败，请检查服务器状态';
         } else {
-          // 其他错误
+          // Other errors
           errorMessage = error.message || errorMessage;
         }
         
         ElMessage.error(errorMessage);
         
-        // 更新命令历史记录的错误响应
+        // Update error response in command history
         const lastIndex = commandHistory.value.length - 1;
         commandHistory.value[lastIndex] = {
           ...commandHistory.value[lastIndex],
@@ -433,18 +433,18 @@ export default {
           executing: false
         };
         
-        // 滚动到底部显示更新的结果
+        // Scroll to bottom to show updated result
         scrollToBottom();
       } finally {
         executing.value = false;
       }
     };
 
-    // 导航命令历史
+    // Navigate command history
     const navigateHistory = (direction) => {
       if (commandHistory.value.length === 0) return;
       
-      if (direction === -1) { // 上箭头
+      if (direction === -1) { // Up arrow
         if (historyIndex.value < commandHistory.value.length - 1) {
           historyIndex.value++;
           const targetIndex = commandHistory.value.length - 1 - historyIndex.value;
@@ -452,7 +452,7 @@ export default {
             currentCommand.value = commandHistory.value[targetIndex].command;
           }
         }
-      } else if (direction === 1) { // 下箭头
+      } else if (direction === 1) { // Down arrow
         if (historyIndex.value > 0) {
           historyIndex.value--;
           const targetIndex = commandHistory.value.length - 1 - historyIndex.value;
@@ -466,7 +466,7 @@ export default {
       }
     };
 
-    // 清空命令历史
+    // Clear command history
     const clearHistory = async () => {
       try {
         await ElMessageBox.confirm(
@@ -484,22 +484,22 @@ export default {
         ElMessage.success(t('interaction.historyCleared'));
       } catch (error) {
         if (error !== 'cancel') {
-          console.error('清空命令历史失败:', error);
+          console.error('Failed to clear command history:', error);
           ElMessage.error(t('interaction.clearHistoryFailed'));
         }
       }
     };
 
-    // 初始化WebSocket连接
+    // Initialize WebSocket connection
     const initWebSocket = () => {
       try {
         const wsUrl = `ws://${window.location.hostname}:8080/api/logs/ws`;
         logWebSocket = new WebSocket(wsUrl);
         
         logWebSocket.onopen = () => {
-          console.log('WebSocket连接已建立');
-          reconnectAttempts = 0; // 重置重连计数
-          // 连接建立后加载历史日志
+          console.log('WebSocket connection established');
+          reconnectAttempts = 0; // Reset reconnection attempts
+          // Load historical logs after connection is established
           loadLogs();
         };
         
@@ -508,42 +508,42 @@ export default {
             const logData = JSON.parse(event.data);
             logs.value.push(logData);
             
-            // 限制日志数量，保持最新的200条
+            // Limit log count, keep the latest 200 entries
             if (logs.value.length > 200) {
               logs.value = logs.value.slice(-200);
             }
             
             scrollToBottom();
           } catch (error) {
-            console.error('解析WebSocket消息失败:', error);
+            console.error('Failed to parse WebSocket message:', error);
           }
         };
         
         logWebSocket.onerror = (error) => {
-          console.error('WebSocket错误:', error);
+          console.error('WebSocket error:', error);
         };
         
         logWebSocket.onclose = () => {
-          console.log('WebSocket连接已关闭');
+          console.log('WebSocket connection closed');
           
-          // 实现指数退避重连策略
+          // Implement exponential backoff reconnection strategy
           if (reconnectAttempts < maxReconnectAttempts) {
-            const delay = Math.min(1000 * Math.pow(2, reconnectAttempts), 30000); // 最大延迟30秒
-            console.log(`${delay}ms后尝试第${reconnectAttempts + 1}次重连`);
+            const delay = Math.min(1000 * Math.pow(2, reconnectAttempts), 30000); // Maximum delay 30 seconds
+            console.log(`Attempting reconnection ${reconnectAttempts + 1} after ${delay}ms`);
             
             reconnectTimeout = setTimeout(() => {
               reconnectAttempts++;
               initWebSocket();
             }, delay);
           } else {
-            console.error('WebSocket重连次数已达上限，停止重连');
-            ElMessage.error('日志连接已断开，请刷新页面重试');
+            console.error('WebSocket reconnection attempts exceeded limit, stopping reconnection');
+            ElMessage.error('Log connection disconnected, please refresh the page and try again');
           }
         };
       } catch (error) {
-        console.error('初始化WebSocket失败:', error);
+        console.error('Failed to initialize WebSocket:', error);
         
-        // 初始化失败也要尝试重连
+        // Attempt reconnection even if initialization fails
         if (reconnectAttempts < maxReconnectAttempts) {
           const delay = Math.min(1000 * Math.pow(2, reconnectAttempts), 30000);
           reconnectTimeout = setTimeout(() => {
@@ -559,7 +559,7 @@ export default {
       loadQuickCommands();
       initWebSocket();
       
-      // 定期刷新命令历史（日志通过WebSocket实时更新）
+      // Periodically refresh command history (logs are updated in real-time via WebSocket)
       refreshInterval = setInterval(() => {
         loadCommandHistory();
       }, 30000);
@@ -656,7 +656,7 @@ export default {
       border-radius: 4px;
       scroll-behavior: smooth;
       
-      // 自定义滚动条样式
+      // Custom scrollbar styles
       &::-webkit-scrollbar {
         width: 8px;
       }
@@ -675,7 +675,7 @@ export default {
         }
       }
       
-      // 响应式设计
+      // Responsive design
       @media (max-width: 768px) {
         height: 300px;
         min-height: 250px;
@@ -830,7 +830,7 @@ export default {
       }
     }
     
-    // 旋转动画
+    // Rotation animation
     .rotating {
       animation: rotate 1s linear infinite;
     }

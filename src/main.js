@@ -9,7 +9,7 @@ import i18n from './i18n';
 
 const app = createApp(App);
 
-// 注册所有图标
+// Register all icons
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component);
 }

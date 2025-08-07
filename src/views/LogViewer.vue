@@ -28,7 +28,7 @@
         </div>
       </template>
       
-      <!-- 日志过滤器 -->
+      <!-- Log Filters -->
       <div class="log-filters">
         <el-row :gutter="16">
           <el-col :span="6">
@@ -67,7 +67,7 @@
         </el-row>
       </div>
 
-      <!-- 日志显示区域 -->
+      <!-- Log Display Area -->
       <div class="log-container" ref="logContainer">
         <div v-if="filteredLogs.length === 0" class="no-logs">
           <el-empty :description="$t('logs.noLogs')" />
@@ -119,7 +119,7 @@ export default {
     const maxReconnectAttempts = 10;
     let reconnectTimeout = null;
 
-    // 连接状态
+    // Connection status
     const connectionStatusType = computed(() => {
       switch (connectionStatus.value) {
         case 'connected': return 'success';
@@ -138,16 +138,16 @@ export default {
       }
     });
 
-    // 过滤后的日志
+    // Filtered logs
     const filteredLogs = computed(() => {
       let filtered = logs.value;
       
-      // 按级别过滤
+      // Filter by level
       if (logLevel.value) {
         filtered = filtered.filter(log => log.level === logLevel.value);
       }
       
-      // 按关键词过滤
+      // Filter by keyword
       if (searchKeyword.value) {
         const keyword = searchKeyword.value.toLowerCase();
         filtered = filtered.filter(log => 
@@ -158,17 +158,17 @@ export default {
       return filtered;
     });
 
-    // 格式化时间
+    // Format time
     const formatTime = (timestamp) => {
       return new Date(timestamp).toLocaleString('sv-SE').replace('T', ' ');
     };
 
-    // 获取日志样式类
+    // Get log style class
     const getLogClass = (level) => {
       return `log-${level?.toLowerCase() || 'info'}`;
     };
 
-    // 滚动到底部
+    // Scroll to bottom
     const scrollToBottom = () => {
       nextTick(() => {
         if (logContainer.value) {
@@ -178,7 +178,7 @@ export default {
       });
     };
 
-    // 加载日志
+    // Load logs
     const loadLogs = async () => {
       try {
         loading.value = true;
@@ -186,19 +186,19 @@ export default {
         logs.value = response.data.logs || [];
         scrollToBottom();
       } catch (error) {
-        console.error('加载日志失败:', error);
+        console.error('Failed to load logs:', error);
         ElMessage.error(t('logs.loadFailed'));
       } finally {
         loading.value = false;
       }
     };
 
-    // 刷新日志
+    // Refresh logs
     const refreshLogs = () => {
       loadLogs();
     };
 
-    // 清空日志
+    // Clear logs
     const clearLogs = async () => {
       try {
         await ElMessageBox.confirm(
@@ -216,18 +216,18 @@ export default {
         ElMessage.success(t('logs.clearSuccess'));
       } catch (error) {
         if (error !== 'cancel') {
-          console.error('清空日志失败:', error);
+          console.error('Failed to clear logs:', error);
           ElMessage.error(t('logs.clearFailed'));
         }
       }
     };
 
-    // 应用过滤器
+    // Apply filters
     const applyFilters = () => {
       loadLogs();
     };
 
-    // 建立WebSocket连接
+    // Establish WebSocket connection
     const connectWebSocket = () => {
       if (logWebSocket) {
         logWebSocket.close();
@@ -240,7 +240,7 @@ export default {
       logWebSocket.onopen = () => {
         connectionStatus.value = 'connected';
         reconnectAttempts = 0;
-        // 连接建立后加载历史日志
+        // Load historical logs after connection is established
         loadLogs();
       };
 
@@ -249,21 +249,21 @@ export default {
           const logData = JSON.parse(event.data);
           logs.value.push(logData);
           
-          // 限制日志数量，保持最新的指定条数
+          // Limit log count, keep the latest specified number of entries
           if (logs.value.length > logLimit.value) {
             logs.value = logs.value.slice(-logLimit.value);
           }
           
           scrollToBottom();
         } catch (error) {
-          console.error('解析日志数据失败:', error);
+          console.error('Failed to parse log data:', error);
         }
       };
 
       logWebSocket.onclose = () => {
         connectionStatus.value = 'disconnected';
         
-        // 自动重连
+        // Auto reconnect
         if (reconnectAttempts < maxReconnectAttempts) {
           reconnectAttempts++;
           const delay = Math.min(1000 * Math.pow(2, reconnectAttempts), 30000);
@@ -271,17 +271,17 @@ export default {
             connectWebSocket();
           }, delay);
         } else {
-          ElMessage.error('日志连接已断开，请刷新页面重试');
+          ElMessage.error('Log connection disconnected, please refresh the page and try again');
         }
       };
 
       logWebSocket.onerror = (error) => {
-        console.error('WebSocket错误:', error);
+        console.error('WebSocket error:', error);
         connectionStatus.value = 'disconnected';
       };
     };
 
-    // 设置自动刷新
+    // Setup auto refresh
     const setupAutoRefresh = () => {
       if (autoRefresh.value && !refreshInterval) {
         refreshInterval = setInterval(() => {
@@ -441,7 +441,7 @@ export default {
       }
     }
     
-    // 自定义滚动条样式
+    // Custom scrollbar styles
     &::-webkit-scrollbar {
       width: 8px;
     }

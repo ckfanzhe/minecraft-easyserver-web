@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <!-- 服务器状态概览 -->
+    <!-- Server Status Overview -->
     <div class="status-overview">
       <el-row :gutter="20">
         <el-col :span="8">
@@ -45,7 +45,7 @@
       </el-row>
     </div>
 
-    <!-- 快速操作 -->
+    <!-- Quick Actions -->
     <div class="quick-actions">
       <el-card>
         <template #header>
@@ -104,7 +104,7 @@
       </el-card>
     </div>
 
-    <!-- 最近日志 -->
+    <!-- Recent Logs -->
     <div class="recent-logs">
       <el-card>
         <template #header>
@@ -136,7 +136,7 @@
       </el-card>
     </div>
 
-    <!-- 系统信息 -->
+    <!-- System Information -->
     <div class="system-info">
       <el-row :gutter="20">
         <el-col :span="12">
@@ -233,7 +233,7 @@ export default {
         const response = await api.getServerStatus();
         serverStatus.value = response.data.status;
       } catch (error) {
-        console.error('获取服务器状态失败:', error);
+        console.error('Failed to get server status:', error);
       }
     };
 
@@ -244,7 +244,7 @@ export default {
         cpuUsage.value = Math.round(data.system.cpu_usage);
         memoryUsage.value = Math.round(data.system.memory_usage);
       } catch (error) {
-        console.error('获取性能数据失败:', error);
+        console.error('Failed to get performance data:', error);
       }
     };
 
@@ -253,7 +253,7 @@ export default {
         const response = await api.getLogs(10);
         logs.value = response.data.logs || [];
       } catch (error) {
-        console.error('获取日志失败:', error);
+        console.error('Failed to get logs:', error);
       }
     };
 
@@ -269,8 +269,8 @@ export default {
          };
         maxPlayers.value = config['max-players'] || 10;
       } catch (error) {
-        console.error('获取服务器信息失败:', error);
-        // 设置默认值以防API调用失败
+        console.error('Failed to get server info:', error);
+        // Set default values in case API call fails
          serverInfo.value = {
            name: '',
            gamemode: '',
@@ -320,7 +320,7 @@ export default {
 
     onMounted(() => {
       loadAllData();
-      // 每30秒刷新一次数据
+      // Refresh data every 30 seconds
       refreshInterval = setInterval(loadAllData, 30000);
     });
 

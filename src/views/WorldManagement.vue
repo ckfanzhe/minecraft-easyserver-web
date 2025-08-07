@@ -1,6 +1,6 @@
 <template>
   <div class="world-management">
-    <!-- 上传区域 -->
+    <!-- Upload Area -->
     <el-card class="upload-card" shadow="hover">
       <template #header>
         <div class="upload-header">
@@ -49,7 +49,7 @@
       </div>
     </el-card>
 
-    <!-- 世界列表 -->
+    <!-- World List -->
     <el-card class="world-list-card">
       <template #header>
         <div class="card-header">
@@ -135,31 +135,31 @@ export default {
       file: null
     });
 
-    // 获取世界列表
+    // Get world list
     const fetchWorlds = async () => {
       try {
         loading.value = true;
         const response = await api.getWorlds();
         worlds.value = response.data.worlds || [];
       } catch (error) {
-        console.error('获取世界列表失败:', error);
+        console.error('Failed to get world list:', error);
         ElMessage.error(t('common.loadFailed'));
       } finally {
         loading.value = false;
       }
     };
 
-    // 处理文件选择
+    // Handle file selection
     const handleFileChange = (file) => {
       uploadForm.file = file.raw;
     };
 
-    // 处理文件移除
+    // Handle file removal
     const handleFileRemove = () => {
       uploadForm.file = null;
     };
 
-    // 上传世界文件
+    // Upload world file
     const uploadWorld = async () => {
       if (!uploadForm.file) {
         ElMessage.warning(t('common.selectFile'));
@@ -177,20 +177,20 @@ export default {
         clearUpload();
         await fetchWorlds();
       } catch (error) {
-        console.error('上传世界文件失败:', error);
+        console.error('Failed to upload world file:', error);
         ElMessage.error(t('common.operationFailed'));
       } finally {
         uploading.value = false;
       }
     };
 
-    // 清除上传
+    // Clear upload
     const clearUpload = () => {
       uploadForm.file = null;
       uploadRef.value?.clearFiles();
     };
 
-    // 激活世界
+    // Activate world
     const activateWorld = async (worldName) => {
       try {
         activating.value = worldName;
@@ -198,14 +198,14 @@ export default {
         ElMessage.success(t('message.worldActivated'));
         await fetchWorlds();
       } catch (error) {
-        console.error('激活世界失败:', error);
+        console.error('Failed to activate world:', error);
         ElMessage.error(t('common.operationFailed'));
       } finally {
         activating.value = '';
       }
     };
 
-    // 确认删除世界
+    // Confirm delete world
     const confirmDeleteWorld = async (worldName) => {
       try {
         await ElMessageBox.confirm(
@@ -219,11 +219,11 @@ export default {
         );
         await deleteWorld(worldName);
       } catch (error) {
-        // 用户取消删除
+        // User cancelled deletion
       }
     };
 
-    // 删除世界
+    // Delete world
     const deleteWorld = async (worldName) => {
       try {
         deleting.value = worldName;
@@ -231,7 +231,7 @@ export default {
         ElMessage.success(t('message.worldDeleted'));
         await fetchWorlds();
       } catch (error) {
-        console.error('删除世界失败:', error);
+        console.error('Failed to delete world:', error);
         ElMessage.error(t('common.operationFailed'));
       } finally {
         deleting.value = '';
