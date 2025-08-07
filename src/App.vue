@@ -2,63 +2,107 @@
   <div id="app">
     <el-container class="app-container">
       <!-- 侧边栏 -->
-      <el-aside width="250px" class="sidebar">
+      <el-aside :width="isCollapsed ? '64px' : '250px'" class="sidebar">
         <div class="logo">
-          <h2>🎮 {{ $t('nav.title') }}</h2>
+          <h2 v-if="!isCollapsed">🎮 {{ $t('nav.title') }}</h2>
+          <h2 v-else>🎮</h2>
         </div>
         <el-menu
           :default-active="$route.path"
           router
           class="sidebar-menu"
-          background-color="#304156"
-          text-color="#bfcbd9"
-          active-text-color="#409EFF"
+          :collapse="isCollapsed"
+          background-color="transparent"
+          text-color="rgba(255, 255, 255, 0.9)"
+          active-text-color="#ffffff"
+          :collapse-transition="false"
         >
           <el-menu-item index="/">
             <el-icon><Odometer /></el-icon>
             <span>{{ $t('nav.menu.dashboard') }}</span>
           </el-menu-item>
-          <el-menu-item index="/config">
-            <el-icon><Setting /></el-icon>
-            <span>{{ $t('nav.menu.serverConfig') }}</span>
-          </el-menu-item>
-          <el-menu-item index="/players">
-            <el-icon><User /></el-icon>
-            <span>{{ $t('nav.menu.allowlist') }}</span>
-          </el-menu-item>
-          <el-menu-item index="/permissions">
-            <el-icon><Key /></el-icon>
-            <span>{{ $t('nav.menu.permission') }}</span>
-          </el-menu-item>
-          <el-menu-item index="/worlds">
-            <el-icon><Baseball /></el-icon>
-            <span>{{ $t('nav.menu.world') }}</span>
-          </el-menu-item>
-          <el-menu-item index="/resource-packs">
-            <el-icon><Box /></el-icon>
-            <span>{{ $t('nav.menu.resourcepack') }}</span>
-          </el-menu-item>
-          <el-menu-item index="/commands">
-            <el-icon><ChatLineSquare /></el-icon>
-            <span>{{ $t('nav.menu.interaction') }}</span>
-          </el-menu-item>
-          <el-menu-item index="/logs">
-            <el-icon><Document /></el-icon>
-            <span>{{ $t('nav.menu.logs') }}</span>
-          </el-menu-item>
-          <el-menu-item index="/performance">
-            <el-icon><TrendCharts /></el-icon>
-            <span>{{ $t('performance.title') }}</span>
-          </el-menu-item>
+          
+          <!-- 服务器管理子菜单 -->
+          <el-sub-menu index="server">
+            <template #title>
+              <el-icon><Setting /></el-icon>
+              <span>{{ $t('nav.menu.serverManagement') }}</span>
+            </template>
+            <el-menu-item index="/config">
+              <el-icon><Setting /></el-icon>
+              <span>{{ $t('nav.menu.serverConfig') }}</span>
+            </el-menu-item>
+            <el-menu-item index="/versions">
+              <el-icon><VideoPlay /></el-icon>
+              <span>{{ $t('nav.menu.versions') }}</span>
+            </el-menu-item>
+            <el-menu-item index="/performance">
+              <el-icon><TrendCharts /></el-icon>
+              <span>{{ $t('performance.title') }}</span>
+            </el-menu-item>
+          </el-sub-menu>
+          
+          <!-- 玩家管理子菜单 -->
+          <el-sub-menu index="players">
+            <template #title>
+              <el-icon><User /></el-icon>
+              <span>{{ $t('nav.menu.playerManagement') }}</span>
+            </template>
+            <el-menu-item index="/players">
+              <el-icon><User /></el-icon>
+              <span>{{ $t('nav.menu.allowlist') }}</span>
+            </el-menu-item>
+            <el-menu-item index="/permissions">
+              <el-icon><Key /></el-icon>
+              <span>{{ $t('nav.menu.permission') }}</span>
+            </el-menu-item>
+          </el-sub-menu>
+          
+          <!-- 世界管理子菜单 -->
+          <el-sub-menu index="world">
+            <template #title>
+              <el-icon><Baseball /></el-icon>
+              <span>{{ $t('nav.menu.worldManagement') }}</span>
+            </template>
+            <el-menu-item index="/worlds">
+              <el-icon><Baseball /></el-icon>
+              <span>{{ $t('nav.menu.world') }}</span>
+            </el-menu-item>
+            <el-menu-item index="/resource-packs">
+              <el-icon><Box /></el-icon>
+              <span>{{ $t('nav.menu.resourcepack') }}</span>
+            </el-menu-item>
+          </el-sub-menu>
+          
+          <!-- 交互与日志子菜单 -->
+          <el-sub-menu index="interaction">
+            <template #title>
+              <el-icon><ChatLineSquare /></el-icon>
+              <span>{{ $t('nav.menu.interactionLogs') }}</span>
+            </template>
+            <el-menu-item index="/commands">
+              <el-icon><ChatLineSquare /></el-icon>
+              <span>{{ $t('nav.menu.interaction') }}</span>
+            </el-menu-item>
+            <el-menu-item index="/logs">
+              <el-icon><Document /></el-icon>
+              <span>{{ $t('nav.menu.logs') }}</span>
+            </el-menu-item>
+          </el-sub-menu>
         </el-menu>
       </el-aside>
 
       <!-- 主内容区 -->
       <el-container>
         <!-- 顶部导航栏 -->
-        <el-header class="header">
+        <el-header height="60px" class="header">
           <div class="header-content">
-            <span class="page-title">{{ getPageTitle() }}</span>
+            <div class="header-left">
+              <div class="collapse-btn" @click="toggleCollapse">
+                <el-icon><ArrowRight v-if="isCollapsed" /><ArrowLeft v-else /></el-icon>
+              </div>
+              <span class="page-title">{{ getPageTitle() }}</span>
+            </div>
             <div class="header-actions">
               <div class="status-badge" :class="`status-${getStatusType()}`">
                 {{ getStatusText() }}
@@ -89,11 +133,6 @@
                   {{ $t('nav.buttons.restart') }}
                 </el-button>
               </el-button-group>
-              
-              <el-button type="text" @click="refreshStatus">
-                <el-icon><Refresh /></el-icon>
-                {{ $t('common.refresh') }}
-              </el-button>
               <LanguageSwitcher />
             </div>
           </div>
@@ -126,7 +165,9 @@ import {
   VideoPlay,
   VideoPause,
   Refresh,
-  RefreshRight
+  RefreshRight,
+  ArrowLeft,
+  ArrowRight
 } from '@element-plus/icons-vue';
 import api from './api';
 import LanguageSwitcher from './components/LanguageSwitcher.vue';
@@ -147,12 +188,19 @@ export default {
     VideoPlay,
     VideoPause,
     Refresh,
-    RefreshRight
+    RefreshRight,
+    ArrowLeft,
+    ArrowRight
   },
   setup() {
     const route = useRoute();
     const { t } = useI18n();
     const serverStatus = ref('未知');
+    const isCollapsed = ref(false);
+
+    const toggleCollapse = () => {
+      isCollapsed.value = !isCollapsed.value;
+    };
 
     const getPageTitle = () => {
       const titles = {
@@ -300,6 +348,8 @@ export default {
 
     return {
       serverStatus,
+      isCollapsed,
+      toggleCollapse,
       getPageTitle,
       getStatusType,
       getStatusText,
@@ -317,22 +367,171 @@ export default {
 }
 
 .sidebar {
-  background-color: #304156;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  transition: width 0.3s ease;
+  
+  // 自定义滚动条样式
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+    transition: background 0.3s ease;
+    
+    &:hover {
+      background: rgba(255, 255, 255, 0.5);
+    }
+  }
   
   .logo {
     padding: 20px;
     text-align: center;
-    border-bottom: 1px solid #434a50;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    position: relative;
     
     h2 {
-      color: #fff;
+      color: #ffffff;
       margin: 0;
-      font-size: 18px;
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 1.2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
     }
   }
   
+
+  
   .sidebar-menu {
     border: none;
+    background: transparent;
+    
+    &.el-menu--collapse {
+      .el-menu-item {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 8px 6px;
+        padding: 0;
+        width: 52px;
+        height: 52px;
+        
+        .el-icon {
+          margin: 0;
+          font-size: 18px;
+        }
+      }
+      
+      .el-sub-menu {
+        .el-sub-menu__title {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin: 8px 6px;
+          padding: 0;
+          width: 52px;
+          height: 52px;
+          
+          .el-icon {
+            margin: 0;
+            font-size: 18px;
+          }
+        }
+      }
+    }
+    
+    .el-menu-item {
+      background: rgba(255, 255, 255, 0.1);
+      margin: 8px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      color: rgba(255, 255, 255, 0.9);
+      
+      &:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateX(4px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        color: #ffffff;
+      }
+      
+      &.is-active {
+        background: rgba(255, 255, 255, 0.9);
+        color: #667eea;
+        font-weight: 600;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        
+        .el-icon {
+          color: #667eea;
+        }
+      }
+      
+      .el-icon {
+        color: rgba(255, 255, 255, 0.8);
+        transition: color 0.3s ease;
+      }
+      
+      span {
+        font-weight: 500;
+      }
+    }
+    
+    .el-sub-menu {
+      .el-sub-menu__title {
+        background: rgba(255, 255, 255, 0.1);
+        margin: 8px 12px;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+        color: rgba(255, 255, 255, 0.9);
+        
+        &:hover {
+          background: rgba(255, 255, 255, 0.2);
+          transform: translateX(4px);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+          color: #ffffff;
+        }
+        
+        .el-icon {
+          color: rgba(255, 255, 255, 0.8);
+          transition: color 0.3s ease;
+        }
+        
+        span {
+          font-weight: 500;
+        }
+      }
+      
+      .el-menu {
+        background: transparent;
+        
+        .el-menu-item {
+          margin: 4px 20px;
+          padding-left: 40px;
+          background: rgba(255, 255, 255, 0.05);
+          
+          &:hover {
+            background: rgba(255, 255, 255, 0.15);
+          }
+        }
+      }
+    }
   }
 }
 
@@ -343,17 +542,45 @@ export default {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   
   .header-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 100%;
-    
-    .page-title {
-      font-size: 20px;
-      font-weight: 600;
-      color: #ffffff;
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-    }
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 100%;
+      
+      .header-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        
+        .collapse-btn {
+          width: 32px;
+          height: 32px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: rgba(255, 255, 255, 0.1);
+          border-radius: 6px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          
+          &:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+          }
+          
+          .el-icon {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 16px;
+          }
+        }
+        
+        .page-title {
+          font-size: 20px;
+          font-weight: 600;
+          color: #ffffff;
+          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+      }
     
     .header-actions {
       display: flex;

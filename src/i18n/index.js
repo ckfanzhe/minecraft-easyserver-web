@@ -29,7 +29,11 @@ const messages = {
         tools: '服务器工具',
         logs: '服务器日志',
         interaction: '命令交互与日志',
-        commands: '快捷命令'
+        commands: '快捷命令',
+        serverManagement: '服务器管理',
+        playerManagement: '玩家管理',
+        worldManagement: '世界管理',
+        interactionLogs: '交互与日志'
       },
       buttons: {
         start: '启动服务器',
@@ -55,6 +59,48 @@ const messages = {
         memoryMb: '内存使用',
         bedrockStopped: 'Bedrock服务器未运行',
         bedrockRunning: 'PID: {pid}'
+      },
+      statusOverview: {
+        title: '服务器状态概览',
+        serverStatus: '服务器状态',
+        cpuUsage: 'CPU 使用率',
+        memoryUsage: '内存使用'
+      },
+      quickActions: {
+        title: '快速操作',
+        startServer: '启动服务器',
+        stopServer: '停止服务器',
+        restartServer: '重启服务器',
+        commandConsole: '命令控制台'
+      },
+      recentLogs: {
+        title: '最近日志',
+        viewMore: '查看更多',
+        noLogs: '暂无日志'
+      },
+      serverInfo: {
+        title: '服务器信息',
+        serverName: '服务器名称',
+        gameMode: '游戏模式',
+        difficulty: '难度',
+        port: '端口',
+        notSet: '未设置',
+        unknown: '未知'
+      },
+      quickLinks: {
+        title: '快捷链接',
+        serverConfig: '服务器配置',
+        playerManagement: '玩家管理',
+        worldManagement: '世界管理',
+        performanceMonitoring: '性能监控'
+      },
+      messages: {
+        startServerSuccess: '服务器启动命令已发送',
+        stopServerSuccess: '服务器停止命令已发送',
+        restartServerSuccess: '服务器重启命令已发送',
+        startServerError: '启动服务器失败',
+        stopServerError: '停止服务器失败',
+        restartServerError: '重启服务器失败'
       }
     },
     
@@ -461,7 +507,11 @@ const messages = {
         tools: 'Server Tools',
         logs: 'Server Logs',
         interaction: 'Command Interaction & Logs',
-        commands: 'Quick Commands'
+        commands: 'Quick Commands',
+        serverManagement: 'Server Management',
+        playerManagement: 'Player Management',
+        worldManagement: 'World Management',
+        interactionLogs: 'Interaction & Logs'
       },
       buttons: {
         start: 'Start Server',
@@ -487,6 +537,48 @@ const messages = {
         memoryMb: 'Memory Usage',
         bedrockStopped: 'Bedrock server not running',
         bedrockRunning: 'PID: {pid}'
+      },
+      statusOverview: {
+        title: 'Server Status Overview',
+        serverStatus: 'Server Status',
+        cpuUsage: 'CPU Usage',
+        memoryUsage: 'Memory Usage'
+      },
+      quickActions: {
+        title: 'Quick Actions',
+        startServer: 'Start Server',
+        stopServer: 'Stop Server',
+        restartServer: 'Restart Server',
+        commandConsole: 'Command Console'
+      },
+      recentLogs: {
+        title: 'Recent Logs',
+        viewMore: 'View More',
+        noLogs: 'No logs available'
+      },
+      serverInfo: {
+        title: 'Server Information',
+        serverName: 'Server Name',
+        gameMode: 'Game Mode',
+        difficulty: 'Difficulty',
+        port: 'Port',
+        notSet: 'Not Set',
+        unknown: 'Unknown'
+      },
+      quickLinks: {
+        title: 'Quick Links',
+        serverConfig: 'Server Configuration',
+        playerManagement: 'Player Management',
+        worldManagement: 'World Management',
+        performanceMonitoring: 'Performance Monitor'
+      },
+      messages: {
+        startServerSuccess: 'Server start command sent',
+        stopServerSuccess: 'Server stop command sent',
+        restartServerSuccess: 'Server restart command sent',
+        startServerError: 'Failed to start server',
+        stopServerError: 'Failed to stop server',
+        restartServerError: 'Failed to restart server'
       }
     },
     
