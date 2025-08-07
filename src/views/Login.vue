@@ -115,10 +115,23 @@ export default {
         // 存储token到localStorage
         localStorage.setItem('token', response.data.token);
         
+        // 设置是否需要修改密码的标志
+        if (response.data.requirePasswordChange) {
+          localStorage.setItem('requirePasswordChange', 'true');
+        } else {
+          localStorage.removeItem('requirePasswordChange');
+        }
+        
         ElMessage.success(t('login.loginSuccess'));
         
-        // 跳转到首页
-        router.push('/');
+        // 检查是否需要强制修改密码
+        if (response.data.requirePasswordChange) {
+          ElMessage.warning('检测到您正在使用默认密码，请立即修改为强密码');
+          router.push('/change-password');
+        } else {
+          // 跳转到首页
+          router.push('/');
+        }
         
       } catch (error) {
         console.error('Login error:', error);

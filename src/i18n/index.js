@@ -23,6 +23,30 @@ const messages = {
     auth: {
       logout: {
         success: '退出登录成功'
+      },
+      changePassword: {
+        title: '修改密码',
+        warningText: '检测到您正在使用默认密码，为了安全起见，请立即修改为强密码。',
+        currentPassword: '当前密码',
+        currentPasswordPlaceholder: '请输入当前密码',
+        newPassword: '新密码',
+        newPasswordPlaceholder: '请输入新密码',
+        confirmPassword: '确认新密码',
+        confirmPasswordPlaceholder: '请再次输入新密码',
+        passwordRequirements: '密码要求：',
+        requirements: {
+          minLength: '至少8位字符',
+          uppercase: '包含大写字母',
+          lowercase: '包含小写字母',
+          number: '包含数字',
+          specialChar: '包含特殊字符'
+        },
+        passwordMismatch: '两次输入的密码不一致',
+        changeButton: '修改密码',
+        changing: '修改中...',
+        changeSuccess: '密码修改成功，即将跳转到登录页面',
+        changeSuccessVoluntary: '密码修改成功，即将返回仪表板',
+        changeFailed: '修改密码失败，请重试'
       }
     },
 
@@ -56,13 +80,15 @@ const messages = {
         serverManagement: '服务器管理',
         playerManagement: '玩家管理',
         worldManagement: '世界管理',
-        interactionLogs: '交互与日志'
+        interactionLogs: '交互与日志',
+        changePassword: '修改密码'
       },
       buttons: {
         start: '启动服务器',
         stop: '停止服务器',
         restart: '重启服务器',
         toggle: '启动/停止',
+        changePassword: '修改密码',
         logout: '退出登录'
       }
     },
@@ -524,6 +550,30 @@ const messages = {
     auth: {
       logout: {
         success: 'Logout successful'
+      },
+      changePassword: {
+        title: 'Change Password',
+        warningText: 'Default password detected. For security reasons, please change to a strong password immediately.',
+        currentPassword: 'Current Password',
+        currentPasswordPlaceholder: 'Enter current password',
+        newPassword: 'New Password',
+        newPasswordPlaceholder: 'Enter new password',
+        confirmPassword: 'Confirm New Password',
+        confirmPasswordPlaceholder: 'Re-enter new password',
+        passwordRequirements: 'Password Requirements:',
+        requirements: {
+          minLength: 'At least 8 characters',
+          uppercase: 'Contains uppercase letter',
+          lowercase: 'Contains lowercase letter',
+          number: 'Contains number',
+          specialChar: 'Contains special character'
+        },
+        passwordMismatch: 'Passwords do not match',
+        changeButton: 'Change Password',
+        changing: 'Changing...',
+        changeSuccess: 'Password changed successfully, redirecting to login page',
+        changeSuccessVoluntary: 'Password changed successfully, returning to dashboard',
+        changeFailed: 'Failed to change password, please try again'
       }
     },
 
@@ -557,13 +607,15 @@ const messages = {
         serverManagement: 'Server Management',
         playerManagement: 'Player Management',
         worldManagement: 'World Management',
-        interactionLogs: 'Interaction & Logs'
+        interactionLogs: 'Interaction & Logs',
+        changePassword: 'Change Password'
       },
       buttons: {
         start: 'Start Server',
         stop: 'Stop Server',
         restart: 'Restart Server',
         toggle: 'Start/Stop',
+        changePassword: 'Change Password',
         logout: 'Logout'
       }
     },

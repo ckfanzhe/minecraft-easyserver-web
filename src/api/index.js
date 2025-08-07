@@ -49,6 +49,10 @@ api.interceptors.response.use(
 export default {
   // Authentication
   login: (password) => api.post('/auth/login', { password }),
+  changePassword: (currentPassword, newPassword) => api.post('/auth/change-password', { 
+    current_password: currentPassword, 
+    new_password: newPassword 
+  }),
   // Server control
   getServerStatus: () => api.get('/status'),
   startServer: () => api.post('/start'),

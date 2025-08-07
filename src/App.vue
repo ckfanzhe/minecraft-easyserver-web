@@ -93,6 +93,12 @@
               <span>{{ $t('nav.menu.logs') }}</span>
             </el-menu-item>
           </el-sub-menu>
+          
+          <!-- Security Settings -->
+          <el-menu-item index="/change-password">
+            <el-icon><Key /></el-icon>
+            <span>{{ $t('nav.menu.changePassword') }}</span>
+          </el-menu-item>
         </el-menu>
       </el-aside>
 
@@ -758,6 +764,7 @@ body, html {
         }
       }
       
+
       .el-button {
          border-radius: 20px;
          padding: 8px 16px;
