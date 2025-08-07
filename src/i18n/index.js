@@ -3,6 +3,29 @@ import { createI18n } from 'vue-i18n'
 // Translation resources
 const messages = {
   zh: {
+    // Login
+    login: {
+      title: '登录',
+      password: '密码',
+      passwordPlaceholder: '请输入密码',
+      loginButton: '登录',
+      loginSuccess: '登录成功',
+      loginFailed: '登录失败',
+      loginError: '登录失败，请重试',
+      invalidPassword: '密码错误',
+      passwordMinLength: '密码长度不能为空',
+      validation: {
+        passwordRequired: '请输入密码'
+      }
+    },
+
+    // Auth
+    auth: {
+      logout: {
+        success: '退出登录成功'
+      }
+    },
+
     // Navigation
     nav: {
       title: 'Minecraft 控制面板',
@@ -39,7 +62,8 @@ const messages = {
         start: '启动服务器',
         stop: '停止服务器',
         restart: '重启服务器',
-        toggle: '启动/停止'
+        toggle: '启动/停止',
+        logout: '退出登录'
       }
     },
     
@@ -478,9 +502,31 @@ const messages = {
       loadFailed: '加载失败',
       operationFailed: '操作失败'
     }
-  },
-  
+   },
   en: {
+    // Login
+    login: {
+      title: 'Login',
+      password: 'Password',
+      passwordPlaceholder: 'Please enter password',
+      loginButton: 'Login',
+      loginSuccess: 'Login successful',
+      loginFailed: 'Login failed',
+      loginError: 'Login failed, please try again',
+      invalidPassword: 'Invalid password',
+      passwordMinLength: 'Password cannot be empty',
+      validation: {
+        passwordRequired: 'Please enter password'
+      }
+    },
+
+    // Auth
+    auth: {
+      logout: {
+        success: 'Logout successful'
+      }
+    },
+
     // Navigation
     nav: {
       title: 'Minecraft EasyServer',
@@ -517,7 +563,8 @@ const messages = {
         start: 'Start Server',
         stop: 'Stop Server',
         restart: 'Restart Server',
-        toggle: 'Start/Stop'
+        toggle: 'Start/Stop',
+        logout: 'Logout'
       }
     },
     

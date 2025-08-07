@@ -233,8 +233,15 @@ export default {
         logWebSocket.close();
       }
 
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.error('No authentication token found');
+        connectionStatus.value = 'disconnected';
+        return;
+      }
+
       connectionStatus.value = 'connecting';
-      const wsUrl = `ws://${window.location.hostname}:8080/api/logs/ws`;
+      const wsUrl = `ws://${window.location.hostname}:8080/api/websocket/logs?token=${encodeURIComponent(token)}`;
       logWebSocket = new WebSocket(wsUrl);
 
       logWebSocket.onopen = () => {

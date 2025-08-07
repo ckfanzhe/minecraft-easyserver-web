@@ -12,6 +12,11 @@ const api = axios.create({
 // Request interceptor
 api.interceptors.request.use(
   config => {
+    // Add JWT token to requests (except login)
+    const token = localStorage.getItem('token');
+    if (token && !config.url.includes('/auth/login')) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
     return config;
   },
   error => {
@@ -26,12 +31,24 @@ api.interceptors.response.use(
   },
   error => {
     console.error('API request error:', error);
+    
+    // Handle 401 unauthorized errors
+    if (error.response && error.response.status === 401) {
+      // Clear token and redirect to login
+      localStorage.removeItem('token');
+      if (window.location.pathname !== '/login') {
+        window.location.href = '/login';
+      }
+    }
+    
     return Promise.reject(error);
   }
 );
 
 // API方法定义
 export default {
+  // Authentication
+  login: (password) => api.post('/auth/login', { password }),
   // Server control
   getServerStatus: () => api.get('/status'),
   startServer: () => api.post('/start'),

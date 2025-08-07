@@ -1,6 +1,10 @@
 <template>
   <div id="app">
-    <el-container class="app-container">
+    <!-- 登录页面独立显示 -->
+    <router-view v-if="$route.path === '/login'" />
+    
+    <!-- 主应用布局 -->
+    <el-container v-else class="app-container">
       <!-- Sidebar -->
       <el-aside :width="isCollapsed ? '64px' : '250px'" class="sidebar">
         <div class="logo">
@@ -134,6 +138,17 @@
                 </el-button>
               </el-button-group>
               <LanguageSwitcher />
+              
+              <!-- 退出登录按钮 -->
+              <el-button 
+                type="danger" 
+                size="small"
+                @click="logout"
+                class="logout-btn"
+              >
+                <el-icon><SwitchButton /></el-icon>
+                {{ $t('nav.buttons.logout') }}
+              </el-button>
             </div>
           </div>
         </el-header>
@@ -149,7 +164,7 @@
 
 <script>
 import { ref, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { 
@@ -167,7 +182,8 @@ import {
   Refresh,
   RefreshRight,
   ArrowLeft,
-  ArrowRight
+  ArrowRight,
+  SwitchButton
 } from '@element-plus/icons-vue';
 import api from './api';
 import LanguageSwitcher from './components/LanguageSwitcher.vue';
@@ -194,6 +210,7 @@ export default {
   },
   setup() {
     const route = useRoute();
+    const router = useRouter();
     const { t } = useI18n();
     const serverStatus = ref('未知');
     const isCollapsed = ref(false);
@@ -340,10 +357,23 @@ export default {
       }
     };
 
+    // 退出登录
+    const logout = () => {
+      // 清除本地存储的token
+      localStorage.removeItem('token');
+      // 跳转到登录页面
+      router.push('/login');
+      ElMessage.success(t('auth.logout.success'));
+    };
+
     onMounted(() => {
-      refreshStatus();
-      // Auto refresh status every 30 seconds
-      setInterval(refreshStatus, 30000);
+      // 只有在用户已登录时才开始定时查询
+      const token = localStorage.getItem('token');
+      if (token) {
+        refreshStatus();
+        // Auto refresh status every 30 seconds
+        setInterval(refreshStatus, 30000);
+      }
     });
 
     return {
@@ -355,13 +385,32 @@ export default {
       getStatusText,
       refreshStatus,
       toggleServer,
-      restartServer
+      restartServer,
+      logout
     };
   }
 };
 </script>
 
 <style lang="scss">
+// 全局样式重置
+#app {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+// 确保登录页面全屏显示
+body, html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
 .app-container {
   height: 100vh;
 }
@@ -581,11 +630,24 @@ export default {
           text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
         }
       }
-    
-    .header-actions {
-      display: flex;
-      align-items: center;
-      gap: 12px;
+      
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        
+        .logout-btn {
+          margin-left: 8px;
+          border-radius: 6px;
+          font-weight: 500;
+          transition: all 0.3s ease;
+          
+          &:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(245, 108, 108, 0.3);
+          }
+        }
+      }
       
       .status-badge {
         display: inline-flex;
@@ -720,7 +782,7 @@ export default {
        }
     }
   }
-}
+
 
 .main-content {
   background-color: #f5f5f5;

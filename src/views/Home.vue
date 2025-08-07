@@ -319,9 +319,13 @@ export default {
     };
 
     onMounted(() => {
-      loadAllData();
-      // Refresh data every 30 seconds
-      refreshInterval = setInterval(loadAllData, 30000);
+      // 只有在用户已登录时才开始定时查询
+      const token = localStorage.getItem('token');
+      if (token) {
+        loadAllData();
+        // Refresh data every 30 seconds
+        refreshInterval = setInterval(loadAllData, 30000);
+      }
     });
 
     onUnmounted(() => {

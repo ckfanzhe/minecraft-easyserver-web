@@ -400,9 +400,13 @@ export default {
 
     // Lifecycle
     onMounted(() => {
-      loadPerformanceData()
-      // Update data every 5 seconds
-      updateInterval = setInterval(loadPerformanceData, 5000)
+      // 只有在用户已登录时才开始定时查询
+      const token = localStorage.getItem('token')
+      if (token) {
+        loadPerformanceData()
+        // Update data every 5 seconds
+        updateInterval = setInterval(loadPerformanceData, 5000)
+      }
     })
 
     onUnmounted(() => {

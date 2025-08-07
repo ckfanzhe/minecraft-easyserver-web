@@ -493,7 +493,12 @@ export default {
     // Initialize WebSocket connection
     const initWebSocket = () => {
       try {
-        const wsUrl = `ws://${window.location.hostname}:8080/api/logs/ws`;
+        const token = localStorage.getItem('token');
+        if (!token) {
+          console.error('No authentication token found');
+          return;
+        }
+        const wsUrl = `ws://${window.location.hostname}:8080/api/websocket/logs?token=${encodeURIComponent(token)}`;
         logWebSocket = new WebSocket(wsUrl);
         
         logWebSocket.onopen = () => {
