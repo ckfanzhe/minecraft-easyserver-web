@@ -38,6 +38,10 @@
             <el-icon><Box /></el-icon>
             <span>{{ $t('nav.menu.resourcepack') }}</span>
           </el-menu-item>
+          <el-menu-item index="/versions">
+            <el-icon><VideoPlay /></el-icon>
+            <span>{{ $t('nav.menu.versions') }}</span>
+          </el-menu-item>
           <el-menu-item index="/commands">
             <el-icon><ChatLineSquare /></el-icon>
             <span>{{ $t('nav.menu.interaction') }}</span>
@@ -89,11 +93,6 @@
                   {{ $t('nav.buttons.restart') }}
                 </el-button>
               </el-button-group>
-              
-              <el-button type="text" @click="refreshStatus">
-                <el-icon><Refresh /></el-icon>
-                {{ $t('common.refresh') }}
-              </el-button>
               <LanguageSwitcher />
             </div>
           </div>

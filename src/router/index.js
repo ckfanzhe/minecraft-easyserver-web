@@ -5,6 +5,7 @@ import PlayerManagement from '../views/PlayerManagement.vue';
 import PermissionManagement from '../views/PermissionManagement.vue';
 import WorldManagement from '../views/WorldManagement.vue';
 import ResourcePackManagement from '../views/ResourcePackManagement.vue';
+import ServerVersions from '../views/ServerVersions.vue';
 import CommandConsole from '../views/CommandConsole.vue';
 import LogViewer from '../views/LogViewer.vue';
 import PerformanceMonitor from '../views/PerformanceMonitor.vue';
@@ -39,6 +40,11 @@ const routes = [
     path: '/resource-packs',
     name: 'ResourcePackManagement',
     component: ResourcePackManagement
+  },
+  {
+    path: '/versions',
+    name: 'ServerVersions',
+    component: ServerVersions
   },
   {
     path: '/commands',
