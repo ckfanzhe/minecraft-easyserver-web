@@ -420,6 +420,40 @@ export default {
     border: none;
     background: transparent;
     
+    &.el-menu--collapse {
+      .el-menu-item {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 8px 6px;
+        padding: 0;
+        width: 52px;
+        height: 52px;
+        
+        .el-icon {
+          margin: 0;
+          font-size: 18px;
+        }
+      }
+      
+      .el-sub-menu {
+        .el-sub-menu__title {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin: 8px 6px;
+          padding: 0;
+          width: 52px;
+          height: 52px;
+          
+          .el-icon {
+            margin: 0;
+            font-size: 18px;
+          }
+        }
+      }
+    }
+    
     .el-menu-item {
       background: rgba(255, 255, 255, 0.1);
       margin: 8px 12px;
