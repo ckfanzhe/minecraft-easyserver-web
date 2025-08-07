@@ -28,6 +28,11 @@ body {
   --background-base: #F5F7FA;
 }
 
+// Element Plus message z-index fix
+.el-message {
+  z-index: 10001 !important;
+}
+
 // Utility classes
 .text-center {
   text-align: center;

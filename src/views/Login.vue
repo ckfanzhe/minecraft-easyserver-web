@@ -138,6 +138,29 @@ export default {
         
         if (error.response && error.response.status === 401) {
           ElMessage.error(t('login.invalidPassword'));
+        } else if (error.response && error.response.status === 429) {
+          // 处理速率限制错误
+          const errorData = error.response.data;
+          ElMessage.error({
+            message: t('login.rateLimitExceeded'),
+            duration: 8000
+          });
+          
+          // 显示详细的封禁信息
+          if (errorData.blocked_until && errorData.retry_after_seconds) {
+            const blockedUntil = new Date(errorData.blocked_until).toLocaleString();
+            const retryAfter = errorData.retry_after_seconds;
+            
+            setTimeout(() => {
+              ElMessage.warning({
+                message: t('login.rateLimitInfo', { 
+                  blockedUntil: blockedUntil, 
+                  retryAfter: retryAfter 
+                }),
+                duration: 10000
+              });
+            }, 1000);
+          }
         } else {
           ElMessage.error(t('login.loginError'));
         }
@@ -167,7 +190,7 @@ export default {
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-  z-index: 9999;
+  z-index: 1000;
 }
 
 .language-switcher {

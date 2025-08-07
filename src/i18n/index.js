@@ -14,6 +14,8 @@ const messages = {
       loginError: '登录失败，请重试',
       invalidPassword: '密码错误',
       passwordMinLength: '密码长度不能为空',
+      rateLimitExceeded: '登录失败次数过多，账户已被暂时封禁',
+      rateLimitInfo: '封禁时间：{blockedUntil}，请在 {retryAfter} 秒后重试',
       validation: {
         passwordRequired: '请输入密码'
       }
@@ -541,6 +543,8 @@ const messages = {
       loginError: 'Login failed, please try again',
       invalidPassword: 'Invalid password',
       passwordMinLength: 'Password cannot be empty',
+      rateLimitExceeded: 'Too many failed login attempts, account temporarily blocked',
+      rateLimitInfo: 'Blocked until: {blockedUntil}, please retry after {retryAfter} seconds',
       validation: {
         passwordRequired: 'Please enter password'
       }
