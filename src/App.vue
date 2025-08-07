@@ -10,9 +10,9 @@
           :default-active="$route.path"
           router
           class="sidebar-menu"
-          background-color="#304156"
-          text-color="#bfcbd9"
-          active-text-color="#409EFF"
+          background-color="transparent"
+          text-color="rgba(255, 255, 255, 0.9)"
+          active-text-color="#667eea"
         >
           <el-menu-item index="/">
             <el-icon><Odometer /></el-icon>
@@ -316,22 +316,90 @@ export default {
 }
 
 .sidebar {
-  background-color: #304156;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  
+  // 自定义滚动条样式
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+    transition: background 0.3s ease;
+    
+    &:hover {
+      background: rgba(255, 255, 255, 0.5);
+    }
+  }
   
   .logo {
     padding: 20px;
     text-align: center;
-    border-bottom: 1px solid #434a50;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
     
     h2 {
-      color: #fff;
+      color: #ffffff;
       margin: 0;
-      font-size: 18px;
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 1.2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     }
   }
   
   .sidebar-menu {
     border: none;
+    background: transparent;
+    
+    .el-menu-item {
+      background: rgba(255, 255, 255, 0.1);
+      margin: 8px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      color: rgba(255, 255, 255, 0.9);
+      
+      &:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateX(4px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        color: #ffffff;
+      }
+      
+      &.is-active {
+        background: rgba(255, 255, 255, 0.9);
+        color: #667eea;
+        font-weight: 600;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        
+        .el-icon {
+          color: #667eea;
+        }
+      }
+      
+      .el-icon {
+        color: rgba(255, 255, 255, 0.8);
+        transition: color 0.3s ease;
+      }
+      
+      span {
+        font-weight: 500;
+      }
+    }
   }
 }
 

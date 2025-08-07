@@ -10,7 +10,7 @@
                 <el-icon><Monitor /></el-icon>
               </div>
               <div class="status-info">
-                <h3>服务器状态</h3>
+                <h3>{{ $t('dashboard.statusOverview.serverStatus') }}</h3>
                 <p :class="getStatusClass()">{{ serverStatus }}</p>
               </div>
             </div>
@@ -23,7 +23,7 @@
                 <el-icon><TrendCharts /></el-icon>
               </div>
               <div class="status-info">
-                <h3>CPU 使用率</h3>
+                <h3>{{ $t('dashboard.statusOverview.cpuUsage') }}</h3>
                 <p>{{ cpuUsage }}%</p>
               </div>
             </div>
@@ -36,7 +36,7 @@
                 <el-icon><PieChart /></el-icon>
               </div>
               <div class="status-info">
-                <h3>内存使用</h3>
+                <h3>{{ $t('dashboard.statusOverview.memoryUsage') }}</h3>
                 <p>{{ memoryUsage }}%</p>
               </div>
             </div>
@@ -50,7 +50,7 @@
       <el-card>
         <template #header>
           <div class="card-header">
-            <span>快速操作</span>
+            <span>{{ $t('dashboard.quickActions.title') }}</span>
           </div>
         </template>
         <el-row :gutter="20">
@@ -63,7 +63,7 @@
               class="action-button"
             >
               <el-icon><VideoPlay /></el-icon>
-              启动服务器
+              {{ $t('dashboard.quickActions.startServer') }}
             </el-button>
           </el-col>
           <el-col :span="6">
@@ -75,7 +75,7 @@
               class="action-button"
             >
               <el-icon><VideoPause /></el-icon>
-              停止服务器
+              {{ $t('dashboard.quickActions.stopServer') }}
             </el-button>
           </el-col>
           <el-col :span="6">
@@ -86,7 +86,7 @@
               class="action-button"
             >
               <el-icon><Refresh /></el-icon>
-              重启服务器
+              {{ $t('dashboard.quickActions.restartServer') }}
             </el-button>
           </el-col>
           <el-col :span="6">
@@ -97,7 +97,7 @@
               class="action-button"
             >
               <el-icon><ChatLineSquare /></el-icon>
-              命令控制台
+              {{ $t('dashboard.quickActions.commandConsole') }}
             </el-button>
           </el-col>
         </el-row>
@@ -109,16 +109,16 @@
       <el-card>
         <template #header>
           <div class="card-header">
-            <span>最近日志</span>
+            <span>{{ $t('dashboard.recentLogs.title') }}</span>
             <el-button type="text" @click="$router.push('/logs')">
-              查看更多
+              {{ $t('dashboard.recentLogs.viewMore') }}
               <el-icon><ArrowRight /></el-icon>
             </el-button>
           </div>
         </template>
         <div class="log-container">
           <div v-if="logs.length === 0" class="no-logs">
-            <el-empty description="暂无日志" />
+            <el-empty :description="$t('dashboard.recentLogs.noLogs')" />
           </div>
           <div v-else>
             <div 
@@ -143,26 +143,26 @@
           <el-card>
             <template #header>
               <div class="card-header">
-                <span>服务器信息</span>
+                <span>{{ $t('dashboard.serverInfo.title') }}</span>
               </div>
             </template>
             <div class="info-list">
               <div class="info-item">
-                <span class="info-label">服务器名称:</span>
-                <span class="info-value">{{ serverInfo.name || '未设置' }}</span>
-              </div>
-              <div class="info-item">
-                <span class="info-label">游戏模式:</span>
-                <span class="info-value">{{ serverInfo.gamemode || '未知' }}</span>
-              </div>
-              <div class="info-item">
-                <span class="info-label">难度:</span>
-                <span class="info-value">{{ serverInfo.difficulty || '未知' }}</span>
-              </div>
-              <div class="info-item">
-                <span class="info-label">端口:</span>
-                <span class="info-value">{{ serverInfo.port || '19132' }}</span>
-              </div>
+                 <span class="info-label">{{ $t('dashboard.serverInfo.serverName') }}:</span>
+                 <span class="info-value">{{ serverInfo.name || $t('dashboard.serverInfo.notSet') }}</span>
+                </div>
+                <div class="info-item">
+                 <span class="info-label">{{ $t('dashboard.serverInfo.gameMode') }}:</span>
+                 <span class="info-value">{{ serverInfo.gamemode || $t('dashboard.serverInfo.unknown') }}</span>
+                </div>
+                <div class="info-item">
+                 <span class="info-label">{{ $t('dashboard.serverInfo.difficulty') }}:</span>
+                 <span class="info-value">{{ serverInfo.difficulty || $t('dashboard.serverInfo.unknown') }}</span>
+                </div>
+                <div class="info-item">
+                 <span class="info-label">{{ $t('dashboard.serverInfo.port') }}:</span>
+                 <span class="info-value">{{ serverInfo.port || '19132' }}</span>
+                </div>
             </div>
           </el-card>
         </el-col>
@@ -170,25 +170,25 @@
           <el-card>
             <template #header>
               <div class="card-header">
-                <span>快捷链接</span>
+                <span>{{ $t('dashboard.quickLinks.title') }}</span>
               </div>
             </template>
             <div class="quick-links">
               <el-button type="text" @click="$router.push('/config')">
                 <el-icon><Setting /></el-icon>
-                服务器配置
+                {{ $t('dashboard.quickLinks.serverConfig') }}
               </el-button>
               <el-button type="text" @click="$router.push('/players')">
                 <el-icon><User /></el-icon>
-                玩家管理
+                {{ $t('dashboard.quickLinks.playerManagement') }}
               </el-button>
               <el-button type="text" @click="$router.push('/worlds')">
                 <el-icon><Globe /></el-icon>
-                世界管理
+                {{ $t('dashboard.quickLinks.worldManagement') }}
               </el-button>
               <el-button type="text" @click="$router.push('/performance')">
                 <el-icon><TrendCharts /></el-icon>
-                性能监控
+                {{ $t('dashboard.quickLinks.performanceMonitoring') }}
               </el-button>
             </div>
           </el-card>
@@ -202,10 +202,12 @@
 import { ref, onMounted, onUnmounted } from 'vue';
 import api from '../api';
 import { ElMessage } from 'element-plus';
+import { useI18n } from 'vue-i18n';
 
 export default {
   name: 'Home',
   setup() {
+    const { t } = useI18n();
     const serverStatus = ref('unknown');
     const maxPlayers = ref(10);
     const cpuUsage = ref(0);
@@ -259,54 +261,54 @@ export default {
       try {
         const response = await api.getServerConfig();
         const config = response.data.config || response.data;
-        serverInfo.value = {
-          name: config['server-name'] || '未设置',
-          gamemode: config.gamemode || '未知',
-          difficulty: config.difficulty || '未知',
-          port: config['server-port'] || '19132'
-        };
+         serverInfo.value = {
+           name: config['server-name'] || '',
+           gamemode: config.gamemode || '',
+           difficulty: config.difficulty || '',
+           port: config['server-port'] || '19132'
+         };
         maxPlayers.value = config['max-players'] || 10;
       } catch (error) {
         console.error('获取服务器信息失败:', error);
         // 设置默认值以防API调用失败
-        serverInfo.value = {
-          name: '未设置',
-          gamemode: '未知',
-          difficulty: '未知',
-          port: '19132'
-        };
+         serverInfo.value = {
+           name: '',
+           gamemode: '',
+           difficulty: '',
+           port: '19132'
+         };
         maxPlayers.value = 10;
       }
     };
 
     const startServer = async () => {
       try {
-        await api.startServer();
-        ElMessage.success('服务器启动命令已发送');
-        setTimeout(loadServerStatus, 2000);
-      } catch (error) {
-        ElMessage.error('启动服务器失败');
-      }
+         await api.startServer();
+         ElMessage.success(t('dashboard.messages.startServerSuccess'));
+         setTimeout(loadServerStatus, 2000);
+       } catch (error) {
+         ElMessage.error(t('dashboard.messages.startServerError'));
+       }
     };
 
     const stopServer = async () => {
       try {
-        await api.stopServer();
-        ElMessage.success('服务器停止命令已发送');
-        setTimeout(loadServerStatus, 2000);
-      } catch (error) {
-        ElMessage.error('停止服务器失败');
-      }
+         await api.stopServer();
+         ElMessage.success(t('dashboard.messages.stopServerSuccess'));
+         setTimeout(loadServerStatus, 2000);
+       } catch (error) {
+         ElMessage.error(t('dashboard.messages.stopServerError'));
+       }
     };
 
     const restartServer = async () => {
       try {
-        await api.restartServer();
-        ElMessage.success('服务器重启命令已发送');
-        setTimeout(loadServerStatus, 2000);
-      } catch (error) {
-        ElMessage.error('重启服务器失败');
-      }
+         await api.restartServer();
+         ElMessage.success(t('dashboard.messages.restartServerSuccess'));
+         setTimeout(loadServerStatus, 2000);
+       } catch (error) {
+         ElMessage.error(t('dashboard.messages.restartServerError'));
+       }
     };
 
     const loadAllData = () => {
