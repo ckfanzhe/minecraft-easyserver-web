@@ -29,7 +29,11 @@ const messages = {
         tools: '服务器工具',
         logs: '服务器日志',
         interaction: '命令交互与日志',
-        commands: '快捷命令'
+        commands: '快捷命令',
+        serverManagement: '服务器管理',
+        playerManagement: '玩家管理',
+        worldManagement: '世界管理',
+        interactionLogs: '交互与日志'
       },
       buttons: {
         start: '启动服务器',
@@ -503,7 +507,11 @@ const messages = {
         tools: 'Server Tools',
         logs: 'Server Logs',
         interaction: 'Command Interaction & Logs',
-        commands: 'Quick Commands'
+        commands: 'Quick Commands',
+        serverManagement: 'Server Management',
+        playerManagement: 'Player Management',
+        worldManagement: 'World Management',
+        interactionLogs: 'Interaction & Logs'
       },
       buttons: {
         start: 'Start Server',
