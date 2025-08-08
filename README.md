@@ -14,6 +14,7 @@ A modern web management panel for Minecraft Easy Server built with Vue 3 and Ele
 - **Resource Packs** - Upload and manage resource packs (.zip/.mcpack)
 - **Command Console** - Execute commands with history
 - **Log Viewer** - Real-time server logs
+- **Authentication** - Secure login system with session management
 - **Multi-language** - Chinese and English support
 
 ## 🛠️ Technology Stack
