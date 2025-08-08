@@ -1,8 +1,59 @@
 import { createI18n } from 'vue-i18n'
 
-// 翻译资源
+// Translation resources
 const messages = {
   zh: {
+    // Login
+    login: {
+      title: '登录',
+      password: '密码',
+      passwordPlaceholder: '请输入密码',
+      loginButton: '登录',
+      loggingIn: '登录中...',
+      loginSuccess: '登录成功',
+      loginFailed: '登录失败',
+      loginError: '登录失败，请重试',
+      invalidPassword: '密码错误',
+      passwordMinLength: '密码长度不能小于8位',
+      rateLimitExceeded: '登录失败次数过多，账户已被暂时封禁',
+      rateLimitInfo: '封禁时间：{blockedUntil}，请在 {retryAfter} 秒后重试',
+      defaultPasswordWarning: '检测到您正在使用默认密码，请立即修改为强密码',
+      validation: {
+        passwordRequired: '请输入密码'
+      }
+    },
+
+    // Auth
+    auth: {
+      logout: {
+        success: '退出登录成功'
+      },
+      changePassword: {
+        title: '修改密码',
+        warningText: '检测到您正在使用默认密码，为了安全起见，请立即修改为强密码。',
+        currentPassword: '当前密码',
+        currentPasswordPlaceholder: '请输入当前密码',
+        newPassword: '新密码',
+        newPasswordPlaceholder: '请输入新密码',
+        confirmPassword: '确认新密码',
+        confirmPasswordPlaceholder: '请再次输入新密码',
+        passwordRequirements: '密码要求：',
+        requirements: {
+          minLength: '至少8位字符',
+          uppercase: '包含大写字母',
+          lowercase: '包含小写字母',
+          number: '包含数字',
+          specialChar: '包含特殊字符'
+        },
+        passwordMismatch: '两次输入的密码不一致',
+        changeButton: '修改密码',
+        changing: '修改中...',
+        changeSuccess: '密码修改成功，即将跳转到登录页面',
+        changeSuccessVoluntary: '密码修改成功，即将返回仪表板',
+        changeFailed: '修改密码失败，请重试'
+      }
+    },
+
     // Navigation
     nav: {
       title: 'Minecraft 控制面板',
@@ -32,14 +83,17 @@ const messages = {
         commands: '快捷命令',
         serverManagement: '服务器管理',
         playerManagement: '玩家管理',
-        worldManagement: '世界管理',
-        interactionLogs: '交互与日志'
+        resourceManagement: '资源管理',
+        interactionLogs: '交互与日志',
+        changePassword: '修改密码'
       },
       buttons: {
         start: '启动服务器',
         stop: '停止服务器',
         restart: '重启服务器',
-        toggle: '启动/停止'
+        toggle: '启动/停止',
+        changePassword: '修改密码',
+        logout: '退出登录'
       }
     },
     
@@ -91,7 +145,7 @@ const messages = {
         title: '快捷链接',
         serverConfig: '服务器配置',
         playerManagement: '玩家管理',
-        worldManagement: '世界管理',
+        resourceManagement: '资源管理',
         performanceMonitoring: '性能监控'
       },
       messages: {
@@ -113,6 +167,14 @@ const messages = {
       bedrockMemory: 'Bedrock 内存',
       cpuChart: 'CPU 使用率趋势',
       memoryChart: '内存使用率趋势',
+      cpuChartTitle: 'CPU 使用率 (%)',
+      memoryChartTitle: '内存使用率 (%)',
+      systemCpuLegend: '系统 CPU',
+      bedrockCpuLegend: 'Bedrock CPU',
+      systemMemoryLegend: '系统内存',
+      bedrockMemoryLegend: 'Bedrock 内存使用量(MB)',
+      usagePercentLabel: '使用率 (%)',
+      memoryMbLabel: '内存 (MB)',
       systemInfo: '系统信息',
       bedrockInfo: 'Bedrock 服务器信息',
       processId: '进程 ID',
@@ -237,7 +299,7 @@ const messages = {
       remove: '移除',
       empty: '暂无白名单用户',
       errorEmptyName: '请输入玩家名称',
-      // 新增字段
+      // New fields
       addPlayer: '添加玩家',
       playerName: '玩家名称',
       ignoresPlayerLimit: '忽略玩家限制',
@@ -325,10 +387,11 @@ const messages = {
     
     // World Management
     world: {
-      title: '世界管理',
+      title: '资源管理',
       upload: '上传世界文件',
       uploadDesc: '支持 .zip 和 .mcworld 格式，自动解压并删除压缩包',
       uploadNote: '上传后将自动解压到世界目录，原压缩文件会被删除',
+      uploadHint: '拖拽文件到此处或点击选择',
       activate: '激活',
       delete: '删除',
       current: '当前世界',
@@ -343,6 +406,7 @@ const messages = {
       upload: '上传资源包',
       uploadDesc: '支持 .zip 和 .mcpack 格式，自动解压并读取配置',
       uploadNote: '上传后将自动解压到资源包目录，原压缩文件会被删除',
+      uploadHint: '拖拽文件到此处或点击选择',
       uploadError: '上传失败',
       activate: '激活',
       deactivate: '停用',
@@ -473,14 +537,65 @@ const messages = {
       active: '活跃',
       inactive: '未激活',
       activate: '激活',
+      deactivate: '停用',
       version: '版本',
       selectFile: '请选择文件',
       loadFailed: '加载失败',
       operationFailed: '操作失败'
     }
-  },
-  
+   },
   en: {
+    // Login
+    login: {
+      title: 'Login',
+      password: 'Password',
+      passwordPlaceholder: 'Please enter password',
+      loginButton: 'Login',
+      loggingIn: 'Logging in...',
+      loginSuccess: 'Login successful',
+      loginFailed: 'Login failed',
+      loginError: 'Login failed, please try again',
+      invalidPassword: 'Invalid password',
+      passwordMinLength: 'Password must be at least 8 characters long',
+      rateLimitExceeded: 'Too many failed login attempts, account temporarily blocked',
+      rateLimitInfo: 'Blocked until: {blockedUntil}, please retry after {retryAfter} seconds',
+      defaultPasswordWarning: 'Default password detected, please change to a strong password immediately',
+      validation: {
+        passwordRequired: 'Please enter password'
+      }
+    },
+
+    // Auth
+    auth: {
+      logout: {
+        success: 'Logout successful'
+      },
+      changePassword: {
+        title: 'Change Password',
+        warningText: 'Default password detected. For security reasons, please change to a strong password immediately.',
+        currentPassword: 'Current Password',
+        currentPasswordPlaceholder: 'Enter current password',
+        newPassword: 'New Password',
+        newPasswordPlaceholder: 'Enter new password',
+        confirmPassword: 'Confirm New Password',
+        confirmPasswordPlaceholder: 'Re-enter new password',
+        passwordRequirements: 'Password Requirements:',
+        requirements: {
+          minLength: 'At least 8 characters',
+          uppercase: 'Contains uppercase letter',
+          lowercase: 'Contains lowercase letter',
+          number: 'Contains number',
+          specialChar: 'Contains special character'
+        },
+        passwordMismatch: 'Passwords do not match',
+        changeButton: 'Change Password',
+        changing: 'Changing...',
+        changeSuccess: 'Password changed successfully, redirecting to login page',
+        changeSuccessVoluntary: 'Password changed successfully, returning to dashboard',
+        changeFailed: 'Failed to change password, please try again'
+      }
+    },
+
     // Navigation
     nav: {
       title: 'Minecraft EasyServer',
@@ -510,14 +625,17 @@ const messages = {
         commands: 'Quick Commands',
         serverManagement: 'Server Management',
         playerManagement: 'Player Management',
-        worldManagement: 'World Management',
-        interactionLogs: 'Interaction & Logs'
+        resourceManagement: 'Resource Management',
+        interactionLogs: 'Interaction & Logs',
+        changePassword: 'Change Password'
       },
       buttons: {
         start: 'Start Server',
         stop: 'Stop Server',
         restart: 'Restart Server',
-        toggle: 'Start/Stop'
+        toggle: 'Start/Stop',
+        changePassword: 'Change Password',
+        logout: 'Logout'
       }
     },
     
@@ -569,7 +687,7 @@ const messages = {
         title: 'Quick Links',
         serverConfig: 'Server Configuration',
         playerManagement: 'Player Management',
-        worldManagement: 'World Management',
+        resourceManagement: 'Resource Management',
         performanceMonitoring: 'Performance Monitor'
       },
       messages: {
@@ -591,6 +709,14 @@ const messages = {
       bedrockMemory: 'Bedrock Memory',
       cpuChart: 'CPU Usage Trend',
       memoryChart: 'Memory Usage Trend',
+      cpuChartTitle: 'CPU Usage (%)',
+      memoryChartTitle: 'Memory Usage (%)',
+      systemCpuLegend: 'System CPU',
+      bedrockCpuLegend: 'Bedrock CPU',
+      systemMemoryLegend: 'System Memory',
+      bedrockMemoryLegend: 'Bedrock Memory Usage(MB)',
+      usagePercentLabel: 'Usage (%)',
+      memoryMbLabel: 'Memory (MB)',
       systemInfo: 'System Information',
       bedrockInfo: 'Bedrock Server Information',
       processId: 'Process ID',
@@ -803,10 +929,11 @@ const messages = {
     
     // World Management
     world: {
-      title: 'World Management',
+      title: 'Resource Management',
       upload: 'Upload World File',
       uploadDesc: 'Supports .zip and .mcworld formats, auto-extract and delete archive',
       uploadNote: 'Files will be auto-extracted to worlds directory, original archive will be deleted',
+      uploadHint: 'Drag files here or click to select',
       activate: 'Activate',
       delete: 'Delete',
       current: 'Current World',
@@ -821,6 +948,7 @@ const messages = {
       upload: 'Upload Resource Pack',
       uploadDesc: 'Supports .zip and .mcpack formats, auto-extract and read configuration',
       uploadNote: 'Files will be auto-extracted to resource packs directory, original archive will be deleted',
+      uploadHint: 'Drag files here or click to select',
       uploadError: 'Upload failed',
       activate: 'Activate',
       deactivate: 'Deactivate',
@@ -951,6 +1079,7 @@ const messages = {
       active: 'Active',
       inactive: 'Inactive',
       activate: 'Activate',
+      deactivate: 'Deactivate',
       version: 'Version',
       selectFile: 'Please select a file',
       loadFailed: 'Load failed',
@@ -959,11 +1088,11 @@ const messages = {
   }
 }
 
-// 创建 i18n 实例
+// Create i18n instance
 const i18n = createI18n({
-  legacy: false, // 使用 Composition API 模式
-  locale: localStorage.getItem('language') || 'zh', // 默认语言
-  fallbackLocale: 'zh', // 回退语言
+  legacy: false, // Use Composition API mode
+  locale: localStorage.getItem('language') || 'zh', // Default language
+  fallbackLocale: 'zh', // Fallback language
   messages
 })
 

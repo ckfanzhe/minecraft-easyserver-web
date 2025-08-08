@@ -1,6 +1,6 @@
 <template>
   <div class="player-management">
-    <!-- 白名单管理 -->
+    <!-- Allowlist Management -->
     <el-card class="allowlist-card">
       <template #header>
         <div class="card-header">
@@ -42,7 +42,7 @@
       </div>
     </el-card>
 
-    <!-- 添加玩家对话框 -->
+    <!-- Add Player Dialog -->
     <el-dialog
       v-model="showAddDialog"
       :title="$t('allowlist.addPlayerDialog.title')"
@@ -107,28 +107,28 @@ export default {
       ]
     }));
     
-    // 加载白名单
+    // Load allowlist
      const loadAllowlist = async () => {
        loading.value = true;
        try {
          const response = await api.getAllowlist();
          allowlist.value = response.data.allowlist || [];
        } catch (error) {
-         console.error('获取白名单失败:', error);
+         console.error('Failed to get allowlist:', error);
          ElMessage.error(t('allowlist.messages.loadFailed'));
        } finally {
          loading.value = false;
        }
      };
     
-    // 添加玩家到白名单
+    // Add player to allowlist
     const addPlayer = async () => {
       if (!playerForm.value) return;
       
       try {
         await playerForm.value.validate();
         
-        // 检查玩家是否已存在
+        // Check if player already exists
         if (allowlist.value.some(player => player.name === newPlayer.name)) {
           ElMessage.warning(t('allowlist.messages.playerExists'));
           return;
@@ -145,14 +145,14 @@ export default {
         resetForm();
         await loadAllowlist();
       } catch (error) {
-        console.error('添加玩家失败:', error);
+        console.error('Failed to add player:', error);
         ElMessage.error(t('allowlist.messages.addFailed'));
       } finally {
         adding.value = false;
       }
     };
     
-    // 从白名单移除玩家
+    // Remove player from allowlist
     const removePlayer = async (playerName) => {
       try {
         await ElMessageBox.confirm(
@@ -172,7 +172,7 @@ export default {
         await loadAllowlist();
       } catch (error) {
         if (error !== 'cancel') {
-          console.error('移除玩家失败:', error);
+          console.error('Failed to remove player:', error);
           ElMessage.error(t('allowlist.messages.removeFailed'));
         }
       } finally {
@@ -180,7 +180,7 @@ export default {
       }
     };
     
-    // 重置表单
+    // Reset form
     const resetForm = () => {
       newPlayer.name = '';
       newPlayer.ignoresPlayerLimit = false;
@@ -189,7 +189,7 @@ export default {
       }
     };
     
-    // 关闭对话框
+    // Close dialog
     const handleCloseDialog = () => {
       showAddDialog.value = false;
       resetForm();

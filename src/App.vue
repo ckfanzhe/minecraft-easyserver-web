@@ -1,7 +1,11 @@
 <template>
   <div id="app">
-    <el-container class="app-container">
-      <!-- 侧边栏 -->
+    <!-- 登录页面独立显示 -->
+    <router-view v-if="$route.path === '/login'" />
+    
+    <!-- 主应用布局 -->
+    <el-container v-else class="app-container">
+      <!-- Sidebar -->
       <el-aside :width="isCollapsed ? '64px' : '250px'" class="sidebar">
         <div class="logo">
           <h2 v-if="!isCollapsed">🎮 {{ $t('nav.title') }}</h2>
@@ -22,7 +26,7 @@
             <span>{{ $t('nav.menu.dashboard') }}</span>
           </el-menu-item>
           
-          <!-- 服务器管理子菜单 -->
+          <!-- Server Management Submenu -->
           <el-sub-menu index="server">
             <template #title>
               <el-icon><Setting /></el-icon>
@@ -42,7 +46,7 @@
             </el-menu-item>
           </el-sub-menu>
           
-          <!-- 玩家管理子菜单 -->
+          <!-- Player Management Submenu -->
           <el-sub-menu index="players">
             <template #title>
               <el-icon><User /></el-icon>
@@ -58,11 +62,11 @@
             </el-menu-item>
           </el-sub-menu>
           
-          <!-- 世界管理子菜单 -->
+          <!-- World Management Submenu -->
           <el-sub-menu index="world">
             <template #title>
               <el-icon><Baseball /></el-icon>
-              <span>{{ $t('nav.menu.worldManagement') }}</span>
+              <span>{{ $t('nav.menu.resourceManagement') }}</span>
             </template>
             <el-menu-item index="/worlds">
               <el-icon><Baseball /></el-icon>
@@ -74,7 +78,7 @@
             </el-menu-item>
           </el-sub-menu>
           
-          <!-- 交互与日志子菜单 -->
+          <!-- Interaction and Logs Submenu -->
           <el-sub-menu index="interaction">
             <template #title>
               <el-icon><ChatLineSquare /></el-icon>
@@ -89,12 +93,18 @@
               <span>{{ $t('nav.menu.logs') }}</span>
             </el-menu-item>
           </el-sub-menu>
+          
+          <!-- Security Settings -->
+          <el-menu-item index="/change-password">
+            <el-icon><Key /></el-icon>
+            <span>{{ $t('nav.menu.changePassword') }}</span>
+          </el-menu-item>
         </el-menu>
       </el-aside>
 
-      <!-- 主内容区 -->
+      <!-- Main Content Area -->
       <el-container>
-        <!-- 顶部导航栏 -->
+        <!-- Top Navigation Bar -->
         <el-header height="60px" class="header">
           <div class="header-content">
             <div class="header-left">
@@ -108,7 +118,7 @@
                 {{ getStatusText() }}
               </div>
               
-              <!-- 服务器控制按钮组 -->
+              <!-- Server Control Button Group -->
               <el-button-group class="control-btn-group">
                 <el-button 
                   :type="serverStatus === 'running' ? 'warning' : 'success'"
@@ -134,11 +144,22 @@
                 </el-button>
               </el-button-group>
               <LanguageSwitcher />
+              
+              <!-- 退出登录按钮 -->
+              <el-button 
+                type="danger" 
+                size="small"
+                @click="logout"
+                class="logout-btn"
+              >
+                <el-icon><SwitchButton /></el-icon>
+                {{ $t('nav.buttons.logout') }}
+              </el-button>
             </div>
           </div>
         </el-header>
 
-        <!-- 主要内容 -->
+        <!-- Main Content -->
         <el-main class="main-content">
           <router-view />
         </el-main>
@@ -149,7 +170,7 @@
 
 <script>
 import { ref, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { 
@@ -167,7 +188,8 @@ import {
   Refresh,
   RefreshRight,
   ArrowLeft,
-  ArrowRight
+  ArrowRight,
+  SwitchButton
 } from '@element-plus/icons-vue';
 import api from './api';
 import LanguageSwitcher from './components/LanguageSwitcher.vue';
@@ -194,6 +216,7 @@ export default {
   },
   setup() {
     const route = useRoute();
+    const router = useRouter();
     const { t } = useI18n();
     const serverStatus = ref('未知');
     const isCollapsed = ref(false);
@@ -237,9 +260,9 @@ export default {
         case 'stopped':
           return t('nav.statusStopped');
         case 'starting':
-          return t('nav.statusOnline'); // 使用在线状态作为启动中
+          return t('nav.statusOnline'); // Use online status for starting
         case 'stopping':
-          return t('nav.statusOffline'); // 使用离线状态作为停止中
+          return t('nav.statusOffline'); // Use offline status for stopping
         default:
           return t('nav.statusUnknown');
       }
@@ -250,12 +273,12 @@ export default {
         const response = await api.getServerStatus();
         serverStatus.value = response.data.status;
       } catch (error) {
-        console.error('获取服务器状态失败:', error);
+        console.error('Failed to get server status:', error);
         serverStatus.value = '错误';
       }
     };
 
-    // 服务器控制方法
+    // Server control methods
     const startServer = async () => {
       try {
         await ElMessageBox.confirm(
@@ -274,7 +297,7 @@ export default {
         setTimeout(refreshStatus, 2000);
       } catch (error) {
         if (error !== 'cancel') {
-          console.error('启动服务器失败:', error);
+          console.error('Failed to start server:', error);
           ElMessage.error(t('serverManagement.startError'));
           refreshStatus();
         }
@@ -299,14 +322,14 @@ export default {
         setTimeout(refreshStatus, 2000);
       } catch (error) {
         if (error !== 'cancel') {
-          console.error('停止服务器失败:', error);
+          console.error('Failed to stop server:', error);
           ElMessage.error(t('serverManagement.stopError'));
           refreshStatus();
         }
       }
     };
 
-    // 切换服务器状态（启动/停止）
+    // Toggle server status (start/stop)
     const toggleServer = async () => {
       if (serverStatus.value === 'running') {
         await stopServer();
@@ -333,17 +356,30 @@ export default {
         setTimeout(refreshStatus, 3000);
       } catch (error) {
         if (error !== 'cancel') {
-          console.error('重启服务器失败:', error);
+          console.error('Failed to restart server:', error);
           ElMessage.error(t('serverManagement.restartError'));
           refreshStatus();
         }
       }
     };
 
+    // 退出登录
+    const logout = () => {
+      // 清除本地存储的token
+      localStorage.removeItem('token');
+      // 跳转到登录页面
+      router.push('/login');
+      ElMessage.success(t('auth.logout.success'));
+    };
+
     onMounted(() => {
-      refreshStatus();
-      // 每30秒自动刷新状态
-      setInterval(refreshStatus, 30000);
+      // 只有在用户已登录时才开始定时查询
+      const token = localStorage.getItem('token');
+      if (token) {
+        refreshStatus();
+        // Auto refresh status every 30 seconds
+        setInterval(refreshStatus, 30000);
+      }
     });
 
     return {
@@ -355,13 +391,32 @@ export default {
       getStatusText,
       refreshStatus,
       toggleServer,
-      restartServer
+      restartServer,
+      logout
     };
   }
 };
 </script>
 
 <style lang="scss">
+// 全局样式重置
+#app {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+// 确保登录页面全屏显示
+body, html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
 .app-container {
   height: 100vh;
 }
@@ -372,7 +427,7 @@ export default {
   overflow-y: auto;
   transition: width 0.3s ease;
   
-  // 自定义滚动条样式
+  // Custom scrollbar styles
   &::-webkit-scrollbar {
     width: 6px;
   }
@@ -488,6 +543,10 @@ export default {
       
       span {
         font-weight: 500;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
       }
     }
     
@@ -515,6 +574,10 @@ export default {
         
         span {
           font-weight: 500;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          max-width: 100%;
         }
       }
       
@@ -528,6 +591,17 @@ export default {
           
           &:hover {
             background: rgba(255, 255, 255, 0.15);
+          }
+          
+          &.is-active {
+            background: rgba(255, 255, 255, 0.9);
+            color: #667eea;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            
+            .el-icon {
+              color: #667eea;
+            }
           }
         }
       }
@@ -581,11 +655,24 @@ export default {
           text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
         }
       }
-    
-    .header-actions {
-      display: flex;
-      align-items: center;
-      gap: 12px;
+      
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        
+        .logout-btn {
+          margin-left: 8px;
+          border-radius: 6px;
+          font-weight: 500;
+          transition: all 0.3s ease;
+          
+          &:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(245, 108, 108, 0.3);
+          }
+        }
+      }
       
       .status-badge {
         display: inline-flex;
@@ -696,6 +783,7 @@ export default {
         }
       }
       
+
       .el-button {
          border-radius: 20px;
          padding: 8px 16px;
@@ -720,7 +808,7 @@ export default {
        }
     }
   }
-}
+
 
 .main-content {
   background-color: #f5f5f5;

@@ -1,6 +1,6 @@
 <template>
   <div class="permission-management">
-    <!-- 权限管理 -->
+    <!-- Permission Management -->
     <el-card class="permission-card">
       <template #header>
         <div class="card-header">
@@ -50,7 +50,7 @@
       </div>
     </el-card>
 
-    <!-- 添加/编辑权限对话框 -->
+    <!-- Add/Edit Permission Dialog -->
     <el-dialog
       v-model="showAddDialog"
       :title="isEditing ? $t('permission.editDialog.title') : $t('permission.addDialog.title')"
@@ -138,7 +138,7 @@ export default {
       ]
     }));
     
-    // 获取权限标签类型
+    // Get permission tag type
     const getPermissionTagType = (level) => {
       switch (level) {
         case 'operator': return 'danger';
@@ -148,28 +148,28 @@ export default {
       }
     };
     
-    // 加载权限列表
+    // Load permission list
     const loadPermissions = async () => {
       loading.value = true;
       try {
         const response = await api.getPermissions();
         permissions.value = response.data.permissions || [];
       } catch (error) {
-        console.error('获取权限列表失败:', error);
+        console.error('Failed to get permission list:', error);
         ElMessage.error(t('permission.messages.loadFailed'));
       } finally {
         loading.value = false;
       }
     };
     
-    // 保存权限
+    // Save permission
     const savePermission = async () => {
       if (!permissionForm.value) return;
       
       try {
         await permissionForm.value.validate();
         
-        // 检查玩家是否已存在（仅在添加时检查）
+        // Check if player already exists (only when adding)
         if (!isEditing.value && permissions.value.some(p => p.xuid === newPermission.xuid)) {
           ElMessage.warning(t('permission.messages.playerExists'));
           return;
@@ -186,14 +186,14 @@ export default {
         resetForm();
         await loadPermissions();
       } catch (error) {
-        console.error('保存权限失败:', error);
+        console.error('Failed to save permissions:', error);
         ElMessage.error(isEditing.value ? t('permission.messages.updateFailed') : t('permission.messages.addFailed'));
       } finally {
         saving.value = false;
       }
     };
     
-    // 编辑权限
+    // Edit permission
     const editPermission = (permission) => {
       isEditing.value = true;
       newPermission.xuid = permission.xuid;
@@ -201,7 +201,7 @@ export default {
       showAddDialog.value = true;
     };
     
-    // 删除权限
+    // Delete permission
     const removePermission = async (xuid) => {
       try {
         await ElMessageBox.confirm(
@@ -221,7 +221,7 @@ export default {
         await loadPermissions();
       } catch (error) {
         if (error !== 'cancel') {
-          console.error('删除权限失败:', error);
+          console.error('Failed to delete permission:', error);
           ElMessage.error(t('permission.messages.removeFailed'));
         }
       } finally {
@@ -229,7 +229,7 @@ export default {
       }
     };
     
-    // 重置表单
+    // Reset form
     const resetForm = () => {
       isEditing.value = false;
       newPermission.xuid = '';
@@ -239,7 +239,7 @@ export default {
       }
     };
     
-    // 关闭对话框
+    // Close dialog
     const handleCloseDialog = () => {
       showAddDialog.value = false;
       resetForm();

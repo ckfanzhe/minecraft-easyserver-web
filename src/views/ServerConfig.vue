@@ -23,7 +23,7 @@
           label-width="150px"
           class="config-form"
         >
-          <!-- 服务器名称 -->
+          <!-- Server Name -->
           <el-form-item :label="$t('config.serverName')" prop="server-name">
             <el-input 
               v-model="config['server-name']" 
@@ -32,7 +32,7 @@
             />
           </el-form-item>
           
-          <!-- 游戏模式 -->
+          <!-- Game Mode -->
           <el-form-item :label="$t('config.gamemode')" prop="gamemode">
             <el-select v-model="config.gamemode" @change="markChanged">
               <el-option 
@@ -50,7 +50,7 @@
             </el-select>
           </el-form-item>
           
-          <!-- 难度 -->
+          <!-- Difficulty -->
           <el-form-item :label="$t('config.difficulty')" prop="difficulty">
             <el-select v-model="config.difficulty" @change="markChanged">
               <el-option 
@@ -72,7 +72,7 @@
             </el-select>
           </el-form-item>
           
-          <!-- 最大玩家数 -->
+          <!-- Max Players -->
           <el-form-item :label="$t('config.maxPlayers')" prop="max-players">
             <el-input-number 
               v-model="config['max-players']" 
@@ -82,7 +82,7 @@
             />
           </el-form-item>
           
-          <!-- 服务器端口 -->
+          <!-- Server Port -->
           <el-form-item :label="$t('config.serverPort')" prop="server-port">
             <el-input-number 
               v-model="config['server-port']" 
@@ -92,7 +92,7 @@
             />
           </el-form-item>
           
-          <!-- 世界名称 -->
+          <!-- World Name -->
           <el-form-item :label="$t('config.levelName')" prop="level-name">
             <el-input 
               v-model="config['level-name']" 
@@ -101,7 +101,7 @@
             />
           </el-form-item>
           
-          <!-- 默认玩家权限级别 -->
+          <!-- Default Player Permission Level -->
           <el-form-item :label="$t('config.defaultPermission')" prop="default-player-permission-level">
             <el-select v-model="config['default-player-permission-level']" @change="markChanged">
               <el-option 
@@ -119,7 +119,7 @@
             </el-select>
           </el-form-item>
           
-          <!-- 开关选项 -->
+          <!-- Switch Options -->
           <div class="switch-options">
             <el-form-item :label="$t('config.allowCheats')">
               <el-switch 
@@ -202,7 +202,7 @@ export default {
       loading.value = true
       try {
         const response = await api.getServerConfig()
-        // 后端返回的数据结构是 { config: {...} }
+        // Backend returns data structure as { config: {...} }
         const configData = response.data.config || response.data
         Object.assign(config, configData)
         originalConfig.value = JSON.parse(JSON.stringify(configData))
@@ -228,7 +228,7 @@ export default {
         )
         
         saving.value = true
-        // 后端期望的数据格式是 { config: {...} }
+        // Backend expects data format as { config: {...} }
         await api.updateServerConfig({ config: config })
         originalConfig.value = JSON.parse(JSON.stringify(config))
         hasChanges.value = false

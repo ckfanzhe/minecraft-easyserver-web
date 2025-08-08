@@ -1,17 +1,22 @@
 import axios from 'axios';
 
-// 创建axios实例
+// Create axios instance
 const api = axios.create({
   baseURL: '/api',
-  timeout: 10000,
+  timeout: 600000, // 10 minutes timeout for file uploads
   headers: {
     'Content-Type': 'application/json'
   }
 });
 
-// 请求拦截器
+// Request interceptor
 api.interceptors.request.use(
   config => {
+    // Add JWT token to requests (except login)
+    const token = localStorage.getItem('token');
+    if (token && !config.url.includes('/auth/login')) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
     return config;
   },
   error => {
@@ -19,40 +24,56 @@ api.interceptors.request.use(
   }
 );
 
-// 响应拦截器
+// Response interceptor
 api.interceptors.response.use(
   response => {
     return response;
   },
   error => {
-    console.error('API请求错误:', error);
+    console.error('API request error:', error);
+    
+    // Handle 401 unauthorized errors
+    if (error.response && error.response.status === 401) {
+      // Clear token and redirect to login
+      localStorage.removeItem('token');
+      if (window.location.pathname !== '/login') {
+        window.location.href = '/login';
+      }
+    }
+    
     return Promise.reject(error);
   }
 );
 
 // API方法定义
 export default {
-  // 服务器控制
+  // Authentication
+  login: (password) => api.post('/auth/login', { password }),
+  changePassword: (currentPassword, newPassword) => api.post('/auth/change-password', { 
+    current_password: currentPassword, 
+    new_password: newPassword 
+  }),
+  // Server control
   getServerStatus: () => api.get('/status'),
   startServer: () => api.post('/start'),
   stopServer: () => api.post('/stop'),
   restartServer: () => api.post('/restart'),
 
-  // 服务器配置
+  // Server configuration
   getServerConfig: () => api.get('/config'),
   updateServerConfig: (config) => api.put('/config', config),
 
-  // 白名单管理
+  // Allowlist management
   getAllowlist: () => api.get('/allowlist'),
   addToAllowlist: (entry) => api.post('/allowlist', entry),
   removeFromAllowlist: (name) => api.delete(`/allowlist/${name}`),
 
-  // 权限管理
+  // Permission management
   getPermissions: () => api.get('/permissions'),
   updatePermission: (permission) => api.put('/permissions', permission),
   removePermission: (xuid) => api.delete(`/permissions/${xuid}`),
 
-  // 世界管理
+  // World management
   getWorlds: () => api.get('/worlds'),
   uploadWorld: (formData) => api.post('/worlds/upload', formData, {
     headers: { 'Content-Type': 'multipart/form-data' }
@@ -60,7 +81,7 @@ export default {
   deleteWorld: (name) => api.delete(`/worlds/${name}`),
   activateWorld: (name) => api.put(`/worlds/${name}/activate`),
 
-  // 资源包管理
+  // Resource pack management
   getResourcePacks: () => api.get('/resource-packs'),
   uploadResourcePack: (formData) => api.post('/resource-packs/upload', formData, {
     headers: { 'Content-Type': 'multipart/form-data' }
@@ -69,18 +90,18 @@ export default {
   deactivateResourcePack: (uuid) => api.put(`/resource-packs/${uuid}/deactivate`),
   deleteResourcePack: (uuid) => api.delete(`/resource-packs/${uuid}`),
 
-  // 服务器版本管理
+  // Server version management
   getServerVersions: () => api.get('/server-versions'),
   downloadServerVersion: (version) => api.post(`/server-versions/${version}/download`),
   getDownloadProgress: (version) => api.get(`/server-versions/${version}/progress`),
   activateServerVersion: (version) => api.post(`/server-versions/${version}/activate`),
   updateVersionConfig: (config) => api.post('/server-versions/update-config', config),
 
-  // 日志管理
+  // Log management
   getLogs: (limit = 100) => api.get(`/logs?limit=${limit}`),
   clearLogs: () => api.delete('/logs'),
 
-  // 服务器交互
+  // Server interaction
   getInteractionStatus: () => api.get('/interaction/status'),
   sendCommand: (command) => api.post('/interaction/command', {
     command,
@@ -89,13 +110,13 @@ export default {
   getCommandHistory: (limit = 50) => api.get(`/interaction/history?limit=${limit}`),
   clearCommandHistory: () => api.delete('/interaction/history'),
 
-  // 快捷命令
+  // Quick commands
   getQuickCommands: (category) => api.get(`/commands${category ? `?category=${category}` : ''}`),
   getCommandCategories: () => api.get('/commands/categories'),
   executeQuickCommand: (id) => api.post(`/commands/${id}/execute`),
   addQuickCommand: (command) => api.post('/commands', command),
   deleteQuickCommand: (id) => api.delete(`/commands/${id}`),
 
-  // 性能监控
+  // Performance monitoring
   getPerformanceData: () => api.get('/monitor/performance')
 };

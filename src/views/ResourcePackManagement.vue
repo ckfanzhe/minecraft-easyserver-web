@@ -1,6 +1,6 @@
 <template>
   <div class="resource-pack-management">
-    <!-- 上传区域 -->
+    <!-- Upload Area -->
     <el-card class="upload-card" shadow="hover">
       <template #header>
         <div class="upload-header">
@@ -25,7 +25,7 @@
             <el-icon class="upload-main-icon"><upload-filled /></el-icon>
             <div class="upload-text">
               <p class="upload-title">{{ $t('resourcepack.uploadDesc') }}</p>
-              <p class="upload-hint">拖拽文件到此处或点击选择</p>
+              <p class="upload-hint">{{ $t('resourcepack.uploadHint') }}</p>
             </div>
           </div>
           
@@ -54,7 +54,7 @@
       </div>
     </el-card>
 
-    <!-- 资源包列表 -->
+    <!-- Resource Pack List -->
     <el-card class="resource-pack-list-card">
       <template #header>
         <div class="card-header">
@@ -157,14 +157,14 @@ export default {
       file: null
     });
 
-    // 获取资源包列表
+    // Get resource pack list
     const fetchResourcePacks = async () => {
       try {
         loading.value = true;
         const response = await api.getResourcePacks();
         resourcePacks.value = response.data.resource_packs || [];
       } catch (error) {
-        console.error('获取资源包列表失败:', error);
+        console.error('Failed to get resource pack list:', error);
         if (error.response && error.response.data && error.response.data.error) {
           ElMessage.error(`加载失败: ${error.response.data.error}`);
         } else if (error.request) {
@@ -177,17 +177,17 @@ export default {
       }
     };
 
-    // 处理文件选择
+    // Handle file selection
     const handleFileChange = (file) => {
       uploadForm.file = file.raw;
     };
 
-    // 处理文件移除
+    // Handle file removal
     const handleFileRemove = () => {
       uploadForm.file = null;
     };
 
-    // 上传资源包文件
+    // Upload resource pack file
     const uploadResourcePack = async () => {
       if (!uploadForm.file) {
         ElMessage.warning(t('common.selectFile'));
@@ -205,7 +205,7 @@ export default {
         clearUpload();
         await fetchResourcePacks();
       } catch (error) {
-        console.error('上传资源包文件失败:', error);
+        console.error('Failed to upload resource pack file:', error);
         if (error.response && error.response.data && error.response.data.error) {
           ElMessage.error(`上传失败: ${error.response.data.error}`);
         } else if (error.request) {
@@ -218,13 +218,13 @@ export default {
       }
     };
 
-    // 清除上传
+    // Clear upload
     const clearUpload = () => {
       uploadForm.file = null;
       uploadRef.value?.clearFiles();
     };
 
-    // 激活资源包
+    // Activate resource pack
     const activateResourcePack = async (uuid) => {
       try {
         activating.value = uuid;
@@ -232,7 +232,7 @@ export default {
         ElMessage.success('资源包激活成功');
         await fetchResourcePacks();
       } catch (error) {
-        console.error('激活资源包失败:', error);
+        console.error('Failed to activate resource pack:', error);
         if (error.response && error.response.data && error.response.data.error) {
           ElMessage.error(`激活失败: ${error.response.data.error}`);
         } else if (error.request) {
@@ -245,7 +245,7 @@ export default {
       }
     };
 
-    // 停用资源包
+    // Deactivate resource pack
     const deactivateResourcePack = async (uuid) => {
       try {
         deactivating.value = uuid;
@@ -253,7 +253,7 @@ export default {
         ElMessage.success('资源包停用成功');
         await fetchResourcePacks();
       } catch (error) {
-        console.error('停用资源包失败:', error);
+        console.error('Failed to deactivate resource pack:', error);
         if (error.response && error.response.data && error.response.data.error) {
           ElMessage.error(`停用失败: ${error.response.data.error}`);
         } else if (error.request) {
@@ -266,7 +266,7 @@ export default {
       }
     };
 
-    // 确认删除资源包
+    // Confirm delete resource pack
     const confirmDeleteResourcePack = async (resourcePack) => {
       try {
         await ElMessageBox.confirm(
@@ -280,11 +280,11 @@ export default {
         );
         await deleteResourcePack(resourcePack.uuid);
       } catch (error) {
-        // 用户取消删除
+        // User cancelled deletion
       }
     };
 
-    // 删除资源包
+    // Delete resource pack
     const deleteResourcePack = async (uuid) => {
       try {
         deleting.value = uuid;
@@ -292,7 +292,7 @@ export default {
         ElMessage.success('资源包删除成功');
         await fetchResourcePacks();
       } catch (error) {
-        console.error('删除资源包失败:', error);
+        console.error('Failed to delete resource pack:', error);
         if (error.response && error.response.data && error.response.data.error) {
           ElMessage.error(`删除失败: ${error.response.data.error}`);
         } else if (error.request) {
