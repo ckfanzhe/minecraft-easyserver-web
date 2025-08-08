@@ -184,7 +184,7 @@
               </el-button>
               <el-button type="text" @click="$router.push('/worlds')">
                 <el-icon><Globe /></el-icon>
-                {{ $t('dashboard.quickLinks.worldManagement') }}
+                {{ $t('dashboard.quickLinks.resourceManagement') }}
               </el-button>
               <el-button type="text" @click="$router.push('/performance')">
                 <el-icon><TrendCharts /></el-icon>

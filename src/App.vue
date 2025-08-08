@@ -66,7 +66,7 @@
           <el-sub-menu index="world">
             <template #title>
               <el-icon><Baseball /></el-icon>
-              <span>{{ $t('nav.menu.worldManagement') }}</span>
+              <span>{{ $t('nav.menu.resourceManagement') }}</span>
             </template>
             <el-menu-item index="/worlds">
               <el-icon><Baseball /></el-icon>
@@ -543,6 +543,10 @@ body, html {
       
       span {
         font-weight: 500;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
       }
     }
     
@@ -570,6 +574,10 @@ body, html {
         
         span {
           font-weight: 500;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          max-width: 100%;
         }
       }
       
@@ -583,6 +591,17 @@ body, html {
           
           &:hover {
             background: rgba(255, 255, 255, 0.15);
+          }
+          
+          &.is-active {
+            background: rgba(255, 255, 255, 0.9);
+            color: #667eea;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            
+            .el-icon {
+              color: #667eea;
+            }
           }
         }
       }

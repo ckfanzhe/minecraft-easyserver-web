@@ -53,9 +53,7 @@
         </el-form-item>
       </el-form>
       
-      <div class="login-footer">
-        <p>管理您的 Minecraft 服务器</p>
-      </div>
+
     </div>
     </div>
   </div>
@@ -99,7 +97,7 @@ export default {
     const loginRules = {
       password: [
         { required: true, message: t('login.validation.passwordRequired'), trigger: 'blur' },
-        { min: 1, message: t('login.passwordMinLength'), trigger: 'blur' }
+        { min: 8, message: t('login.passwordMinLength'), trigger: 'blur' }
       ]
     };
     
@@ -126,7 +124,7 @@ export default {
         
         // 检查是否需要强制修改密码
         if (response.data.requirePasswordChange) {
-          ElMessage.warning('检测到您正在使用默认密码，请立即修改为强密码');
+          ElMessage.warning(this.$t('login.defaultPasswordWarning'));
           router.push('/change-password');
         } else {
           // 跳转到首页

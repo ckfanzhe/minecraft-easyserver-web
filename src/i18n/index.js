@@ -9,13 +9,15 @@ const messages = {
       password: '密码',
       passwordPlaceholder: '请输入密码',
       loginButton: '登录',
+      loggingIn: '登录中...',
       loginSuccess: '登录成功',
       loginFailed: '登录失败',
       loginError: '登录失败，请重试',
       invalidPassword: '密码错误',
-      passwordMinLength: '密码长度不能为空',
+      passwordMinLength: '密码长度不能小于8位',
       rateLimitExceeded: '登录失败次数过多，账户已被暂时封禁',
       rateLimitInfo: '封禁时间：{blockedUntil}，请在 {retryAfter} 秒后重试',
+      defaultPasswordWarning: '检测到您正在使用默认密码，请立即修改为强密码',
       validation: {
         passwordRequired: '请输入密码'
       }
@@ -81,7 +83,7 @@ const messages = {
         commands: '快捷命令',
         serverManagement: '服务器管理',
         playerManagement: '玩家管理',
-        worldManagement: '世界管理',
+        resourceManagement: '资源管理',
         interactionLogs: '交互与日志',
         changePassword: '修改密码'
       },
@@ -143,7 +145,7 @@ const messages = {
         title: '快捷链接',
         serverConfig: '服务器配置',
         playerManagement: '玩家管理',
-        worldManagement: '世界管理',
+        resourceManagement: '资源管理',
         performanceMonitoring: '性能监控'
       },
       messages: {
@@ -165,6 +167,14 @@ const messages = {
       bedrockMemory: 'Bedrock 内存',
       cpuChart: 'CPU 使用率趋势',
       memoryChart: '内存使用率趋势',
+      cpuChartTitle: 'CPU 使用率 (%)',
+      memoryChartTitle: '内存使用率 (%)',
+      systemCpuLegend: '系统 CPU',
+      bedrockCpuLegend: 'Bedrock CPU',
+      systemMemoryLegend: '系统内存',
+      bedrockMemoryLegend: 'Bedrock 内存使用量(MB)',
+      usagePercentLabel: '使用率 (%)',
+      memoryMbLabel: '内存 (MB)',
       systemInfo: '系统信息',
       bedrockInfo: 'Bedrock 服务器信息',
       processId: '进程 ID',
@@ -377,10 +387,11 @@ const messages = {
     
     // World Management
     world: {
-      title: '世界管理',
+      title: '资源管理',
       upload: '上传世界文件',
       uploadDesc: '支持 .zip 和 .mcworld 格式，自动解压并删除压缩包',
       uploadNote: '上传后将自动解压到世界目录，原压缩文件会被删除',
+      uploadHint: '拖拽文件到此处或点击选择',
       activate: '激活',
       delete: '删除',
       current: '当前世界',
@@ -395,6 +406,7 @@ const messages = {
       upload: '上传资源包',
       uploadDesc: '支持 .zip 和 .mcpack 格式，自动解压并读取配置',
       uploadNote: '上传后将自动解压到资源包目录，原压缩文件会被删除',
+      uploadHint: '拖拽文件到此处或点击选择',
       uploadError: '上传失败',
       activate: '激活',
       deactivate: '停用',
@@ -538,13 +550,15 @@ const messages = {
       password: 'Password',
       passwordPlaceholder: 'Please enter password',
       loginButton: 'Login',
+      loggingIn: 'Logging in...',
       loginSuccess: 'Login successful',
       loginFailed: 'Login failed',
       loginError: 'Login failed, please try again',
       invalidPassword: 'Invalid password',
-      passwordMinLength: 'Password cannot be empty',
+      passwordMinLength: 'Password must be at least 8 characters long',
       rateLimitExceeded: 'Too many failed login attempts, account temporarily blocked',
       rateLimitInfo: 'Blocked until: {blockedUntil}, please retry after {retryAfter} seconds',
+      defaultPasswordWarning: 'Default password detected, please change to a strong password immediately',
       validation: {
         passwordRequired: 'Please enter password'
       }
@@ -610,7 +624,7 @@ const messages = {
         commands: 'Quick Commands',
         serverManagement: 'Server Management',
         playerManagement: 'Player Management',
-        worldManagement: 'World Management',
+        resourceManagement: 'Resource Management',
         interactionLogs: 'Interaction & Logs',
         changePassword: 'Change Password'
       },
@@ -672,7 +686,7 @@ const messages = {
         title: 'Quick Links',
         serverConfig: 'Server Configuration',
         playerManagement: 'Player Management',
-        worldManagement: 'World Management',
+        resourceManagement: 'Resource Management',
         performanceMonitoring: 'Performance Monitor'
       },
       messages: {
@@ -694,6 +708,14 @@ const messages = {
       bedrockMemory: 'Bedrock Memory',
       cpuChart: 'CPU Usage Trend',
       memoryChart: 'Memory Usage Trend',
+      cpuChartTitle: 'CPU Usage (%)',
+      memoryChartTitle: 'Memory Usage (%)',
+      systemCpuLegend: 'System CPU',
+      bedrockCpuLegend: 'Bedrock CPU',
+      systemMemoryLegend: 'System Memory',
+      bedrockMemoryLegend: 'Bedrock Memory Usage(MB)',
+      usagePercentLabel: 'Usage (%)',
+      memoryMbLabel: 'Memory (MB)',
       systemInfo: 'System Information',
       bedrockInfo: 'Bedrock Server Information',
       processId: 'Process ID',
@@ -906,10 +928,11 @@ const messages = {
     
     // World Management
     world: {
-      title: 'World Management',
+      title: 'Resource Management',
       upload: 'Upload World File',
       uploadDesc: 'Supports .zip and .mcworld formats, auto-extract and delete archive',
       uploadNote: 'Files will be auto-extracted to worlds directory, original archive will be deleted',
+      uploadHint: 'Drag files here or click to select',
       activate: 'Activate',
       delete: 'Delete',
       current: 'Current World',
@@ -924,6 +947,7 @@ const messages = {
       upload: 'Upload Resource Pack',
       uploadDesc: 'Supports .zip and .mcpack formats, auto-extract and read configuration',
       uploadNote: 'Files will be auto-extracted to resource packs directory, original archive will be deleted',
+      uploadHint: 'Drag files here or click to select',
       uploadError: 'Upload failed',
       activate: 'Activate',
       deactivate: 'Deactivate',

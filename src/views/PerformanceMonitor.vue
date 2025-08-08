@@ -123,7 +123,7 @@
 </template>
 
 <script>
-import { ref, reactive, onMounted, onUnmounted } from 'vue'
+import { ref, reactive, onMounted, onUnmounted, computed, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import { Cpu, Monitor } from '@element-plus/icons-vue'
 import VChart from 'vue-echarts'
@@ -136,6 +136,7 @@ import {
   GridComponent
 } from 'echarts/components'
 import { CanvasRenderer } from 'echarts/renderers'
+import { useI18n } from 'vue-i18n'
 import api from '../api'
 
 // Register ECharts components
@@ -156,6 +157,8 @@ export default {
     Monitor
   },
   setup() {
+    const { t } = useI18n()
+    
     // Reactive data
     const systemData = reactive({
       cpu_usage: 0,
@@ -186,7 +189,7 @@ export default {
     // CPU chart configuration
     const cpuChartOption = ref({
       title: {
-        text: 'CPU 使用率 (%)',
+        text: '',
         left: 'center',
         textStyle: {
           fontSize: 14
@@ -203,7 +206,7 @@ export default {
         }
       },
       legend: {
-        data: ['系统 CPU', 'Bedrock CPU'],
+        data: [],
         bottom: 0
       },
       grid: {
@@ -231,7 +234,7 @@ export default {
       },
       series: [
         {
-          name: '系统 CPU',
+          name: '',
           type: 'line',
           data: chartData.systemCpu,
           smooth: true,
@@ -243,7 +246,7 @@ export default {
           }
         },
         {
-          name: 'Bedrock CPU',
+          name: '',
           type: 'line',
           data: chartData.bedrockCpu,
           smooth: true,
@@ -260,7 +263,7 @@ export default {
     // Memory chart configuration
     const memoryChartOption = ref({
       title: {
-        text: '内存使用率 (%)',
+        text: '',
         left: 'center',
         textStyle: {
           fontSize: 14
@@ -271,7 +274,7 @@ export default {
         formatter: function(params) {
           let result = params[0].name + '<br/>'
           params.forEach(param => {
-            if (param.seriesName.includes('内存使用量')) {
+            if (param.seriesName.includes('MB')) {
               result += param.marker + param.seriesName + ': ' + param.value + 'MB<br/>'
             } else {
               result += param.marker + param.seriesName + ': ' + param.value + '%<br/>'
@@ -281,7 +284,7 @@ export default {
         }
       },
       legend: {
-        data: ['系统内存', 'Bedrock 内存使用量(MB)'],
+        data: [],
         bottom: 0
       },
       grid: {
@@ -302,7 +305,7 @@ export default {
       yAxis: [
         {
           type: 'value',
-          name: '使用率 (%)',
+          name: '',
           min: 0,
           max: 100,
           position: 'left',
@@ -312,7 +315,7 @@ export default {
         },
         {
           type: 'value',
-          name: '内存 (MB)',
+          name: '',
           min: 0,
           position: 'right',
           axisLabel: {
@@ -322,7 +325,7 @@ export default {
       ],
       series: [
         {
-          name: '系统内存',
+          name: '',
           type: 'line',
           yAxisIndex: 0,
           data: chartData.systemMemory,
@@ -335,7 +338,7 @@ export default {
           }
         },
         {
-          name: 'Bedrock 内存使用量(MB)',
+          name: '',
           type: 'line',
           yAxisIndex: 1,
           data: chartData.bedrockMemory,
@@ -348,6 +351,28 @@ export default {
           }
         }
       ]
+    })
+
+    // Update chart configurations when language changes
+    const updateChartConfigurations = () => {
+      // Update CPU chart
+      cpuChartOption.value.title.text = t('performance.cpuChartTitle')
+      cpuChartOption.value.legend.data = [t('performance.systemCpuLegend'), t('performance.bedrockCpuLegend')]
+      cpuChartOption.value.series[0].name = t('performance.systemCpuLegend')
+      cpuChartOption.value.series[1].name = t('performance.bedrockCpuLegend')
+      
+      // Update Memory chart
+      memoryChartOption.value.title.text = t('performance.memoryChartTitle')
+      memoryChartOption.value.legend.data = [t('performance.systemMemoryLegend'), t('performance.bedrockMemoryLegend')]
+      memoryChartOption.value.yAxis[0].name = t('performance.usagePercentLabel')
+      memoryChartOption.value.yAxis[1].name = t('performance.memoryMbLabel')
+      memoryChartOption.value.series[0].name = t('performance.systemMemoryLegend')
+      memoryChartOption.value.series[1].name = t('performance.bedrockMemoryLegend')
+    }
+
+    // Watch for language changes
+    watch(() => t('performance.title'), () => {
+      updateChartConfigurations()
     })
 
     // Load performance data
@@ -400,6 +425,9 @@ export default {
 
     // Lifecycle
     onMounted(() => {
+      // Initialize chart configurations
+      updateChartConfigurations()
+      
       // 只有在用户已登录时才开始定时查询
       const token = localStorage.getItem('token')
       if (token) {

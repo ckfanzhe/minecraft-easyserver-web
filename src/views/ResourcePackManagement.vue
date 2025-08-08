@@ -25,7 +25,7 @@
             <el-icon class="upload-main-icon"><upload-filled /></el-icon>
             <div class="upload-text">
               <p class="upload-title">{{ $t('resourcepack.uploadDesc') }}</p>
-              <p class="upload-hint">拖拽文件到此处或点击选择</p>
+              <p class="upload-hint">{{ $t('resourcepack.uploadHint') }}</p>
             </div>
           </div>
           

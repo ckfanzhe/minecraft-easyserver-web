@@ -25,7 +25,7 @@
             <el-icon class="upload-main-icon"><upload-filled /></el-icon>
             <div class="upload-text">
               <p class="upload-title">{{ $t('world.uploadDesc') }}</p>
-              <p class="upload-hint">拖拽文件到此处或点击选择</p>
+              <p class="upload-hint">{{ $t('world.uploadHint') }}</p>
             </div>
           </div>
           
@@ -66,7 +66,7 @@
           :data="worlds" 
           v-loading="loading"
           style="width: 100%"
-          empty-text="暂无世界文件"
+          :empty-text="$t('world.empty')"
           stripe
         >
           <el-table-column prop="name" :label="$t('common.name')" min-width="250" show-overflow-tooltip />
