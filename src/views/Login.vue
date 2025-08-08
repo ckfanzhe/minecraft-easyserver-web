@@ -14,7 +14,7 @@
     <div class="login-container">
       <div class="login-box">
         <div class="login-header">
-          <h1>🎮 {{ $t('login.title') }}</h1>
+          <h1>{{ $t('login.title') }}</h1>
           <p>Minecraft Easy Server</p>
         </div>
       
